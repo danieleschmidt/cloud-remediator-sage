@@ -1,9 +1,3 @@
-
----
-
-### 3. `cloud-remediator-sage/README.md`
-
-```markdown
 # cloud-remediator-sage
 
 <!-- IMPORTANT: Replace 'your-github-username-or-org' with your actual GitHub details -->
