@@ -72,10 +72,10 @@ npm run build
 ```
 
 ### Automated Execution
-The system runs automatically via GitHub Actions:
-- **Scheduled**: Every 4 hours during business hours (8am, 12pm, 4pm, 8pm)
-- **Manual Trigger**: Via GitHub Actions workflow dispatch
-- **Auto-rebase**: Automatically rebases PRs to prevent conflicts
+The system can be automated in several ways:
+- **Cron Jobs**: Schedule `npm run backlog` to run periodically
+- **CI/CD Integration**: Integrate with your existing CI/CD pipeline
+- **Local Development**: Run manually or via IDE integration
 
 ### Configuration
 1. **Backlog File**: Define items in `backlog.yml`
@@ -134,17 +134,39 @@ backlog:
    - Daily status reports
    - Prometheus metrics
 
-### GitHub Actions
+### Automation Integration
 
-1. **Autonomous Backlog** (`.github/workflows/autonomous-backlog.yml`)
-   - Scheduled execution
-   - Security scanning
-   - Metrics collection
+The system can be integrated with various automation platforms:
 
-2. **Auto-rebase** (`.github/workflows/auto-rebase.yml`)
-   - Automatic PR rebasing
-   - Conflict resolution
-   - Rerere cache management
+1. **Cron Jobs**: Unix/Linux systems
+   ```bash
+   # Add to crontab for every 4 hours during business hours
+   0 8,12,16,20 * * 1-5 cd /path/to/repo && npm run backlog
+   ```
+
+2. **CI/CD Pipelines**: Jenkins, GitLab CI, GitHub Actions
+   - Schedule periodic execution
+   - Trigger on repository changes
+   - Integrate with existing workflows
+
+3. **Container Orchestration**: Kubernetes CronJobs, Docker Compose
+   ```yaml
+   # Kubernetes CronJob example
+   apiVersion: batch/v1
+   kind: CronJob
+   metadata:
+     name: autonomous-backlog
+   spec:
+     schedule: "0 */4 * * *"
+     jobTemplate:
+       spec:
+         template:
+           spec:
+             containers:
+             - name: backlog
+               image: node:18
+               command: ["npm", "run", "backlog"]
+   ```
 
 ## 📈 Metrics & Monitoring
 
@@ -197,6 +219,8 @@ Generated in `docs/status/`:
 
 ## 🚀 Getting Started
 
+### Method 1: Direct Execution
+
 1. **Clone and Install**:
    ```bash
    git clone <repository>
@@ -217,17 +241,46 @@ Generated in `docs/status/`:
 
 4. **Execute System**:
    ```bash
+   # Using npm script
    npm run backlog
+   
+   # Or using the runner script
+   ./run-autonomous.sh
    ```
 
-5. **Monitor Progress**:
+### Method 2: Docker Execution
+
+1. **Build and Run**:
    ```bash
-   # Check daily reports
-   ls docs/status/
+   # Single container
+   docker build -t autonomous-backlog .
+   docker run -v $(pwd):/app autonomous-backlog
    
-   # View Prometheus metrics
-   cat docs/status/metrics.prom
+   # Or with Docker Compose (includes monitoring)
+   docker-compose up -d
    ```
+
+2. **Scheduled Execution**:
+   ```bash
+   # Kubernetes CronJob
+   kubectl apply -f k8s-cronjob.yaml
+   
+   # Or Linux cron
+   echo "0 */4 * * * cd /path/to/repo && ./run-autonomous.sh" | crontab -
+   ```
+
+### Method 3: Monitoring Progress
+
+```bash
+# Check daily reports
+ls docs/status/
+
+# View Prometheus metrics
+cat docs/status/metrics.prom
+
+# View latest status
+cat docs/status/$(date +%Y-%m-%d).md
+```
 
 ## 📚 Documentation
 
