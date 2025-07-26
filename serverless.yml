@@ -1,0 +1,55 @@
+service: cloud-remediator-sage
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ${opt:region, 'us-east-1'}
+  stage: ${opt:stage, 'dev'}
+  environment:
+    NEPTUNE_ENDPOINT: ${env:NEPTUNE_ENDPOINT}
+    STAGE: ${self:provider.stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - neptune-db:connect
+      Resource: "*"
+    - Effect: Allow
+      Action:
+        - logs:CreateLogGroup
+        - logs:CreateLogStream
+        - logs:PutLogEvents
+      Resource: "*"
+
+functions:
+  prowlerIngest:
+    handler: src/lambda/prowler-ingest.handler
+    description: Ingests security findings from Prowler scanner
+    timeout: 300
+    memorySize: 512
+    events:
+      - s3:
+          bucket: ${env:PROWLER_BUCKET}
+          event: s3:ObjectCreated:*
+          rules:
+            - suffix: .json
+
+  riskScoring:
+    handler: src/lambda/risk-scoring.handler
+    description: Calculates risk scores for security findings
+    timeout: 300
+    memorySize: 512
+
+  remediationGenerator:
+    handler: src/lambda/remediation-generator.handler
+    description: Generates IaC remediation scripts
+    timeout: 300
+    memorySize: 512
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 3000

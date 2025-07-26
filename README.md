@@ -1,9 +1,8 @@
 # cloud-remediator-sage
 
-<!-- IMPORTANT: Replace 'your-github-username-or-org' with your actual GitHub details -->
-[![Build Status](https://img.shields.io/github/actions/workflow/status/your-github-username-or-org/cloud-remediator-sage/ci.yml?branch=main)](https://github.com/your-github-username-or-org/cloud-remediator-sage/actions)
-[![Coverage Status](https://img.shields.io/coveralls/github/your-github-username-or-org/cloud-remediator-sage)](https://coveralls.io/github/your-github-username-or-org/cloud-remediator-sage)
-[![License](https://img.shields.io/github/license/your-github-username-or-org/cloud-remediator-sage)](LICENSE)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/danieleschmidt/cloud-remediator-sage/ci.yml?branch=main)](https://github.com/danieleschmidt/cloud-remediator-sage/actions)
+[![Coverage Status](https://img.shields.io/coveralls/github/danieleschmidt/cloud-remediator-sage)](https://coveralls.io/github/danieleschmidt/cloud-remediator-sage)
+[![License](https://img.shields.io/github/license/danieleschmidt/cloud-remediator-sage)](LICENSE)
 [![Version](https://img.shields.io/badge/version-v0.1.0-blue)](https://semver.org)
 
 A serverless framework to automate cloud security posture management (CSPM). It ingests security findings from scanners, prioritizes risks using a graph database, and auto-generates Infrastructure-as-Code (IaC) for remediation.

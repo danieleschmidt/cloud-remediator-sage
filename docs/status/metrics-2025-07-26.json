@@ -1,0 +1,39 @@
+{
+  "timestamp": "2025-07-26T00:00:00Z",
+  "completed_ids": ["CSRM-001", "CSRM-002"],
+  "coverage_delta": "+basic test framework",
+  "flaky_tests": [],
+  "ci_summary": {
+    "project_structure": "clean",
+    "dependencies": "not_installed_yet"
+  },
+  "open_prs": 0,
+  "risks_or_blocks": [
+    {
+      "id": "CSRM-003",
+      "type": "high-risk",
+      "reason": "Complex Lambda function with security scanner integration"
+    },
+    {
+      "id": "CSRM-005", 
+      "type": "high-risk",
+      "reason": "Risk scoring algorithm affects security posture decisions"
+    }
+  ],
+  "backlog_size_by_status": {
+    "NEW": 5,
+    "REFINED": 0,
+    "READY": 0,
+    "DOING": 0,
+    "DONE": 2,
+    "BLOCKED": 0
+  },
+  "avg_cycle_time_minutes": 15,
+  "wsjf_snapshot": [
+    {"id": "CSRM-003", "wsjf": 4.25, "priority": 1},
+    {"id": "CSRM-005", "wsjf": 4.25, "priority": 1}, 
+    {"id": "CSRM-004", "wsjf": 4.2, "priority": 3},
+    {"id": "CSRM-006", "wsjf": 2.6, "priority": 4},
+    {"id": "CSRM-007", "wsjf": 2.6, "priority": 5}
+  ]
+}
