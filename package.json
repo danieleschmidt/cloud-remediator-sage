@@ -1,0 +1,30 @@
+{
+  "name": "cloud-remediator-sage",
+  "version": "0.1.0",
+  "description": "A serverless framework to automate cloud security posture management (CSPM)",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint src/ tests/",
+    "build": "npm run lint && npm run test"
+  },
+  "keywords": [
+    "security",
+    "cloud",
+    "cspm",
+    "aws",
+    "serverless",
+    "remediation"
+  ],
+  "author": "Terragon Labs",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "eslint": "^8.57.0",
+    "@jest/globals": "^29.7.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1691.0",
+    "gremlin": "^3.7.2"
+  }
+}
