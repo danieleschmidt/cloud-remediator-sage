@@ -16,6 +16,7 @@ A serverless framework to automate cloud security posture management (CSPM). It 
 *   **Risk Graph Triage**: Utilizes Amazon Neptune to deduplicate findings and score risks.
 *   **Automated Fix Generation**: Employs Jinja templates to create ready-to-use Terraform or Boto3 remediation scripts.
 *   **Safe Mode**: Requires manual approval for remediation actions in production environments.
+*   **🤖 Autonomous Backlog Management**: WSJF-prioritized autonomous execution with TDD and security integration. [Learn more](AUTONOMOUS_BACKLOG.md)
 
 ## 🛠️ Technical Details
 

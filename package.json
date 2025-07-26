@@ -6,7 +6,9 @@
   "scripts": {
     "test": "jest",
     "lint": "eslint src/ tests/",
-    "build": "npm run lint && npm run test"
+    "build": "npm run lint && npm run test",
+    "backlog": "node src/backlog/index.js",
+    "demo": "node -e \"console.log('🤖 Autonomous Backlog Management Demo'); console.log('Run: npm run backlog');\""
   },
   "keywords": [
     "security",
@@ -25,6 +27,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.1691.0",
-    "gremlin": "^3.7.2"
+    "gremlin": "^3.7.2",
+    "js-yaml": "^4.1.0"
   }
 }

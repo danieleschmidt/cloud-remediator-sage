@@ -1,0 +1,30 @@
+# Merge strategies for autonomous conflict resolution
+package-lock.json merge=theirs
+yarn.lock merge=theirs
+*.snap merge=theirs
+*.md merge=union
+CHANGELOG.md merge=union
+docs/status/*.json merge=union
+docs/status/*.md merge=union
+*.svg merge=lock
+*.png merge=lock
+*.jpg merge=lock
+*.zip merge=lock
+
+# Line ending normalization
+* text=auto
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.tar.gz binary
