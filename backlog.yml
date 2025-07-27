@@ -1,129 +1,2949 @@
 backlog:
-  - id: "CSRM-001"
-    title: "Initialize project structure and development environment"
-    type: "infrastructure"
-    description: "Set up basic project structure with directories for Lambda functions, Terraform templates, tests, and configuration"
+  - id: CSRM-001
+    title: Initialize project structure and development environment
+    type: infrastructure
+    description: >-
+      Set up basic project structure with directories for Lambda functions,
+      Terraform templates, tests, and configuration
     acceptance_criteria:
-      - "Create src/ directory structure for Lambda functions"
-      - "Create terraform/ directory for IaC templates"
-      - "Create tests/ directory with test framework setup"
-      - "Add basic serverless.yml configuration"
-      - "Add package.json with dependencies"
+      - Create src/ directory structure for Lambda functions
+      - Create terraform/ directory for IaC templates
+      - Create tests/ directory with test framework setup
+      - Add basic serverless.yml configuration
+      - Add package.json with dependencies
     effort: 3
     value: 8
     time_criticality: 5
     risk_reduction: 2
-    status: "DONE"
-    risk_tier: "low"
-    created_at: "2025-07-26"
-    completed_at: "2025-07-26"
+    status: DONE
+    risk_tier: low
+    created_at: '2025-07-26'
+    completed_at: '2025-07-26'
     links: []
-
-  - id: "CSRM-002"
-    title: "Fix README.md placeholder GitHub URLs"
-    type: "documentation"
-    description: "Replace placeholder GitHub URLs in README.md badges with actual repository information"
+    wsjf:
+      base_wsjf: 5
+      aging_multiplier: 1.01
+      final_wsjf: 5.07
+      cost_of_delay: 15
+      validated_scores:
+        value: 8
+        time_criticality: 5
+        risk_reduction: 2
+        effort: 3
+  - id: CSRM-003
+    title: Implement Prowler integration Lambda function
+    type: feature
+    description: Create Lambda function to ingest security findings from Prowler scanner
     acceptance_criteria:
-      - "Replace 'your-github-username-or-org' placeholders in badge URLs"
-      - "Verify all badges point to correct repository"
+      - Lambda function accepts Prowler JSON output
+      - Parses findings and normalizes to common format
+      - Stores findings in Neptune graph database
+      - Includes error handling and logging
+      - Unit tests with >80% coverage
+    effort: 8
+    value: 13
+    time_criticality: 8
+    risk_reduction: 13
+    status: BLOCKED
+    risk_tier: medium
+    created_at: '2025-07-26'
+    links: []
+    wsjf:
+      base_wsjf: 4.25
+      aging_multiplier: 1.01
+      final_wsjf: 4.31
+      cost_of_delay: 34
+      validated_scores:
+        value: 13
+        time_criticality: 8
+        risk_reduction: 13
+        effort: 8
+  - id: CSRM-005
+    title: Implement risk scoring algorithm
+    type: feature
+    description: >-
+      Implement the risk scoring formula: RiskScore = (CVSS_Weight *
+      Asset_Exposure_Score) + Blast_Radius_Impact
+    acceptance_criteria:
+      - Function calculates risk score per formula
+      - CVSS scoring integration
+      - Asset exposure assessment logic
+      - Blast radius calculation
+      - Comprehensive unit tests
+    effort: 8
+    value: 13
+    time_criticality: 8
+    risk_reduction: 13
+    status: NEW
+    risk_tier: medium
+    created_at: '2025-07-26'
+    links: []
+    wsjf:
+      base_wsjf: 4.25
+      aging_multiplier: 1.01
+      final_wsjf: 4.31
+      cost_of_delay: 34
+      validated_scores:
+        value: 13
+        time_criticality: 8
+        risk_reduction: 13
+        effort: 8
+  - id: CSRM-004
+    title: Create Neptune graph schema for security findings
+    type: infrastructure
+    description: >-
+      Design and implement graph database schema for storing and relating
+      security findings
+    acceptance_criteria:
+      - Define vertex types for Assets, Findings, Risks
+      - Define edge relationships between entities
+      - Create Gremlin scripts for schema initialization
+      - Include risk scoring properties
+    effort: 5
+    value: 8
+    time_criticality: 5
+    risk_reduction: 8
+    status: NEW
+    risk_tier: medium
+    created_at: '2025-07-26'
+    links: []
+    wsjf:
+      base_wsjf: 4.2
+      aging_multiplier: 1.01
+      final_wsjf: 4.25
+      cost_of_delay: 21
+      validated_scores:
+        value: 8
+        time_criticality: 5
+        risk_reduction: 8
+        effort: 5
+  - id: CSRM-002
+    title: Fix README.md placeholder GitHub URLs
+    type: documentation
+    description: >-
+      Replace placeholder GitHub URLs in README.md badges with actual repository
+      information
+    acceptance_criteria:
+      - Replace 'your-github-username-or-org' placeholders in badge URLs
+      - Verify all badges point to correct repository
     effort: 1
     value: 2
     time_criticality: 1
     risk_reduction: 1
-    status: "DONE"
-    risk_tier: "low"
-    created_at: "2025-07-26"
-    completed_at: "2025-07-26"
+    status: DONE
+    risk_tier: low
+    created_at: '2025-07-26'
+    completed_at: '2025-07-26'
     links: []
-
-  - id: "CSRM-003"
-    title: "Implement Prowler integration Lambda function"
-    type: "feature"
-    description: "Create Lambda function to ingest security findings from Prowler scanner"
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1.01
+      final_wsjf: 4.05
+      cost_of_delay: 4
+      validated_scores:
+        value: 2
+        time_criticality: 1
+        risk_reduction: 1
+        effort: 1
+  - id: TODO-1
+    title: 'Fix TODO:     // Discover from codebase TODOs'
+    type: technical_debt
+    description: >-
+      TODO found in ./src/backlog/discovery.js:20 -     // Discover from
+      codebase TODOs
     acceptance_criteria:
-      - "Lambda function accepts Prowler JSON output"
-      - "Parses findings and normalizes to common format"
-      - "Stores findings in Neptune graph database"
-      - "Includes error handling and logging"
-      - "Unit tests with >80% coverage"
+      - Remove TODO comment in ./src/backlog/discovery.js:20
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-2
+    title: 'Fix TODO:       const todoPattern = /(?'
+    type: technical_debt
+    description: >-
+      TODO found in ./src/backlog/discovery.js:72 -       const todoPattern =
+      /(?
+    acceptance_criteria:
+      - Remove TODO comment in ./src/backlog/discovery.js:72
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-3
+    title: >-
+      Fix TODO:       const findCommand = 'find . -type f \\( -name "*.js" -o
+      -name "*
+    type: technical_debt
+    description: >-
+      TODO found in ./src/backlog/discovery.js:75 -       const findCommand =
+      'find . -type f \\( -name "*.js" -o -name "*.ts" -o -name "*.py" \\) -exec
+      grep -Hn "TODO\\|FIXME\\|XXX\\|HACK" {} \\;';
+    acceptance_criteria:
+      - Remove TODO comment in ./src/backlog/discovery.js:75
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-8
+    title: 'Fix TODO:       console.warn(''Error discovering codebase TODOs'
+    type: technical_debt
+    description: >-
+      TODO found in ./src/backlog/discovery.js:105 -       console.warn('Error
+      discovering codebase TODOs
+    acceptance_criteria:
+      - Remove TODO comment in ./src/backlog/discovery.js:105
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-13
+    title: >-
+      Fix TODO:     // #region ------------------------- isXXX
+      -----------------------
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/@types/babel__traverse/index.d.ts:785 -    
+      // #region ------------------------- isXXX -------------------------
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/@types/babel__traverse/index.d.ts:785
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-14
+    title: >-
+      Fix TODO:     // #region ------------------------- assertXXX
+      -------------------
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/@types/babel__traverse/index.d.ts:1116 -    
+      // #region ------------------------- assertXXX -------------------------
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/@types/babel__traverse/index.d.ts:1116
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-17
+    title: >-
+      Fix TODO:              * Shorthand for marking a suite as `TODO`. This is
+      the sa
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/@types/node/test.d.ts:176 -              *
+      Shorthand for marking a suite as `TODO`. This is the same as calling
+      {@link suite} with `options.todo` set to `true`.
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/@types/node/test.d.ts:176
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-18
+    title: >-
+      Fix TODO:          * Shorthand for marking a test as `TODO`. This is the
+      same as
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/@types/node/test.d.ts:201 -          *
+      Shorthand for marking a test as `TODO`. This is the same as calling {@link
+      test} with `options.todo` set to `true`.
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/@types/node/test.d.ts:201
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-19
+    title: 'Fix TODO:                      * The total number of TODO tests.'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/@types/node/test.d.ts:894
+      -                      * The total number of TODO tests.
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/@types/node/test.d.ts:894
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-20
+    title: >-
+      Fix TODO:              * This function adds a `TODO` directive to the
+      test's out
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/@types/node/test.d.ts:1117 -              *
+      This function adds a `TODO` directive to the test's output. If `message`
+      is
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/@types/node/test.d.ts:1117
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-21
+    title: 'Fix TODO:              *   // This test is marked as `TODO`'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/@types/node/test.d.ts:1123 -              *  
+      // This test is marked as `TODO`
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/@types/node/test.d.ts:1123
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-22
+    title: 'Fix TODO:              * @param message Optional `TODO` message.'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/@types/node/test.d.ts:1128 -              *
+      @param message Optional `TODO` message.
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/@types/node/test.d.ts:1128
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-23
+    title: >-
+      Fix TODO:              * If truthy, the test marked as `TODO`. If a string
+      is pr
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/@types/node/test.d.ts:1334 -              *
+      If truthy, the test marked as `TODO`. If a string is provided, that string
+      is displayed in
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/@types/node/test.d.ts:1334
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-24
+    title: >-
+      Fix TODO:              * the test results as the reason why the test is
+      `TODO`.
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/@types/node/test.d.ts:1335 -              *
+      the test results as the reason why the test is `TODO`.
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/@types/node/test.d.ts:1335
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-33
+    title: 'Fix TODO:                     // TODO(mysticatea)'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/@eslint-community/eslint-utils/index.js:816
+      -                     // TODO(mysticatea)
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/@eslint-community/eslint-utils/index.js:816
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-46
+    title: 'Fix TODO:             // TODO - come up with a better strategy in future'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/eslint/lib/rules/indent-legacy.js:721
+      -             // TODO - come up with a better strategy in future
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/eslint/lib/rules/indent-legacy.js:721
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-48
+    title: 'Fix TODO:  * @returns {string} "\uXXXX" sequence.'
+    type: technical_debt
+    description: >-
+      TODO found in
+      ./node_modules/eslint/lib/rules/no-nonoctal-decimal-escape.js:17 -  *
+      @returns {string} "\uXXXX" sequence.
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/eslint/lib/rules/no-nonoctal-decimal-escape.js:17
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-50
+    title: >-
+      Fix TODO:              *     e.g. terms ["TODO"] matches `//TODO
+      something`
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/eslint/lib/rules/no-warning-comments.js:85
+      -              *     e.g. terms ["TODO"] matches `//TODO something`
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/eslint/lib/rules/no-warning-comments.js:85
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-51
+    title: >-
+      Fix TODO:              *     e.g. terms ["TODO"] matches `// something
+      TODO`
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/eslint/lib/rules/no-warning-comments.js:87
+      -              *     e.g. terms ["TODO"] matches `// something TODO`
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/eslint/lib/rules/no-warning-comments.js:87
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-52
+    title: >-
+      Fix TODO:              *     e.g. terms ["TODO"] matches `//    TODO
+      something`
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/eslint/lib/rules/no-warning-comments.js:94
+      -              *     e.g. terms ["TODO"] matches `//    TODO something`
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/eslint/lib/rules/no-warning-comments.js:94
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-53
+    title: >-
+      Fix TODO:              *     e.g. terms ["TODO"] matches `/**** TODO
+      something .
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/eslint/lib/rules/no-warning-comments.js:97
+      -              *     e.g. terms ["TODO"] matches `/**** TODO something ...
+      `
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/eslint/lib/rules/no-warning-comments.js:97
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-54
+    title: 'Fix TODO:                         // TODO(nzakas)'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/eslint/lib/rules/valid-jsdoc.js:458
+      -                         // TODO(nzakas)
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/eslint/lib/rules/valid-jsdoc.js:458
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-63
+    title: 'Fix TODO:  * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'
+    type: technical_debt
+    description: >-
+      TODO found in
+      ./node_modules/gremlin/node_modules/uuid/dist/commonjs-browser/stringify.js:15
+      -  * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/gremlin/node_modules/uuid/dist/commonjs-browser/stringify.js:15
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-88
+    title: 'Fix TODO:       // TODO(ronag)'
+    type: technical_debt
+    description: >-
+      TODO found in
+      ./node_modules/readable-stream/lib/internal/streams/compose.js:37 -      
+      // TODO(ronag)
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/readable-stream/lib/internal/streams/compose.js:37
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-89
+    title: 'Fix TODO:   // TODO(ronag)'
+    type: technical_debt
+    description: >-
+      TODO found in
+      ./node_modules/readable-stream/lib/internal/streams/compose.js:71 -   //
+      TODO(ronag)
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/readable-stream/lib/internal/streams/compose.js:71
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-90
+    title: 'Fix TODO:     // TODO (ronag)'
+    type: technical_debt
+    description: >-
+      TODO found in
+      ./node_modules/readable-stream/lib/internal/streams/compose.js:75 -     //
+      TODO (ronag)
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/readable-stream/lib/internal/streams/compose.js:75
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-93
+    title: 'Fix TODO:         // TODO (ronag)'
+    type: technical_debt
+    description: >-
+      TODO found in
+      ./node_modules/readable-stream/lib/internal/streams/duplexify.js:97
+      -         // TODO (ronag)
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/readable-stream/lib/internal/streams/duplexify.js:97
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-95
+    title: 'Fix TODO:       // TODO (ronag)'
+    type: technical_debt
+    description: >-
+      TODO found in
+      ./node_modules/readable-stream/lib/internal/streams/duplexify.js:144
+      -       // TODO (ronag)
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/readable-stream/lib/internal/streams/duplexify.js:144
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-98
+    title: 'Fix TODO:   // TODO (ronag)'
+    type: technical_debt
+    description: >-
+      TODO found in
+      ./node_modules/readable-stream/lib/internal/streams/end-of-stream.js:73
+      -   // TODO (ronag)
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/readable-stream/lib/internal/streams/end-of-stream.js:73
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-99
+    title: 'Fix TODO:     // TODO(ronag)'
+    type: technical_debt
+    description: >-
+      TODO found in
+      ./node_modules/readable-stream/lib/internal/streams/from.js:37 -     //
+      TODO(ronag)
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/readable-stream/lib/internal/streams/from.js:37
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-100
+    title: >-
+      Fix TODO: // TODO(benjamingr) it is likely slower to do it this way than
+      with fr
+    type: technical_debt
+    description: >-
+      TODO found in
+      ./node_modules/readable-stream/lib/internal/streams/readable.js:96 - //
+      TODO(benjamingr) it is likely slower to do it this way than with free
+      functions
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/readable-stream/lib/internal/streams/readable.js:96
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-101
+    title: >-
+      Fix TODO:   // These options can be provided separately as readableXXX and
+      writa
+    type: technical_debt
+    description: >-
+      TODO found in
+      ./node_modules/readable-stream/lib/internal/streams/readable.js:151 -   //
+      These options can be provided separately as readableXXX and writableXXX.
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/readable-stream/lib/internal/streams/readable.js:151
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-106
+    title: 'Fix TODO:         // TODO(perf)'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/@bcoe/v8-coverage/dist/lib/range-tree.js:95
+      -         // TODO(perf)
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/@bcoe/v8-coverage/dist/lib/range-tree.js:95
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-108
+    title: 'Fix TODO:     // TODO(perf)'
+    type: technical_debt
+    description: >-
+      TODO found in
+      ./node_modules/@bcoe/v8-coverage/dist/lib/_src/range-tree.ts:109 -     //
+      TODO(perf)
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/@bcoe/v8-coverage/dist/lib/_src/range-tree.ts:109
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-122
+    title: 'Fix TODO: // TODO remove re-export in Jest 30'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/jest-mock/build/index.js:28 - // TODO remove
+      re-export in Jest 30
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/jest-mock/build/index.js:28
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-124
+    title: 'Fix TODO: // TODO in Jest 30 remove `SpyInstance` in favour of `Spied`'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/jest-mock/build/index.js:32 - // TODO in Jest
+      30 remove `SpyInstance` in favour of `Spied`
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/jest-mock/build/index.js:32
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-125
+    title: 'Fix TODO:   Expected extends Array<any> = [] /** TODO should be'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/expect/build/index.d.ts:97 -   Expected
+      extends Array<any> = [] /** TODO should be
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/expect/build/index.d.ts:97
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-127
+    title: 'Fix TODO:      * TODO docs'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/undici-types/cache-interceptor.d.ts:37 -     
+      * TODO docs
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/undici-types/cache-interceptor.d.ts:37
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-128
+    title: 'Fix TODO:     /** TODO */'
+    type: technical_debt
+    description: TODO found in ./node_modules/undici-types/client.d.ts:34 -     /** TODO */
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/undici-types/client.d.ts:34
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-143
+    title: 'Fix TODO:   // TODO(@KhafraDev)'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/undici-types/webidl.d.ts:242 -   //
+      TODO(@KhafraDev)
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/undici-types/webidl.d.ts:242
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-148
+    title: 'Fix TODO:     cst_TODO_parsing_error = "TODO parsing error",'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/xml2js/lib/xml2js.bc.js:28170 -    
+      cst_TODO_parsing_error = "TODO parsing error",
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/xml2js/lib/xml2js.bc.js:28170
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-149
+    title: 'Fix TODO:     _a_ = [0, "TODO, unclear semantics"];'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/xml2js/lib/xml2js.bc.js:28171 -     _a_ = [0,
+      "TODO, unclear semantics"];
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/xml2js/lib/xml2js.bc.js:28171
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-150
+    title: >-
+      Fix TODO:      return cb(caml_call1(Js_of_ocaml_Js[2],
+      cst_TODO_parsing_error), 
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/xml2js/lib/xml2js.bc.js:28204 -      return
+      cb(caml_call1(Js_of_ocaml_Js[2], cst_TODO_parsing_error), _g_);
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/xml2js/lib/xml2js.bc.js:28204
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-153
+    title: "Fix TODO: \t\t// XXX (@Qix-) should we be logging these?"
+    type: technical_debt
+    description: "TODO found in ./node_modules/debug/src/browser.js:209 - \t\t// XXX (@Qix-) should we be logging these?"
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/debug/src/browser.js:209
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-156
+    title: "Fix TODO: \t\tdebug.destroy = createDebug.destroy; // XXX Temporary. Will be remov"
+    type: technical_debt
+    description: "TODO found in ./node_modules/debug/src/common.js:120 - \t\tdebug.destroy = createDebug.destroy; // XXX Temporary. Will be removed in the next major release."
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/debug/src/common.js:120
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-157
+    title: "Fix TODO: \t* XXX DO NOT USE. This is a temporary stub function."
+    type: technical_debt
+    description: "TODO found in ./node_modules/debug/src/common.js:280 - \t* XXX DO NOT USE. This is a temporary stub function."
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/debug/src/common.js:280
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-158
+    title: "Fix TODO: \t* XXX It WILL be removed in the next major release."
+    type: technical_debt
+    description: "TODO found in ./node_modules/debug/src/common.js:281 - \t* XXX It WILL be removed in the next major release."
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/debug/src/common.js:281
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-159
+    title: >-
+      Fix TODO:         var str = '', quote, ch, code, unescaped, restore;
+      //TODO revi
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/doctrine/lib/typed.js:128 -         var str =
+      '', quote, ch, code, unescaped, restore; //TODO review removal octal =
+      false
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/doctrine/lib/typed.js:128
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-160
+    title: >-
+      Fix TODO:                             // Deprecating unused code. TODO
+      review re
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/doctrine/lib/typed.js:177
+      -                             // Deprecating unused code. TODO review
+      removal
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/doctrine/lib/typed.js:177
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-161
+    title: >-
+      Fix TODO:                                 //TODO Review Removal octal =
+      true;
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/doctrine/lib/typed.js:183
+      -                                 //TODO Review Removal octal = true;
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/doctrine/lib/typed.js:183
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-165
+    title: 'Fix TODO:         // TODO(Constellation)'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/eslint-scope/lib/scope.js:668 -         //
+      TODO(Constellation)
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/eslint-scope/lib/scope.js:668
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-170
+    title: 'Fix TODO:         // XXX remove this slice.  Just pass the start index.'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/minimatch/minimatch.js:859 -         // XXX
+      remove this slice.  Just pass the start index.
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/minimatch/minimatch.js:859
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-175
+    title: 'Fix TODO:     // Identifier or keyword. ''\uXXXX'' sequences are allowed in'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/acorn/dist/acorn.js:5448 -     // Identifier
+      or keyword. '\uXXXX' sequences are allowed in
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/acorn/dist/acorn.js:5448
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-176
+    title: >-
+      Fix TODO:           { this.invalidStringToken(this.pos, "Expecting Unicode
+      escap
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/acorn/dist/acorn.js:6148 -           {
+      this.invalidStringToken(this.pos, "Expecting Unicode escape sequence
+      \\uXXXX"); }
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/acorn/dist/acorn.js:6148
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-194
+    title: 'Fix TODO:   // XXX review this.  Shouldn''t it be doing the mounting etc'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/glob/glob.js:672 -   // XXX review this. 
+      Shouldn't it be doing the mounting etc
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/glob/glob.js:672
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-202
+    title: >-
+      Fix TODO:     // XXX It's somewhat ambiguous whether a new callback added
+      in thi
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/inflight/inflight.js:23 -     // XXX It's
+      somewhat ambiguous whether a new callback added in this
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/inflight/inflight.js:23
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-210
+    title: >-
+      Fix TODO:   if (key.name === 'pageup') return 'prevPage'; // TODO create
+      home() 
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/prompts/dist/util/action.js:28 -   if
+      (key.name === 'pageup') return 'prevPage'; // TODO create home() in prompt
+      types (e.g. TextPrompt)
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/prompts/dist/util/action.js:28
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-211
+    title: >-
+      Fix TODO:   if (key.name === 'home') return 'home'; // TODO create end()
+      in prom
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/prompts/dist/util/action.js:30 -   if
+      (key.name === 'home') return 'home'; // TODO create end() in prompt types
+      (e.g. TextPrompt)
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/prompts/dist/util/action.js:30
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-213
+    title: 'Fix TODO:   // AM/PM // TODO (special)'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/prompts/dist/elements/date.js:43 -   // AM/PM
+      // TODO (special)
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/prompts/dist/elements/date.js:43
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-214
+    title: 'Fix TODO:   // TODO create home() in prompt types (e.g. TextPrompt)'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/prompts/lib/util/action.js:28 -   // TODO
+      create home() in prompt types (e.g. TextPrompt)
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/prompts/lib/util/action.js:28
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-215
+    title: 'Fix TODO:   // TODO create end() in prompt types (e.g. TextPrompt)'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/prompts/lib/util/action.js:30 -   // TODO
+      create end() in prompt types (e.g. TextPrompt)
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/prompts/lib/util/action.js:30
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-231
+    title: 'Fix TODO: // @ts-expect-error TODO make this not error'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/is-arguments/index.js:40 - //
+      @ts-expect-error TODO make this not error
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/is-arguments/index.js:40
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-233
+    title: "Fix TODO: \t\t\t\t// @ts-expect-error TODO FIXME"
+    type: technical_debt
+    description: "TODO found in ./node_modules/which-typed-array/index.js:55 - \t\t\t\t// @ts-expect-error TODO FIXME"
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/which-typed-array/index.js:55
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-241
+    title: 'Fix TODO:     // @ts-expect-error TODO fixme'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/for-each/test/test.js:54 -     //
+      @ts-expect-error TODO fixme
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/for-each/test/test.js:54
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-246
+    title: 'Fix TODO:         // TODO(bcoe)'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/yargs-parser/build/lib/yargs-parser.js:167
+      -         // TODO(bcoe)
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/yargs-parser/build/lib/yargs-parser.js:167
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-247
+    title: 'Fix TODO:                 // TODO(bcoe)'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/yargs-parser/build/lib/yargs-parser.js:753
+      -                 // TODO(bcoe)
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/yargs-parser/build/lib/yargs-parser.js:753
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-248
+    title: 'Fix TODO:             // TODO(bcoe)'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/yargs-parser/build/lib/yargs-parser.js:774
+      -             // TODO(bcoe)
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/yargs-parser/build/lib/yargs-parser.js:774
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-249
+    title: 'Fix TODO: // TODO(bcoe)'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/yargs-parser/build/lib/yargs-parser.js:1032 -
+      // TODO(bcoe)
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/yargs-parser/build/lib/yargs-parser.js:1032
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-255
+    title: >-
+      Fix TODO:      * The alias for the directory. If no alias has been created
+      for t
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/aws-sdk/clients/directoryservice.d.ts:1484
+      -      * The alias for the directory. If no alias has been created for the
+      directory, the alias is the directory identifier, such as d-XXXXXXXXXX.
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/aws-sdk/clients/directoryservice.d.ts:1484
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-259
+    title: >-
+      Fix TODO:      * The destination of the contact method, such as an email
+      address
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/aws-sdk/clients/lightsail.d.ts:2595 -      *
+      The destination of the contact method, such as an email address or a
+      mobile phone number. Use the E.164 format when specifying a mobile phone
+      number. E.164 is a standard for the phone number structure used for
+      international telecommunication. Phone numbers that follow this format can
+      have a maximum of 15 digits, and they are prefixed with the plus character
+      (+) and the country code. For example, a U.S. phone number in E.164 format
+      would be specified as +1XXX5550100. For more information, see E.164 on
+      Wikipedia.
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/aws-sdk/clients/lightsail.d.ts:2595
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-260
+    title: >-
+      Fix TODO:      * Provides Network ID that matches EIDR ID format (e.g.,
+      "10.XXXX
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/aws-sdk/clients/medialive.d.ts:1448 -      *
+      Provides Network ID that matches EIDR ID format (e.g.,
+      "10.XXXX/XXXX-XXXX-XXXX-XXXX-XXXX-C").
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/aws-sdk/clients/medialive.d.ts:1448
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-262
+    title: 'Fix TODO:     //config.XXX is either undefined or string'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/aws-sdk/lib/publisher/configuration.js:71
+      -     //config.XXX is either undefined or string
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/aws-sdk/lib/publisher/configuration.js:71
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-264
+    title: 'Fix TODO:     // TODO '
+    type: technical_debt
+    description: 'TODO found in ./node_modules/aws-sdk/lib/service.js:585 -     // TODO '
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/aws-sdk/lib/service.js:585
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-265
+    title: 'Fix TODO:    * TODO Remove in major version revision'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/aws-sdk/lib/util.js:729 -    * TODO Remove in
+      major version revision
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/aws-sdk/lib/util.js:729
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-266
+    title: 'Fix TODO:         } else { // TODO support other stream types'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/aws-sdk/lib/util.js:770 -         } else { //
+      TODO support other stream types
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/aws-sdk/lib/util.js:770
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-267
+    title: "Fix TODO: \t   * TODO Remove in major version revision"
+    type: technical_debt
+    description: "TODO found in ./node_modules/aws-sdk/dist/aws-sdk-core-react-native.js:908 - \t   * TODO Remove in major version revision"
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/aws-sdk/dist/aws-sdk-core-react-native.js:908
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-268
+    title: "Fix TODO: \t        } else { // TODO support other stream types"
+    type: technical_debt
+    description: "TODO found in ./node_modules/aws-sdk/dist/aws-sdk-core-react-native.js:949 - \t        } else { // TODO support other stream types"
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/aws-sdk/dist/aws-sdk-core-react-native.js:949
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-269
+    title: "Fix TODO: \t * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+    type: technical_debt
+    description: "TODO found in ./node_modules/aws-sdk/dist/aws-sdk-core-react-native.js:1930 - \t * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/aws-sdk/dist/aws-sdk-core-react-native.js:1930
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-271
+    title: "Fix TODO: \t    // TODO "
+    type: technical_debt
+    description: "TODO found in ./node_modules/aws-sdk/dist/aws-sdk-core-react-native.js:5371 - \t    // TODO "
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/aws-sdk/dist/aws-sdk-core-react-native.js:5371
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-276
+    title: "Fix TODO: \t\t   * TODO Remove in major version revision"
+    type: technical_debt
+    description: "TODO found in ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:1220 - \t\t   * TODO Remove in major version revision"
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:1220
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-277
+    title: "Fix TODO: \t\t        } else { // TODO support other stream types"
+    type: technical_debt
+    description: "TODO found in ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:1261 - \t\t        } else { // TODO support other stream types"
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:1261
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-278
+    title: "Fix TODO: \t\t * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+    type: technical_debt
+    description: "TODO found in ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:2242 - \t\t * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:2242
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-280
+    title: "Fix TODO: \t\t    // TODO "
+    type: technical_debt
+    description: "TODO found in ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:5683 - \t\t    // TODO "
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:5683
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-286
+    title: "Fix TODO: \t    // v0.12 TODO(isaacs)"
+    type: technical_debt
+    description: "TODO found in ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:18233 - \t    // v0.12 TODO(isaacs)"
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:18233
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-288
+    title: "Fix TODO: \t\t  // These options can be provided separately as readableXXX and wri"
+    type: technical_debt
+    description: "TODO found in ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:30994 - \t\t  // These options can be provided separately as readableXXX and writableXXX."
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:30994
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-291
+    title: "Fix TODO: \t\t// @TODO Handling all encodings inside a single object makes it very"
+    type: technical_debt
+    description: "TODO found in ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:34330 - \t\t// @TODO Handling all encodings inside a single object makes it very difficult"
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:34330
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-292
+    title: "Fix TODO: \t\t// @TODO There should be a utf8-strict encoding that rejects invalid"
+    type: technical_debt
+    description: "TODO found in ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:34332 - \t\t// @TODO There should be a utf8-strict encoding that rejects invalid UTF-8 code"
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:34332
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-293
+    title: "Fix TODO: \t\t    // 110XXXXX"
+    type: technical_debt
+    description: "TODO found in ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:34460 - \t\t    // 110XXXXX"
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:34460
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-294
+    title: "Fix TODO: \t\t    // 1110XXXX"
+    type: technical_debt
+    description: "TODO found in ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:34466 - \t\t    // 1110XXXX"
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:34466
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-299
+    title: "Fix TODO: \t  // These options can be provided separately as readableXXX and writ"
+    type: technical_debt
+    description: "TODO found in ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:47503 - \t  // These options can be provided separately as readableXXX and writableXXX."
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/aws-sdk/dist/aws-sdk-react-native.js:47503
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-312
+    title: 'Fix TODO:     // v0.12 TODO(isaacs)'
+    type: technical_debt
+    description: >-
+      TODO found in ./node_modules/aws-sdk/dist/aws-sdk.js:299023 -     // v0.12
+      TODO(isaacs)
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/aws-sdk/dist/aws-sdk.js:299023
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-318
+    title: "Fix TODO: \t// @TODO Handling all encodings inside a single object makes it very "
+    type: technical_debt
+    description: "TODO found in ./node_modules/aws-sdk/dist/xml2js.js:12543 - \t// @TODO Handling all encodings inside a single object makes it very difficult"
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/aws-sdk/dist/xml2js.js:12543
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-319
+    title: "Fix TODO: \t// @TODO There should be a utf8-strict encoding that rejects invalid "
+    type: technical_debt
+    description: "TODO found in ./node_modules/aws-sdk/dist/xml2js.js:12545 - \t// @TODO There should be a utf8-strict encoding that rejects invalid UTF-8 code"
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/aws-sdk/dist/xml2js.js:12545
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-320
+    title: "Fix TODO: \t    // 110XXXXX"
+    type: technical_debt
+    description: "TODO found in ./node_modules/aws-sdk/dist/xml2js.js:12673 - \t    // 110XXXXX"
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/aws-sdk/dist/xml2js.js:12673
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-321
+    title: "Fix TODO: \t    // 1110XXXX"
+    type: technical_debt
+    description: "TODO found in ./node_modules/aws-sdk/dist/xml2js.js:12679 - \t    // 1110XXXX"
+    acceptance_criteria:
+      - Remove TODO comment in ./node_modules/aws-sdk/dist/xml2js.js:12679
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-323
+    title: 'Fix TODO: // TODO build?'
+    type: technical_debt
+    description: >-
+      TODO found in
+      ./node_modules/jest-snapshot/node_modules/semver/classes/range.js:489 - //
+      TODO build?
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/jest-snapshot/node_modules/semver/classes/range.js:489
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: TODO-324
+    title: 'Fix TODO: // XXX remove in v8 or beyond'
+    type: technical_debt
+    description: >-
+      TODO found in
+      ./node_modules/jest-snapshot/node_modules/semver/preload.js:3 - // XXX
+      remove in v8 or beyond
+    acceptance_criteria:
+      - >-
+        Remove TODO comment in
+        ./node_modules/jest-snapshot/node_modules/semver/preload.js:3
+      - Implement proper solution
+    effort: 2
+    value: 3
+    time_criticality: 2
+    risk_reduction: 3
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-27'
+    links: []
+    wsjf:
+      base_wsjf: 4
+      aging_multiplier: 1
+      final_wsjf: 4.01
+      cost_of_delay: 8
+      validated_scores:
+        value: 3
+        time_criticality: 2
+        risk_reduction: 3
+        effort: 2
+  - id: CSRM-006
+    title: Create Terraform remediation templates
+    type: feature
+    description: Develop Jinja2 templates for generating Terraform remediation code
+    acceptance_criteria:
+      - Template for AWS S3 bucket security fixes
+      - Template for AWS IAM policy remediation
+      - Template for AWS security group fixes
+      - Template validation and testing
     effort: 8
-    value: 13
-    time_criticality: 8
-    risk_reduction: 13
-    status: "NEW"
-    risk_tier: "medium"
-    created_at: "2025-07-26"
-    links: []
-
-  - id: "CSRM-004"
-    title: "Create Neptune graph schema for security findings"
-    type: "infrastructure"
-    description: "Design and implement graph database schema for storing and relating security findings"
-    acceptance_criteria:
-      - "Define vertex types for Assets, Findings, Risks"
-      - "Define edge relationships between entities"
-      - "Create Gremlin scripts for schema initialization"
-      - "Include risk scoring properties"
-    effort: 5
     value: 8
     time_criticality: 5
     risk_reduction: 8
-    status: "NEW"
-    risk_tier: "medium"
-    created_at: "2025-07-26"
+    status: NEW
+    risk_tier: medium
+    created_at: '2025-07-26'
     links: []
-
-  - id: "CSRM-005"
-    title: "Implement risk scoring algorithm"
-    type: "feature"
-    description: "Implement the risk scoring formula: RiskScore = (CVSS_Weight * Asset_Exposure_Score) + Blast_Radius_Impact"
+    wsjf:
+      base_wsjf: 2.63
+      aging_multiplier: 1.01
+      final_wsjf: 2.66
+      cost_of_delay: 21
+      validated_scores:
+        value: 8
+        time_criticality: 5
+        risk_reduction: 8
+        effort: 8
+  - id: CSRM-007
+    title: Add CI/CD pipeline configuration
+    type: infrastructure
+    description: Set up GitHub Actions workflow for automated testing and deployment
     acceptance_criteria:
-      - "Function calculates risk score per formula"
-      - "CVSS scoring integration"
-      - "Asset exposure assessment logic"
-      - "Blast radius calculation"
-      - "Comprehensive unit tests"
-    effort: 8
-    value: 13
-    time_criticality: 8
-    risk_reduction: 13
-    status: "NEW"
-    risk_tier: "medium"
-    created_at: "2025-07-26"
-    links: []
-
-  - id: "CSRM-006"
-    title: "Create Terraform remediation templates"
-    type: "feature"
-    description: "Develop Jinja2 templates for generating Terraform remediation code"
-    acceptance_criteria:
-      - "Template for AWS S3 bucket security fixes"
-      - "Template for AWS IAM policy remediation"
-      - "Template for AWS security group fixes"
-      - "Template validation and testing"
-    effort: 8
-    value: 8
-    time_criticality: 5
-    risk_reduction: 8
-    status: "NEW"
-    risk_tier: "medium"
-    created_at: "2025-07-26"
-    links: []
-
-  - id: "CSRM-007"
-    title: "Add CI/CD pipeline configuration"
-    type: "infrastructure"
-    description: "Set up GitHub Actions workflow for automated testing and deployment"
-    acceptance_criteria:
-      - "CI workflow runs tests on PR"
-      - "Lint and code quality checks"
-      - "Security scanning integration"
-      - "Automated deployment to staging"
+      - CI workflow runs tests on PR
+      - Lint and code quality checks
+      - Security scanning integration
+      - Automated deployment to staging
     effort: 5
     value: 5
     time_criticality: 3
     risk_reduction: 5
-    status: "NEW"
-    risk_tier: "low"
-    created_at: "2025-07-26"
+    status: NEW
+    risk_tier: low
+    created_at: '2025-07-26'
     links: []
+    wsjf:
+      base_wsjf: 2.6
+      aging_multiplier: 1.01
+      final_wsjf: 2.63
+      cost_of_delay: 13
+      validated_scores:
+        value: 5
+        time_criticality: 3
+        risk_reduction: 5
+        effort: 5

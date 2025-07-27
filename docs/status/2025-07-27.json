@@ -1,0 +1,59 @@
+{
+  "timestamp": "2025-07-27T04:09:08.536Z",
+  "completed_ids": [],
+  "coverage_delta": "0.0",
+  "flaky_tests": [],
+  "ci_summary": "passing",
+  "open_prs": 0,
+  "risks_or_blocks": [
+    "1 items are blocked"
+  ],
+  "backlog_size_by_status": {
+    "DONE": 2,
+    "BLOCKED": 1,
+    "NEW": 101
+  },
+  "avg_cycle_time": 0,
+  "dora": {
+    "deploy_freq": "7",
+    "lead_time": "2",
+    "change_fail_rate": "0.0",
+    "mttr": "0"
+  },
+  "rerere_auto_resolved_total": 0,
+  "merge_driver_hits_total": 0,
+  "ci_failure_rate": "0.0",
+  "pr_backoff_state": "inactive",
+  "wsjf_snapshot": [
+    {
+      "id": "CSRM-005",
+      "title": "Implement risk scoring algorithm",
+      "wsjf": 4.31,
+      "status": "NEW"
+    },
+    {
+      "id": "CSRM-004",
+      "title": "Create Neptune graph schema for security findings",
+      "wsjf": 4.25,
+      "status": "NEW"
+    },
+    {
+      "id": "TODO-1",
+      "title": "Fix TODO:     // Discover from codebase TODOs",
+      "wsjf": 4.01,
+      "status": "NEW"
+    },
+    {
+      "id": "TODO-2",
+      "title": "Fix TODO:       const todoPattern = /(?",
+      "wsjf": 4.01,
+      "status": "NEW"
+    },
+    {
+      "id": "TODO-3",
+      "title": "Fix TODO:       const findCommand = 'find . -type f \\\\( -name \"*.js\" -o -name \"*",
+      "wsjf": 4.01,
+      "status": "NEW"
+    }
+  ]
+}
