@@ -1,0 +1,30 @@
+# HELP backlog_items_total Total number of backlog items
+# TYPE backlog_items_total gauge
+backlog_items_total{status="total"} 104
+backlog_items_total{status="done"} 2
+backlog_items_total{status="blocked"} 5
+backlog_items_total{status="new"} 97
+
+# HELP dora_deployment_frequency_per_day DORA deployment frequency
+# TYPE dora_deployment_frequency_per_day gauge
+dora_deployment_frequency_per_day 7
+
+# HELP dora_lead_time_hours DORA lead time in hours
+# TYPE dora_lead_time_hours gauge
+dora_lead_time_hours 2
+
+# HELP dora_change_failure_rate_percent DORA change failure rate
+# TYPE dora_change_failure_rate_percent gauge
+dora_change_failure_rate_percent 0.0
+
+# HELP dora_mttr_hours DORA mean time to recovery in hours
+# TYPE dora_mttr_hours gauge
+dora_mttr_hours 0
+
+# HELP rerere_auto_resolved_total Conflicts auto-resolved by rerere
+# TYPE rerere_auto_resolved_total counter
+rerere_auto_resolved_total 0
+
+# HELP ci_failure_rate_percent CI pipeline failure rate
+# TYPE ci_failure_rate_percent gauge
+ci_failure_rate_percent 0.0
