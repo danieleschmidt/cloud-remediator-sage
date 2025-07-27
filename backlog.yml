@@ -103,7 +103,7 @@ backlog:
     value: 8
     time_criticality: 5
     risk_reduction: 8
-    status: NEW
+    status: BLOCKED
     risk_tier: medium
     created_at: '2025-07-26'
     links: []
