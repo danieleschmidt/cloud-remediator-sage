@@ -1,17 +1,17 @@
 {
-  "timestamp": "2025-07-27T04:09:52.497Z",
+  "timestamp": "2025-07-27T04:10:13.091Z",
   "completed_ids": [],
   "coverage_delta": "0.0",
   "flaky_tests": [],
   "ci_summary": "passing",
   "open_prs": 0,
   "risks_or_blocks": [
-    "3 items are blocked"
+    "4 items are blocked"
   ],
   "backlog_size_by_status": {
     "DONE": 2,
-    "BLOCKED": 3,
-    "NEW": 99
+    "BLOCKED": 4,
+    "NEW": 98
   },
   "avg_cycle_time": 0,
   "dora": {
@@ -25,12 +25,6 @@
   "ci_failure_rate": "0.0",
   "pr_backoff_state": "inactive",
   "wsjf_snapshot": [
-    {
-      "id": "TODO-1",
-      "title": "Fix TODO:     // Discover from codebase TODOs",
-      "wsjf": 4.01,
-      "status": "NEW"
-    },
     {
       "id": "TODO-2",
       "title": "Fix TODO:       const todoPattern = /(?",
@@ -52,6 +46,12 @@
     {
       "id": "TODO-13",
       "title": "Fix TODO:     // #region ------------------------- isXXX -----------------------",
+      "wsjf": 4.01,
+      "status": "NEW"
+    },
+    {
+      "id": "TODO-14",
+      "title": "Fix TODO:     // #region ------------------------- assertXXX -------------------",
       "wsjf": 4.01,
       "status": "NEW"
     }

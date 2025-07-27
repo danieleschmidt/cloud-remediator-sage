@@ -2,8 +2,8 @@
 # TYPE backlog_items_total gauge
 backlog_items_total{status="total"} 104
 backlog_items_total{status="done"} 2
-backlog_items_total{status="blocked"} 3
-backlog_items_total{status="new"} 99
+backlog_items_total{status="blocked"} 4
+backlog_items_total{status="new"} 98
 
 # HELP dora_deployment_frequency_per_day DORA deployment frequency
 # TYPE dora_deployment_frequency_per_day gauge
