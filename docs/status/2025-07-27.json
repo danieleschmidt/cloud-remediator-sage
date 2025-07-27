@@ -1,17 +1,17 @@
 {
-  "timestamp": "2025-07-27T04:09:08.536Z",
+  "timestamp": "2025-07-27T04:09:31.020Z",
   "completed_ids": [],
   "coverage_delta": "0.0",
   "flaky_tests": [],
   "ci_summary": "passing",
   "open_prs": 0,
   "risks_or_blocks": [
-    "1 items are blocked"
+    "2 items are blocked"
   ],
   "backlog_size_by_status": {
     "DONE": 2,
-    "BLOCKED": 1,
-    "NEW": 101
+    "BLOCKED": 2,
+    "NEW": 100
   },
   "avg_cycle_time": 0,
   "dora": {
@@ -25,12 +25,6 @@
   "ci_failure_rate": "0.0",
   "pr_backoff_state": "inactive",
   "wsjf_snapshot": [
-    {
-      "id": "CSRM-005",
-      "title": "Implement risk scoring algorithm",
-      "wsjf": 4.31,
-      "status": "NEW"
-    },
     {
       "id": "CSRM-004",
       "title": "Create Neptune graph schema for security findings",
@@ -52,6 +46,12 @@
     {
       "id": "TODO-3",
       "title": "Fix TODO:       const findCommand = 'find . -type f \\\\( -name \"*.js\" -o -name \"*",
+      "wsjf": 4.01,
+      "status": "NEW"
+    },
+    {
+      "id": "TODO-8",
+      "title": "Fix TODO:       console.warn('Error discovering codebase TODOs",
       "wsjf": 4.01,
       "status": "NEW"
     }
