@@ -1,17 +1,17 @@
 {
-  "timestamp": "2025-07-27T04:10:13.091Z",
+  "timestamp": "2025-07-27T04:10:34.432Z",
   "completed_ids": [],
   "coverage_delta": "0.0",
   "flaky_tests": [],
   "ci_summary": "passing",
   "open_prs": 0,
   "risks_or_blocks": [
-    "4 items are blocked"
+    "5 items are blocked"
   ],
   "backlog_size_by_status": {
     "DONE": 2,
-    "BLOCKED": 4,
-    "NEW": 98
+    "BLOCKED": 5,
+    "NEW": 97
   },
   "avg_cycle_time": 0,
   "dora": {
@@ -25,12 +25,6 @@
   "ci_failure_rate": "0.0",
   "pr_backoff_state": "inactive",
   "wsjf_snapshot": [
-    {
-      "id": "TODO-2",
-      "title": "Fix TODO:       const todoPattern = /(?",
-      "wsjf": 4.01,
-      "status": "NEW"
-    },
     {
       "id": "TODO-3",
       "title": "Fix TODO:       const findCommand = 'find . -type f \\\\( -name \"*.js\" -o -name \"*",
@@ -52,6 +46,12 @@
     {
       "id": "TODO-14",
       "title": "Fix TODO:     // #region ------------------------- assertXXX -------------------",
+      "wsjf": 4.01,
+      "status": "NEW"
+    },
+    {
+      "id": "TODO-17",
+      "title": "Fix TODO:              * Shorthand for marking a suite as `TODO`. This is the sa",
       "wsjf": 4.01,
       "status": "NEW"
     }
