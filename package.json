@@ -25,7 +25,10 @@
     "deps:monitor": "node scripts/dependency-monitor.js",
     "quality:metrics": "node scripts/code-quality-metrics.js",
     "perf:benchmark": "node scripts/performance-benchmark.js",
-    "maintenance:all": "npm run deps:monitor && npm run quality:metrics && npm run perf:benchmark"
+    "maintenance:all": "npm run deps:monitor && npm run quality:metrics && npm run perf:benchmark",
+    "dev": "npm run test:unit -- --watch",
+    "clean": "rm -rf node_modules coverage .serverless dist build",
+    "setup": "npm install && npm run prepare && echo 'Setup complete. Copy .env.example to .env and configure.'",
   },
   "keywords": [
     "security",
