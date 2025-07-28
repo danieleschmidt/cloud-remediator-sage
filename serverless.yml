@@ -47,6 +47,33 @@ functions:
     timeout: 300
     memorySize: 512
 
+  # Monitoring and observability functions
+  healthCheck:
+    handler: src/monitoring/health.handler
+    description: System health check endpoint
+    timeout: 30
+    memorySize: 256
+    events:
+      - http:
+          path: health
+          method: get
+          cors: true
+      - http:
+          path: health/{check}
+          method: get
+          cors: true
+
+  metricsExport:
+    handler: src/monitoring/metrics.handler
+    description: Prometheus metrics export endpoint
+    timeout: 30
+    memorySize: 256
+    events:
+      - http:
+          path: metrics
+          method: get
+          cors: true
+
 plugins:
   - serverless-offline
 

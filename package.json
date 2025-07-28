@@ -5,10 +5,27 @@
   "main": "src/index.js",
   "scripts": {
     "test": "jest",
+    "test:unit": "jest --testPathPattern=\"tests/.*\\.test\\.js\" --testPathIgnorePatterns=\"tests/integration/\" --testPathIgnorePatterns=\"tests/contract/\" --testPathIgnorePatterns=\"tests/performance/\"",
+    "test:integration": "jest --testPathPattern=\"tests/integration/.*\\.test\\.js\"",
+    "test:contract": "jest --testPathPattern=\"tests/contract/.*\\.test\\.js\"",
     "lint": "eslint src/ tests/",
+    "lint:security": "eslint src/ tests/ --config .eslintrc.security.js",
     "build": "npm run lint && npm run test",
     "backlog": "node src/backlog/index.js",
-    "demo": "node -e \"console.log('🤖 Autonomous Backlog Management Demo'); console.log('Run: npm run backlog');\""
+    "demo": "node -e \"console.log('🤖 Autonomous Backlog Management Demo'); console.log('Run: npm run backlog');\"",
+    "semantic-release": "semantic-release",
+    "prepare": "husky install || true",
+    "security:scan": "node scripts/security-scan.js",
+    "security:scan:verbose": "node scripts/security-scan.js --verbose",
+    "security:sbom": "node scripts/generate-sbom.js",
+    "security:audit": "npm audit && npm run security:scan",
+    "package:release": "node scripts/package-release.js",
+    "release": "semantic-release",
+    "release:dry-run": "semantic-release --dry-run",
+    "deps:monitor": "node scripts/dependency-monitor.js",
+    "quality:metrics": "node scripts/code-quality-metrics.js",
+    "perf:benchmark": "node scripts/performance-benchmark.js",
+    "maintenance:all": "npm run deps:monitor && npm run quality:metrics && npm run perf:benchmark"
   },
   "keywords": [
     "security",
@@ -23,7 +40,17 @@
   "devDependencies": {
     "jest": "^29.7.0",
     "eslint": "^8.57.0",
-    "@jest/globals": "^29.7.0"
+    "@jest/globals": "^29.7.0",
+    "semantic-release": "^22.0.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^9.2.0",
+    "@semantic-release/npm": "^11.0.0",
+    "@commitlint/cli": "^18.0.0",
+    "@commitlint/config-conventional": "^18.0.0",
+    "husky": "^8.0.3",
+    "@pact-foundation/pact": "^12.0.0",
+    "@cyclonedx/bom": "^4.0.0"
   },
   "dependencies": {
     "aws-sdk": "^2.1691.0",

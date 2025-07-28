@@ -1,0 +1,412 @@
+# Alerting Configuration for Cloud Remediator Sage
+# This file defines alerting rules and thresholds for the system
+
+alerting:
+  global:
+    # Global alerting configuration
+    evaluation_interval: 30s
+    resolve_timeout: 5m
+    
+  route:
+    # Default routing for alerts
+    group_by: ['alertname', 'severity']
+    group_wait: 10s
+    group_interval: 10s
+    repeat_interval: 12h
+    receiver: 'default'
+    
+    routes:
+      # Critical alerts go to pager duty
+      - match:
+          severity: critical
+        receiver: 'pagerduty-critical'
+        repeat_interval: 5m
+        
+      # High severity alerts go to slack and email
+      - match:
+          severity: high
+        receiver: 'slack-high-severity'
+        repeat_interval: 30m
+        
+      # Security alerts have special routing
+      - match:
+          category: security
+        receiver: 'security-team'
+        repeat_interval: 15m
+
+  receivers:
+    - name: 'default'
+      slack_configs:
+        - api_url: '${SLACK_WEBHOOK_URL}'
+          channel: '#ops-alerts'
+          title: 'Cloud Remediator Alert'
+          text: '{{ range .Alerts }}{{ .Annotations.summary }}{{ end }}'
+          
+    - name: 'pagerduty-critical'
+      pagerduty_configs:
+        - service_key: '${PAGERDUTY_SERVICE_KEY}'
+          description: '{{ .GroupLabels.alertname }}: {{ .CommonAnnotations.summary }}'
+          details:
+            severity: '{{ .CommonLabels.severity }}'
+            environment: '{{ .CommonLabels.environment }}'
+            
+    - name: 'slack-high-severity'
+      slack_configs:
+        - api_url: '${SLACK_WEBHOOK_URL}'
+          channel: '#critical-alerts'
+          title: 'High Severity Alert'
+          text: |
+            *Alert:* {{ .GroupLabels.alertname }}
+            *Severity:* {{ .CommonLabels.severity }}
+            *Environment:* {{ .CommonLabels.environment }}
+            *Summary:* {{ .CommonAnnotations.summary }}
+            *Description:* {{ .CommonAnnotations.description }}
+          color: 'danger'
+          
+    - name: 'security-team'
+      email_configs:
+        - to: 'security-team@company.com'
+          from: 'alerts@company.com'
+          subject: 'Security Alert: {{ .GroupLabels.alertname }}'
+          body: |
+            Security alert detected in Cloud Remediator Sage:
+            
+            Alert: {{ .GroupLabels.alertname }}
+            Severity: {{ .CommonLabels.severity }}
+            Environment: {{ .CommonLabels.environment }}
+            Time: {{ .CommonAnnotations.timestamp }}
+            
+            Summary: {{ .CommonAnnotations.summary }}
+            Description: {{ .CommonAnnotations.description }}
+            
+            Runbook: {{ .CommonAnnotations.runbook_url }}
+
+# Alert Rules
+rules:
+  # Lambda Function Alerts
+  - name: lambda-alerts
+    rules:
+      - alert: LambdaHighErrorRate
+        expr: sum(rate(lambda_invocations_total{success="false"}[5m])) / sum(rate(lambda_invocations_total[5m])) > 0.05
+        for: 5m
+        labels:
+          severity: high
+          category: performance
+          service: lambda
+        annotations:
+          summary: "High error rate detected in Lambda functions"
+          description: "Lambda function error rate is {{ $value | humanizePercentage }} over the last 5 minutes"
+          runbook_url: "https://docs.company.com/runbooks/lambda-errors"
+          
+      - alert: LambdaHighDuration
+        expr: histogram_quantile(0.95, rate(lambda_duration_seconds_bucket[5m])) > 30
+        for: 3m
+        labels:
+          severity: medium
+          category: performance
+          service: lambda
+        annotations:
+          summary: "Lambda function duration is high"
+          description: "95th percentile duration is {{ $value }}s"
+          runbook_url: "https://docs.company.com/runbooks/lambda-performance"
+          
+      - alert: LambdaMemoryHigh
+        expr: memory_usage_bytes / (1024 * 1024 * 1024) > 0.8
+        for: 2m
+        labels:
+          severity: medium
+          category: resource
+          service: lambda
+        annotations:
+          summary: "Lambda memory usage is high"
+          description: "Memory usage is {{ $value | humanize }}GB"
+          
+  # Health Check Alerts
+  - name: health-check-alerts
+    rules:
+      - alert: HealthCheckFailure
+        expr: up == 0
+        for: 2m
+        labels:
+          severity: critical
+          category: availability
+          service: health-check
+        annotations:
+          summary: "Health check is failing"
+          description: "Health check for {{ $labels.instance }} has been down for more than 2 minutes"
+          runbook_url: "https://docs.company.com/runbooks/health-check-failure"
+          
+      - alert: HealthCheckDegraded
+        expr: health_checks_total{success="false"} > 2
+        for: 5m
+        labels:
+          severity: high
+          category: availability
+          service: health-check
+        annotations:
+          summary: "Multiple health check failures"
+          description: "{{ $value }} health checks have failed in the last 5 minutes"
+          
+  # Security Alerts
+  - name: security-alerts
+    rules:
+      - alert: HighSeveritySecurityFinding
+        expr: increase(security_findings_total{severity="critical"}[10m]) > 0
+        labels:
+          severity: critical
+          category: security
+          service: security-scanner
+        annotations:
+          summary: "Critical security finding detected"
+          description: "{{ $value }} critical security findings detected in the last 10 minutes"
+          runbook_url: "https://docs.company.com/runbooks/security-findings"
+          
+      - alert: SecurityScanFailure
+        expr: up{job="security-scanner"} == 0
+        for: 15m
+        labels:
+          severity: high
+          category: security
+          service: security-scanner
+        annotations:
+          summary: "Security scanner is down"
+          description: "Security scanner has been unavailable for more than 15 minutes"
+          
+      - alert: UnauthorizedAccess
+        expr: increase(errors_total{type="unauthorized"}[5m]) > 5
+        labels:
+          severity: high
+          category: security
+          service: api
+        annotations:
+          summary: "Multiple unauthorized access attempts"
+          description: "{{ $value }} unauthorized access attempts in the last 5 minutes"
+          
+  # Database Alerts
+  - name: database-alerts
+    rules:
+      - alert: NeptuneConnectionFailure
+        expr: up{job="neptune"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          category: database
+          service: neptune
+        annotations:
+          summary: "Neptune database is unreachable"
+          description: "Neptune database connection has been failing for more than 2 minutes"
+          runbook_url: "https://docs.company.com/runbooks/neptune-issues"
+          
+      - alert: NeptuneHighQueryDuration
+        expr: histogram_quantile(0.95, rate(neptune_query_duration_seconds_bucket[5m])) > 10
+        for: 5m
+        labels:
+          severity: medium
+          category: performance
+          service: neptune
+        annotations:
+          summary: "Neptune query performance is degraded"
+          description: "95th percentile query duration is {{ $value }}s"
+          
+  # System Resource Alerts
+  - name: system-resource-alerts
+    rules:
+      - alert: HighMemoryUsage
+        expr: memory_usage_bytes / (1024 * 1024 * 1024) > 1.5
+        for: 5m
+        labels:
+          severity: medium
+          category: resource
+          service: system
+        annotations:
+          summary: "High memory usage detected"
+          description: "Memory usage is {{ $value | humanize }}GB"
+          
+      - alert: HighCPUUsage
+        expr: cpu_usage_percent > 80
+        for: 5m
+        labels:
+          severity: medium
+          category: resource
+          service: system
+        annotations:
+          summary: "High CPU usage detected"
+          description: "CPU usage is {{ $value }}%"
+          
+  # Business Logic Alerts
+  - name: business-logic-alerts
+    rules:
+      - alert: RemediationGenerationFailure
+        expr: increase(remediation_actions_total{success="false"}[10m]) > 5
+        for: 2m
+        labels:
+          severity: high
+          category: business
+          service: remediation
+        annotations:
+          summary: "Multiple remediation generation failures"
+          description: "{{ $value }} remediation generation failures in the last 10 minutes"
+          runbook_url: "https://docs.company.com/runbooks/remediation-failures"
+          
+      - alert: ProcessingBacklog
+        expr: remediation_queue_size > 100
+        for: 10m
+        labels:
+          severity: medium
+          category: business
+          service: processing
+        annotations:
+          summary: "Large processing backlog detected"
+          description: "Processing queue has {{ $value }} items"
+          
+      - alert: NoSecurityFindingsProcessed
+        expr: increase(security_findings_total[30m]) == 0
+        for: 30m
+        labels:
+          severity: medium
+          category: business
+          service: processing
+        annotations:
+          summary: "No security findings processed recently"
+          description: "No security findings have been processed in the last 30 minutes"
+          
+  # External Dependencies
+  - name: external-dependency-alerts
+    rules:
+      - alert: S3ServiceDegraded
+        expr: up{job="s3"} == 0
+        for: 5m
+        labels:
+          severity: high
+          category: dependency
+          service: s3
+        annotations:
+          summary: "S3 service is degraded"
+          description: "S3 service health check has been failing for more than 5 minutes"
+          
+      - alert: AWSAPIRateLimit
+        expr: increase(errors_total{type="rate_limit"}[5m]) > 10
+        labels:
+          severity: medium
+          category: dependency
+          service: aws
+        annotations:
+          summary: "AWS API rate limiting detected"
+          description: "{{ $value }} rate limit errors in the last 5 minutes"
+
+# CloudWatch Alarm Templates
+cloudwatch_alarms:
+  # Lambda function alarms
+  lambda_error_rate:
+    alarm_name: "Lambda-High-Error-Rate"
+    metric_name: "Errors"
+    namespace: "AWS/Lambda"
+    statistic: "Sum"
+    period: 300
+    evaluation_periods: 2
+    threshold: 5
+    comparison_operator: "GreaterThanThreshold"
+    alarm_description: "Lambda function error rate is too high"
+    alarm_actions:
+      - "arn:aws:sns:us-east-1:123456789012:lambda-alerts"
+      
+  lambda_duration:
+    alarm_name: "Lambda-High-Duration"
+    metric_name: "Duration"
+    namespace: "AWS/Lambda"
+    statistic: "Average"
+    period: 300
+    evaluation_periods: 2
+    threshold: 30000  # 30 seconds in milliseconds
+    comparison_operator: "GreaterThanThreshold"
+    alarm_description: "Lambda function duration is too high"
+    
+  # Neptune alarms
+  neptune_cpu:
+    alarm_name: "Neptune-High-CPU"
+    metric_name: "CPUUtilization"
+    namespace: "AWS/Neptune"
+    statistic: "Average"
+    period: 300
+    evaluation_periods: 2
+    threshold: 80
+    comparison_operator: "GreaterThanThreshold"
+    alarm_description: "Neptune CPU utilization is high"
+    
+  # Custom metric alarms
+  security_findings:
+    alarm_name: "High-Severity-Security-Findings"
+    metric_name: "security_findings_total"
+    namespace: "CloudRemediatorSage"
+    statistic: "Sum"
+    period: 600
+    evaluation_periods: 1
+    threshold: 10
+    comparison_operator: "GreaterThanThreshold"
+    alarm_description: "High number of security findings detected"
+
+# Notification Templates
+notification_templates:
+  critical_alert:
+    title: "🚨 CRITICAL ALERT: {{ .alertname }}"
+    body: |
+      **CRITICAL ALERT DETECTED**
+      
+      **Service:** {{ .service }}
+      **Environment:** {{ .environment }}
+      **Time:** {{ .timestamp }}
+      
+      **Summary:** {{ .summary }}
+      **Description:** {{ .description }}
+      
+      **Action Required:** Immediate investigation and response required
+      **Runbook:** {{ .runbook_url }}
+      **Escalation:** Notify on-call engineer immediately
+      
+  security_alert:
+    title: "🔒 SECURITY ALERT: {{ .alertname }}"
+    body: |
+      **SECURITY ALERT DETECTED**
+      
+      **Severity:** {{ .severity }}
+      **Category:** Security
+      **Time:** {{ .timestamp }}
+      
+      **Summary:** {{ .summary }}
+      **Description:** {{ .description }}
+      
+      **Immediate Actions:**
+      1. Review security logs
+      2. Check for indicators of compromise
+      3. Follow security incident response procedures
+      
+      **Runbook:** {{ .runbook_url }}
+      
+# Escalation Policies
+escalation:
+  critical:
+    - level: 0
+      delay: 0m
+      notify: ["on-call-engineer"]
+    - level: 1
+      delay: 15m
+      notify: ["team-lead", "on-call-engineer"]
+    - level: 2
+      delay: 30m
+      notify: ["manager", "team-lead", "on-call-engineer"]
+      
+  high:
+    - level: 0
+      delay: 0m
+      notify: ["on-call-engineer"]
+    - level: 1
+      delay: 30m
+      notify: ["team-lead"]
+      
+  medium:
+    - level: 0
+      delay: 0m
+      notify: ["team-channel"]
+    - level: 1
+      delay: 60m
+      notify: ["on-call-engineer"]

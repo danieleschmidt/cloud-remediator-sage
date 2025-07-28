@@ -1,0 +1,59 @@
+{
+  "extends": ["@commitlint/config-conventional"],
+  "rules": {
+    "type-enum": [
+      2,
+      "always",
+      [
+        "feat",
+        "fix",
+        "docs",
+        "style",
+        "refactor",
+        "perf",
+        "test",
+        "build",
+        "ci",
+        "chore",
+        "revert",
+        "security",
+        "config"
+      ]
+    ],
+    "scope-enum": [
+      2,
+      "always",
+      [
+        "api",
+        "auth",
+        "core",
+        "ui",
+        "deps",
+        "config",
+        "docs",
+        "tests",
+        "ci",
+        "security",
+        "monitoring",
+        "deployment",
+        "database",
+        "lambda",
+        "backlog",
+        "remediation",
+        "scanning",
+        "reporting"
+      ]
+    ],
+    "subject-case": [2, "always", "lower-case"],
+    "subject-empty": [2, "never"],
+    "subject-full-stop": [2, "never", "."],
+    "type-case": [2, "always", "lower-case"],
+    "type-empty": [2, "never"],
+    "body-leading-blank": [2, "always"],
+    "body-max-line-length": [2, "always", 100],
+    "footer-leading-blank": [2, "always"],
+    "footer-max-line-length": [2, "always", 100],
+    "header-max-length": [2, "always", 72]
+  },
+  "helpUrl": "https://github.com/conventional-changelog/commitlint/#what-is-commitlint"
+}

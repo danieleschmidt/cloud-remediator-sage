@@ -1,0 +1,172 @@
+{
+  "prowlerFindings": [
+    {
+      "id": "aws-s3-bucket-public-read-write-access",
+      "severity": "CRITICAL",
+      "resource": "arn:aws:s3:::test-public-bucket",
+      "region": "us-east-1",
+      "accountId": "123456789012",
+      "service": "s3",
+      "category": "data_protection",
+      "subcategory": "bucket_permissions",
+      "title": "S3 bucket allows public read/write access",
+      "description": "The S3 bucket 'test-public-bucket' is configured to allow public read and write access, which could lead to data exposure and unauthorized modifications.",
+      "recommendation": "Configure bucket policy to restrict public access and enable bucket encryption",
+      "references": [
+        "https://docs.aws.amazon.com/s3/latest/userguide/access-control-block-public-access.html"
+      ],
+      "remediation": {
+        "automated": true,
+        "script": "aws s3api put-public-access-block --bucket test-public-bucket --public-access-block-configuration BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true",
+        "riskLevel": "low"
+      },
+      "metadata": {
+        "containsPII": true,
+        "internetFacing": true,
+        "complianceFrameworks": ["SOC2", "GDPR", "HIPAA"],
+        "businessCriticality": "high"
+      },
+      "timestamp": "2025-07-27T10:30:00Z"
+    },
+    {
+      "id": "aws-ec2-security-group-unrestricted-access",
+      "severity": "HIGH",
+      "resource": "arn:aws:ec2:us-east-1:123456789012:security-group/sg-0123456789abcdef0",
+      "region": "us-east-1",
+      "accountId": "123456789012",
+      "service": "ec2",
+      "category": "network_security",
+      "subcategory": "security_groups",
+      "title": "Security group allows unrestricted inbound access",
+      "description": "Security group sg-0123456789abcdef0 has rules that allow unrestricted inbound access (0.0.0.0/0) on sensitive ports.",
+      "recommendation": "Restrict inbound rules to specific IP ranges and required ports only",
+      "references": [
+        "https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html"
+      ],
+      "remediation": {
+        "automated": true,
+        "script": "aws ec2 revoke-security-group-ingress --group-id sg-0123456789abcdef0 --protocol tcp --port 22 --cidr 0.0.0.0/0",
+        "riskLevel": "medium"
+      },
+      "metadata": {
+        "exposedPorts": [22, 3389, 1433],
+        "internetFacing": true,
+        "complianceFrameworks": ["CIS", "NIST"],
+        "businessCriticality": "medium"
+      },
+      "timestamp": "2025-07-27T10:31:00Z"
+    },
+    {
+      "id": "aws-iam-user-excessive-permissions",
+      "severity": "HIGH",
+      "resource": "arn:aws:iam::123456789012:user/test-user",
+      "region": "global",
+      "accountId": "123456789012",
+      "service": "iam",
+      "category": "identity_access",
+      "subcategory": "user_permissions",
+      "title": "IAM user has excessive permissions",
+      "description": "IAM user 'test-user' has administrator access policies attached, violating the principle of least privilege.",
+      "recommendation": "Review and reduce user permissions to minimum required for their role",
+      "references": [
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+      ],
+      "remediation": {
+        "automated": false,
+        "script": "# MANUAL REVIEW REQUIRED\n# aws iam detach-user-policy --user-name test-user --policy-arn arn:aws:iam::aws:policy/AdministratorAccess",
+        "riskLevel": "high",
+        "requiresApproval": true
+      },
+      "metadata": {
+        "attachedPolicies": ["AdministratorAccess", "PowerUserAccess"],
+        "lastUsed": "2025-07-26T15:20:00Z",
+        "complianceFrameworks": ["SOX", "PCI-DSS"],
+        "businessCriticality": "high"
+      },
+      "timestamp": "2025-07-27T10:32:00Z"
+    },
+    {
+      "id": "aws-rds-unencrypted-database",
+      "severity": "MEDIUM",
+      "resource": "arn:aws:rds:us-east-1:123456789012:db:test-database",
+      "region": "us-east-1",
+      "accountId": "123456789012",
+      "service": "rds",
+      "category": "data_protection",
+      "subcategory": "encryption",
+      "title": "RDS database instance is not encrypted",
+      "description": "RDS database instance 'test-database' does not have encryption enabled, potentially exposing sensitive data.",
+      "recommendation": "Enable encryption at rest for the database instance",
+      "references": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Encryption.html"
+      ],
+      "remediation": {
+        "automated": false,
+        "script": "# Encryption must be enabled during creation\n# Create encrypted snapshot and restore to new encrypted instance",
+        "riskLevel": "high",
+        "requiresDowntime": true
+      },
+      "metadata": {
+        "engine": "mysql",
+        "engineVersion": "8.0.32",
+        "multiAZ": false,
+        "complianceFrameworks": ["GDPR", "HIPAA"],
+        "businessCriticality": "high"
+      },
+      "timestamp": "2025-07-27T10:33:00Z"
+    }
+  ],
+  "awsConfigFindings": [
+    {
+      "id": "config-rule-s3-bucket-ssl-requests-only",
+      "configRuleName": "s3-bucket-ssl-requests-only",
+      "compliance": "NON_COMPLIANT",
+      "resource": "arn:aws:s3:::test-insecure-bucket",
+      "severity": "MEDIUM",
+      "description": "S3 bucket does not have a policy that requires SSL requests only",
+      "remediation": {
+        "automated": true,
+        "script": "aws s3api put-bucket-policy --bucket test-insecure-bucket --policy file://ssl-only-policy.json"
+      }
+    },
+    {
+      "id": "config-rule-cloudtrail-enabled",
+      "configRuleName": "cloudtrail-enabled",
+      "compliance": "NON_COMPLIANT",
+      "resource": "arn:aws:cloudtrail:us-east-1:123456789012:trail/test-trail",
+      "severity": "HIGH",
+      "description": "CloudTrail is not enabled in this region",
+      "remediation": {
+        "automated": true,
+        "script": "aws cloudtrail create-trail --name security-audit-trail --s3-bucket-name cloudtrail-logs-bucket"
+      }
+    }
+  ],
+  "guardDutyFindings": [
+    {
+      "id": "gd-finding-malicious-ip",
+      "type": "UnauthorizedAPICall:IAMUser/MaliciousIPCaller.Custom",
+      "severity": "HIGH",
+      "resource": "arn:aws:iam::123456789012:user/compromised-user",
+      "description": "IAM user is making API calls from a known malicious IP address",
+      "remediation": {
+        "automated": true,
+        "script": "aws iam attach-user-policy --user-name compromised-user --policy-arn arn:aws:iam::aws:policy/AWSDenyAll",
+        "urgent": true
+      }
+    }
+  ],
+  "customSecurityChecks": [
+    {
+      "id": "custom-check-password-policy",
+      "category": "identity_access",
+      "severity": "MEDIUM",
+      "description": "Account password policy does not meet security requirements",
+      "resource": "arn:aws:iam::123456789012:account-summary",
+      "remediation": {
+        "automated": true,
+        "script": "aws iam update-account-password-policy --minimum-password-length 14 --require-symbols --require-numbers --require-uppercase-characters --require-lowercase-characters"
+      }
+    }
+  ]
+}

@@ -1,0 +1,263 @@
+# EditorConfig configuration for Cloud Remediator Sage
+# Top-most EditorConfig file
+root = true
+
+# ===================================================================
+# DEFAULT SETTINGS FOR ALL FILES
+# ===================================================================
+[*]
+# Character encoding
+charset = utf-8
+
+# Line ending style (Unix-style)
+end_of_line = lf
+
+# Insert final newline
+insert_final_newline = true
+
+# Remove trailing whitespace
+trim_trailing_whitespace = true
+
+# Indentation style and size
+indent_style = space
+indent_size = 2
+
+# Maximum line length hint for editors
+max_line_length = 120
+
+# ===================================================================
+# JAVASCRIPT AND TYPESCRIPT FILES
+# ===================================================================
+[*.{js,jsx,ts,tsx}]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+quote_type = single
+curly_bracket_next_line = false
+spaces_around_operators = true
+spaces_around_brackets = false
+
+# ===================================================================
+# JSON FILES
+# ===================================================================
+[*.{json,jsonc}]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+# Package files
+[{package.json,package-lock.json}]
+indent_style = space
+indent_size = 2
+
+# ===================================================================
+# YAML FILES
+# ===================================================================
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+# Docker Compose files
+[{docker-compose*.yml,docker-compose*.yaml}]
+indent_style = space
+indent_size = 2
+
+# GitHub Actions workflows
+[.github/workflows/*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# Serverless configuration
+[serverless.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# ===================================================================
+# MARKDOWN FILES
+# ===================================================================
+[*.{md,mdx}]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+trim_trailing_whitespace = false  # Preserve double spaces for line breaks
+
+# ===================================================================
+# DOCKER FILES
+# ===================================================================
+[{Dockerfile,Dockerfile.*,*.dockerfile}]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+# ===================================================================
+# SHELL SCRIPTS
+# ===================================================================
+[*.{sh,bash,zsh}]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+# ===================================================================
+# PYTHON FILES (for future ML components)
+# ===================================================================
+[*.{py,pyw}]
+indent_style = space
+indent_size = 4
+max_line_length = 88
+
+# Python configuration files
+[*.{cfg,ini}]
+indent_style = space
+indent_size = 4
+
+# ===================================================================
+# TERRAFORM FILES
+# ===================================================================
+[*.{tf,tfvars,hcl}]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+# ===================================================================
+# SQL FILES
+# ===================================================================
+[*.{sql,gql,graphql}]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+# ===================================================================
+# CONFIGURATION FILES
+# ===================================================================
+
+# ESLint configuration
+[.eslintrc*]
+indent_style = space
+indent_size = 2
+
+# Prettier configuration
+[.prettierrc*]
+indent_style = space
+indent_size = 2
+
+# Jest configuration
+[jest.config.{js,ts,json}]
+indent_style = space
+indent_size = 2
+
+# ===================================================================
+# ENVIRONMENT FILES
+# ===================================================================
+[*.env*]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+# ===================================================================
+# DOCUMENTATION FILES
+# ===================================================================
+
+# README files
+[README*]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+trim_trailing_whitespace = false
+
+# License files
+[LICENSE*]
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = false
+
+# Changelog files
+[CHANGELOG*]
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = false
+
+# ===================================================================
+# IGNORE PATTERNS
+# ===================================================================
+
+# Generated files and dependencies
+[{node_modules,coverage,dist,build,.serverless,.aws-sam,.terraform}/**]
+charset = unset
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+indent_style = unset
+indent_size = unset
+
+# Lock files
+[{package-lock.json,yarn.lock,pnpm-lock.yaml}]
+charset = unset
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+indent_style = unset
+indent_size = unset
+
+# Minified files
+[*.min.{js,css}]
+charset = unset
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+indent_style = unset
+indent_size = unset
+
+# ===================================================================
+# SPECIAL CASES
+# ===================================================================
+
+# Makefile requires tabs
+[{Makefile,makefile,GNUmakefile,*.mk}]
+indent_style = tab
+indent_size = 4
+
+# Go files require tabs
+[*.go]
+indent_style = tab
+indent_size = 4
+
+# Windows batch files
+[*.{bat,cmd}]
+end_of_line = crlf
+
+# ===================================================================
+# VS CODE SPECIFIC FILES
+# ===================================================================
+[.vscode/*.json]
+indent_style = space
+indent_size = 2
+
+# ===================================================================
+# GIT CONFIGURATION FILES
+# ===================================================================
+[.git*]
+indent_style = space
+indent_size = 2
+
+# Git commit message template
+[.gitmessage]
+max_line_length = 72
+trim_trailing_whitespace = false
+
+# ===================================================================
+# NOTES
+# ===================================================================
+# This EditorConfig file ensures consistent formatting across:
+# - Different editors and IDEs
+# - Different operating systems
+# - Team members' local environments
+# - CI/CD pipeline environments
+#
+# Supported by most modern editors including:
+# - Visual Studio Code
+# - JetBrains IDEs (WebStorm, IntelliJ)
+# - Sublime Text
+# - Atom
+# - Vim/Neovim
+# - Emacs

@@ -25,6 +25,8 @@ The Cloud Remediator Sage is a serverless, multi-cloud security posture manageme
 
 ## Data Flow
 
+### High-Level System Flow
+
 ```mermaid
 graph TD
     A[Security Scanners] --> B[Prowler Ingest Lambda]
@@ -35,6 +37,76 @@ graph TD
     G[Backlog System] --> H[Autonomous Execution]
     H --> I[CI/CD Pipeline]
     I --> J[Deployment]
+```
+
+### Detailed Data Flow Architecture
+
+```mermaid
+graph TD
+    subgraph "Data Ingestion Layer"
+        A1[Prowler CLI] --> A2[S3 Bucket]
+        A3[CloudSploit] --> A2
+        A4[Steampipe] --> A2
+        A2 --> A5[S3 Event Trigger]
+        A5 --> B1[Prowler Ingest Lambda]
+    end
+    
+    subgraph "Processing Layer"
+        B1 --> B2[Data Validation]
+        B2 --> B3[Finding Normalization]
+        B3 --> C1[Neptune Graph DB]
+        C1 --> D1[Risk Scoring Engine]
+        D1 --> D2[CVSS Calculator]
+        D1 --> D3[Asset Criticality Scorer]
+        D1 --> D4[Blast Radius Analyzer]
+    end
+    
+    subgraph "Intelligence Layer"
+        D4 --> E1[WSJF Prioritizer]
+        E1 --> E2[Backlog Manager]
+        E2 --> E3[Task Scheduler]
+        E3 --> F1[Remediation Generator]
+        F1 --> F2[Template Engine]
+        F2 --> F3[IaC Generation]
+    end
+    
+    subgraph "Execution Layer"
+        F3 --> G1[GitHub Actions]
+        G1 --> G2[Terraform Apply]
+        G1 --> G3[Serverless Deploy]
+        G2 --> G4[AWS Resources]
+        G3 --> G4
+        G4 --> H1[Validation Tests]
+        H1 --> H2[Success Metrics]
+        H2 --> E2
+    end
+    
+    subgraph "Monitoring Layer"
+        I1[CloudWatch Logs] --> I2[Metrics Dashboard]
+        I2 --> I3[Alert Manager]
+        I3 --> I4[Slack Notifications]
+        G4 --> I1
+        H1 --> I1
+    end
+```
+
+### State Transitions
+
+```mermaid
+stateDiagram-v2
+    [*] --> Discovered: Security Finding Detected
+    Discovered --> Validated: Input Validation
+    Validated --> Scored: Risk Assessment
+    Scored --> Prioritized: WSJF Calculation
+    Prioritized --> Queued: Backlog Entry
+    Queued --> InProgress: Execution Started
+    InProgress --> Remediated: Template Applied
+    InProgress --> Failed: Execution Error
+    Failed --> Queued: Retry Logic
+    Remediated --> Verified: Validation Tests
+    Verified --> Closed: Success Confirmation
+    Verified --> Failed: Validation Failed
+    Closed --> [*]
 ```
 
 ## Deployment Architecture
@@ -134,19 +206,87 @@ See `docs/adr/` directory for architectural decisions and their rationale.
 - Custom remediation workflows
 - Multi-tenant support
 
-## Security Considerations
+## Security Architecture
 
-### Threat Model
-- Supply chain attacks via dependencies
-- Credential compromise
-- Code injection in templates
-- Privilege escalation
+### Zero-Trust Security Model
 
-### Mitigation Strategies
-- Dependency pinning with SHA verification
-- Secrets rotation
-- Template sandboxing
-- Role-based access control
+```mermaid
+graph TD
+    subgraph "Identity & Access Management"
+        A1[IAM Roles] --> A2[Least Privilege]
+        A2 --> A3[Resource-Based Policies]
+        A3 --> A4[SCP Guardrails]
+    end
+    
+    subgraph "Data Protection"
+        B1[KMS Encryption] --> B2[S3 Server-Side Encryption]
+        B1 --> B3[Neptune Encryption at Rest]
+        B1 --> B4[Lambda Environment Variables]
+        B2 --> B5[Bucket Policies]
+        B3 --> B6[VPC Endpoints]
+        B4 --> B7[Parameter Store]
+    end
+    
+    subgraph "Network Security"
+        C1[VPC Isolation] --> C2[Private Subnets]
+        C2 --> C3[Security Groups]
+        C3 --> C4[NACLs]
+        C4 --> C5[VPC Flow Logs]
+    end
+    
+    subgraph "Application Security"
+        D1[Input Validation] --> D2[Output Encoding]
+        D2 --> D3[SAST/SCA Scanning]
+        D3 --> D4[Dependency Monitoring]
+        D4 --> D5[Runtime Protection]
+    end
+```
+
+### Threat Model & Mitigations
+
+| Threat Category | Risk Level | Mitigation Strategy |
+|----------------|------------|-------------------|
+| **Supply Chain Attacks** | High | Dependency pinning, SHA verification, SBOM generation |
+| **Credential Compromise** | High | Rotation policies, temporary credentials, MFA |
+| **Code Injection** | Medium | Template sandboxing, input validation, CSP headers |
+| **Privilege Escalation** | High | Least privilege IAM, resource boundaries, monitoring |
+| **Data Exfiltration** | Medium | VPC endpoints, encryption, access logging |
+| **Denial of Service** | Low | Rate limiting, auto-scaling, circuit breakers |
+
+### Security Controls Matrix
+
+```mermaid
+graph TD
+    subgraph "Preventive Controls"
+        P1[IAM Policies]
+        P2[Input Validation]
+        P3[Encryption]
+        P4[Network Segmentation]
+    end
+    
+    subgraph "Detective Controls"
+        D1[CloudTrail Logging]
+        D2[VPC Flow Logs]
+        D3[GuardDuty]
+        D4[Config Rules]
+    end
+    
+    subgraph "Responsive Controls"
+        R1[Automated Remediation]
+        R2[Incident Response]
+        R3[Security Notifications]
+        R4[Access Revocation]
+    end
+    
+    P1 --> D1
+    P2 --> D2
+    P3 --> D3
+    P4 --> D4
+    D1 --> R1
+    D2 --> R2
+    D3 --> R3
+    D4 --> R4
+```
 
 ## Performance Requirements
 
