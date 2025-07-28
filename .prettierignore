@@ -1,0 +1,99 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+build/
+dist/
+out/
+target/
+bin/
+
+# Coverage reports
+coverage/
+.nyc_output/
+
+# Serverless Framework
+.serverless/
+
+# AWS
+.aws-sam/
+
+# Terraform
+.terraform/
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Minified files
+*.min.js
+*.min.css
+
+# Generated files
+*.bundle.js
+*.bundle.css
+
+# Logs
+*.log
+
+# Cache directories
+.cache/
+.eslintcache
+.prettiercache
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+.temp/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Documentation builds
+docs/_build/
+/site
+
+# Test outputs
+test-results/
+playwright-report/
+
+# Cloud Remediator Sage specific
+prowler-output/
+neptune-backups/
+remediation-templates-generated/
+security-scan-results/
+risk-assessment-cache/
+
+# Environment files
+.env*
+
+# Secrets
+*.key
+*.pem
+*.p12
+*.p8
+*.crt
+*.cer
+*.der
+credentials
+credentials.json
+service-account.json
+.secrets/
+
+# Static analysis
+.scannerwork/
+.sonarqube/
+
+# Backup files
+*.backup
+*.bak
+*.old
+*.orig
+*.save

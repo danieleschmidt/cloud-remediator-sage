@@ -1,0 +1,256 @@
+# Development and build artifacts
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Test coverage and reports
+coverage/
+*.lcov
+test-results.xml
+junit.xml
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+.temp/
+
+# Log files
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Optional npm cache directory
+.npm/
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# parcel-bundler cache
+.cache/
+.parcel-cache/
+
+# Next.js build output
+.next/
+
+# Nuxt.js build / generate output
+.nuxt/
+dist/
+
+# Storybook build outputs
+.out/
+.storybook-out/
+
+# Rollup.js default build output
+dist/
+
+# Uncomment the public line in if your project uses Gatsby and not Next.js
+# public
+
+# Storybook build outputs
+.out
+.storybook-out
+
+# vuepress build output
+.vuepress/dist
+
+# Serverless directories
+.serverless/
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file
+.tern-port
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test/
+
+# yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Environment files (security risk)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# Git files
+.git/
+.gitignore
+.gitattributes
+
+# CI/CD files
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+azure-pipelines.yml
+appveyor.yml
+
+# Documentation that's not needed in runtime
+README.md
+CHANGELOG.md
+CONTRIBUTING.md
+LICENSE
+docs/guides/
+docs/adr/
+docs/runbooks/
+
+# Development configuration
+.editorconfig
+.prettierrc*
+.eslintrc*
+.babelrc*
+jest.config.js
+webpack.config.js
+rollup.config.js
+tsconfig.json
+
+# Package management files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Security and analysis reports
+reports/
+security/
+*.sarif
+
+# Performance testing
+tests/performance/
+
+# Development Docker files
+docker-compose.override.yml
+docker-compose.dev.yml
+Dockerfile.dev
+
+# Kubernetes development files
+k8s/
+kubernetes/
+helm/
+
+# Terraform files
+terraform/
+*.tf
+*.tfvars
+*.tfstate*
+
+# Local development databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Cache directories
+.cache/
+.nyc_output/
+
+# Build artifacts
+build/
+out/
+
+# Temporary test files
+test-output/
+test-reports/
+
+# Local configuration
+local.json
+local.yml
+local.yaml
+
+# Backup files
+*.bak
+*.backup
+
+# Archive files
+*.tar
+*.tar.gz
+*.zip
+*.rar
+
+# MacOS specific
+.AppleDouble
+.LSOverride
+Icon
+
+# Windows specific
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux specific
+*~
+
+# Security scanning results that shouldn't be in image
+trivy-results.json
+snyk-results.json
+security-scan.json
+
+# Local secrets (should never be committed but extra safety)
+secrets/
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Development utilities
+scripts/dev/
+scripts/local/
+dev/
+local/
+
+# Documentation build artifacts
+site/
+_site/

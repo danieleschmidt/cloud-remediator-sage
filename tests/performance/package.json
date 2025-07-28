@@ -1,0 +1,23 @@
+{
+  "name": "cloud-remediator-sage-performance-tests",
+  "version": "1.0.0",
+  "description": "Performance testing suite for cloud remediation system",
+  "scripts": {
+    "test:performance": "k6 run k6-config.js",
+    "test:load": "k6 run load-test.js",
+    "test:stress": "k6 run --env TEST_TYPE=stress k6-config.js",
+    "test:spike": "k6 run --env TEST_TYPE=spike k6-config.js",
+    "test:all": "npm run test:performance && npm run test:load"
+  },
+  "devDependencies": {
+    "k6": "^0.47.0"
+  },
+  "keywords": [
+    "performance",
+    "testing",
+    "k6",
+    "security",
+    "cloud",
+    "remediation"
+  ]
+}

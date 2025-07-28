@@ -1,35 +1,111 @@
 version: '3.8'
 
 services:
-  autonomous-backlog:
+  # Main application service
+  cloud-remediator-sage:
     build: .
-    container_name: autonomous-backlog-manager
+    container_name: cloud-remediator-sage
     environment:
       - NODE_ENV=production
       - MAX_PRS_PER_DAY=5
       - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-east-1}
+      - PACT_BROKER_URL=${PACT_BROKER_URL}
+      - FINDINGS_BUCKET=${FINDINGS_BUCKET}
+      - RISK_TABLE=${RISK_TABLE}
+      - REMEDIATION_BUCKET=${REMEDIATION_BUCKET}
     volumes:
       - .:/app
       - autonomous_cache:/app/cache
       - autonomous_reports:/app/reports
+      - autonomous_logs:/app/logs
+      - git_data:/app/.git
+    ports:
+      - "3000:3000"
     networks:
-      - autonomous-network
+      - cloud-security-network
     restart: unless-stopped
-    
-    # Run every 4 hours
-    # Note: This requires a cron-like scheduler service or external orchestration
+    healthcheck:
+      test: ["CMD", "node", "-e", "console.log('Health check passed')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     labels:
-      - "com.terragon.service=autonomous-backlog"
+      - "com.terragon.service=cloud-remediator-sage"
       - "com.terragon.version=1.0.0"
+      - "com.terragon.category=security"
 
-  # Optional: Prometheus for metrics collection
+  # Development database for testing
+  postgres:
+    image: postgres:15-alpine
+    container_name: cloud-remediator-postgres
+    environment:
+      - POSTGRES_DB=cloud_security
+      - POSTGRES_USER=security_user
+      - POSTGRES_PASSWORD=secure_password_123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - cloud-security-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U security_user -d cloud_security"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for caching and session management
+  redis:
+    image: redis:7-alpine
+    container_name: cloud-remediator-redis
+    command: redis-server --requirepass ${REDIS_PASSWORD:-redis_secure_123}
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - cloud-security-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # LocalStack for AWS service mocking in development
+  localstack:
+    image: localstack/localstack:latest
+    container_name: cloud-remediator-localstack
+    environment:
+      - SERVICES=s3,dynamodb,lambda,iam,ec2,sts
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+      - LAMBDA_EXECUTOR=docker
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes:
+      - localstack_data:/tmp/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "4566:4566"
+      - "4571:4571"
+    networks:
+      - cloud-security-network
+    restart: unless-stopped
+
+  # Prometheus for metrics collection
   prometheus:
     image: prom/prometheus:latest
-    container_name: autonomous-prometheus
-    ports:
-      - "9090:9090"
+    container_name: cloud-remediator-prometheus
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./monitoring/rules/:/etc/prometheus/rules/
       - prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -38,30 +114,132 @@ services:
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--storage.tsdb.retention.time=200h'
       - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+    ports:
+      - "9090:9090"
     networks:
-      - autonomous-network
+      - cloud-security-network
     restart: unless-stopped
+    depends_on:
+      - cloud-remediator-sage
 
-  # Optional: Grafana for visualization
+  # Grafana for security dashboards
   grafana:
     image: grafana/grafana:latest
-    container_name: autonomous-grafana
-    ports:
-      - "3000:3000"
+    container_name: cloud-remediator-grafana
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin_secure_123}
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel,grafana-worldmap-panel
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/dashboards/security-overview.json
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    ports:
+      - "3001:3000"
     networks:
-      - autonomous-network
+      - cloud-security-network
     restart: unless-stopped
+    depends_on:
+      - prometheus
+
+  # Jaeger for distributed tracing
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: cloud-remediator-jaeger
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "16686:16686"
+      - "14268:14268"
+      - "14250:14250"
+    networks:
+      - cloud-security-network
+    restart: unless-stopped
+
+  # Pact Broker for contract testing
+  pact-broker:
+    image: pactfoundation/pact-broker:latest
+    container_name: cloud-remediator-pact-broker
+    environment:
+      - PACT_BROKER_DATABASE_URL=postgres://pact_user:pact_password@pact-postgres/pact_broker
+      - PACT_BROKER_BASIC_AUTH_USERNAME=pact
+      - PACT_BROKER_BASIC_AUTH_PASSWORD=pact_secure_123
+    ports:
+      - "9292:9292"
+    networks:
+      - cloud-security-network
+    restart: unless-stopped
+    depends_on:
+      - pact-postgres
+
+  # Postgres for Pact Broker
+  pact-postgres:
+    image: postgres:15-alpine
+    container_name: cloud-remediator-pact-postgres
+    environment:
+      - POSTGRES_DB=pact_broker
+      - POSTGRES_USER=pact_user
+      - POSTGRES_PASSWORD=pact_password
+    volumes:
+      - pact_postgres_data:/var/lib/postgresql/data
+    networks:
+      - cloud-security-network
+    restart: unless-stopped
+
+  # Security testing tools container
+  security-tools:
+    image: owasp/zap2docker-stable
+    container_name: cloud-remediator-security-tools
+    command: zap-baseline.py -t http://cloud-remediator-sage:3000 -J security-report.json || true
+    volumes:
+      - ./security:/zap/wrk
+    networks:
+      - cloud-security-network
+    profiles:
+      - security-testing
+
+  # Performance testing with k6
+  k6:
+    image: grafana/k6:latest
+    container_name: cloud-remediator-k6
+    volumes:
+      - ./tests/performance:/scripts
+      - ./reports:/reports
+    environment:
+      - K6_OUT=json=/reports/k6-results.json
+      - API_BASE_URL=http://cloud-remediator-sage:3000
+    networks:
+      - cloud-security-network
+    profiles:
+      - performance-testing
 
 volumes:
   autonomous_cache:
+    driver: local
   autonomous_reports:
+    driver: local
+  autonomous_logs:
+    driver: local
+  git_data:
+    driver: local
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  localstack_data:
+    driver: local
   prometheus_data:
+    driver: local
   grafana_data:
+    driver: local
+  pact_postgres_data:
+    driver: local
 
 networks:
-  autonomous-network:
+  cloud-security-network:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
