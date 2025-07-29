@@ -1,0 +1,105 @@
+version: 2
+updates:
+  # Enable version updates for npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "04:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5
+    
+    # Dependency grouping for related updates
+    groups:
+      aws-dependencies:
+        patterns:
+          - "aws-*"
+          - "@aws-*"
+      
+      testing-dependencies:
+        patterns:
+          - "jest*"
+          - "@jest/*"
+          - "*test*"
+      
+      linting-dependencies:
+        patterns:
+          - "eslint*"
+          - "@eslint/*"
+          - "prettier*"
+    
+    # Custom commit messages
+    commit-message:
+      prefix: "deps"
+      prefix-development: "deps-dev"
+      include: "scope"
+    
+    # Reviewers and assignees
+    reviewers:
+      - "danieleschmidt"
+    
+    # Labels for dependency PRs
+    labels:
+      - "dependencies"
+      - "automated"
+    
+    # Allow automatic merging of patch updates
+    allow:
+      - dependency-type: "direct:production"
+        update-type: "version-update:semver-patch"
+      - dependency-type: "direct:development"
+        update-type: "version-update:semver-patch"
+    
+    # Ignore specific dependencies that require manual review
+    ignore:
+      # Major version updates require manual review
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+      
+      # Specific packages that have caused issues
+      - dependency-name: "aws-sdk"
+        versions: [">= 3.0.0"]
+        reason: "Requires migration from v2 to v3 SDK"
+
+  # Enable version updates for Docker
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "04:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 2
+    
+    commit-message:
+      prefix: "docker"
+      include: "scope"
+    
+    reviewers:
+      - "danieleschmidt"
+    
+    labels:
+      - "docker"
+      - "automated"
+
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/.github/workflows"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "04:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 3
+    
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    
+    reviewers:
+      - "danieleschmidt"
+    
+    labels:
+      - "ci"
+      - "automated"
