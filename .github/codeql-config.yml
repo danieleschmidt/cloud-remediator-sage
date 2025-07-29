@@ -1,0 +1,40 @@
+name: "Cloud Remediator Sage CodeQL Config"
+
+# Disable default queries to focus on security-specific ones
+disable-default-queries: false
+
+# Include additional security-focused query suites
+queries:
+  - uses: security-extended
+  - uses: security-and-quality
+
+# Configure paths to analyze
+paths:
+  - src/
+  - scripts/
+
+# Exclude paths from analysis
+paths-ignore:
+  - tests/
+  - coverage/
+  - node_modules/
+  - docs/
+  - "**/*.test.js"
+  - "**/*.spec.js"
+
+# Configure specific security checks
+query-filters:
+  # Focus on high-severity security issues
+  - include:
+      kind: problem
+      problem.severity: error
+  # Include AWS-specific security patterns
+  - include:
+      tags: security
+      tags: aws
+      tags: credentials
+  # Include injection-related queries
+  - include:
+      tags: injection
+      tags: xss
+      tags: sqli
