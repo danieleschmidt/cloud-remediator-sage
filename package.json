@@ -28,7 +28,7 @@
     "maintenance:all": "npm run deps:monitor && npm run quality:metrics && npm run perf:benchmark",
     "dev": "npm run test:unit -- --watch",
     "clean": "rm -rf node_modules coverage .serverless dist build",
-    "setup": "npm install && npm run prepare && echo 'Setup complete. Copy .env.example to .env and configure.'",
+    "setup": "npm install && npm run prepare && echo 'Setup complete. Copy .env.example to .env and configure.'"
   },
   "keywords": [
     "security",

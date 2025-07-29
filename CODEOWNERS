@@ -1,0 +1,91 @@
+# CODEOWNERS - Cloud Remediator Sage
+# This file defines code ownership and review requirements
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# =====================================================================
+# GLOBAL OWNERSHIP
+# =====================================================================
+
+# Default owners for all files
+* @danieleschmidt
+
+# =====================================================================
+# CORE ARCHITECTURE & SECURITY
+# =====================================================================
+
+# Architecture and core business logic
+/src/backlog/ @danieleschmidt
+/src/lambda/ @danieleschmidt
+ARCHITECTURE.md @danieleschmidt
+
+# Security-critical files require additional review
+SECURITY.md @danieleschmidt
+/src/lambda/risk-scoring.js @danieleschmidt
+/scripts/security-scan.js @danieleschmidt
+.eslintrc.security.js @danieleschmidt
+
+# =====================================================================
+# INFRASTRUCTURE & DEPLOYMENT
+# =====================================================================
+
+# Infrastructure as Code
+serverless.yml @danieleschmidt
+Dockerfile @danieleschmidt
+docker-compose.yml @danieleschmidt
+
+# CI/CD and automation
+/.github/ @danieleschmidt
+/scripts/ @danieleschmidt
+Makefile @danieleschmidt
+
+# Dependency management
+package.json @danieleschmidt
+package-lock.json @danieleschmidt
+.nvmrc @danieleschmidt
+
+# =====================================================================
+# CONFIGURATION & ENVIRONMENT
+# =====================================================================
+
+# Environment and configuration files
+.env.example @danieleschmidt
+jest.config.js @danieleschmidt
+.eslintrc.js @danieleschmidt
+.prettierrc @danieleschmidt
+.pre-commit-config.yaml @danieleschmidt
+
+# =====================================================================
+# DOCUMENTATION & GOVERNANCE
+# =====================================================================
+
+# Project governance
+README.md @danieleschmidt
+CONTRIBUTING.md @danieleschmidt
+CODE_OF_CONDUCT.md @danieleschmidt
+LICENSE @danieleschmidt
+
+# Development documentation
+DEVELOPMENT.md @danieleschmidt
+/docs/ @danieleschmidt
+
+# =====================================================================
+# TESTING & MONITORING
+# =====================================================================
+
+# Test configuration and critical test files
+/tests/setup.js @danieleschmidt
+/tests/security-test-processor.js @danieleschmidt
+/tests/contract/ @danieleschmidt
+
+# Monitoring and observability
+/monitoring/ @danieleschmidt
+/docs/monitoring/ @danieleschmidt
+
+# =====================================================================
+# RELEASE & CHANGELOG
+# =====================================================================
+
+# Release management
+CHANGELOG.md @danieleschmidt
+.releaserc.json @danieleschmidt
+/scripts/package-release.js @danieleschmidt
