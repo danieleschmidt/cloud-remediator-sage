@@ -237,6 +237,13 @@ $RECYCLE.BIN/
 trivy-results.json
 snyk-results.json
 security-scan.json
+*.sarif
+
+# Container security specific excludes
+.trivyignore
+.snyk
+Dockerfile*
+.dockerignore
 
 # Local secrets (should never be committed but extra safety)
 secrets/
