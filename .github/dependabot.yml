@@ -44,12 +44,22 @@ updates:
       - "dependencies"
       - "automated"
     
-    # Allow automatic merging of patch updates
+    # Security-focused updates - prioritize security patches
     allow:
+      - dependency-type: "direct:production"
+        update-type: "security"
+      - dependency-type: "indirect"
+        update-type: "security"
       - dependency-type: "direct:production"
         update-type: "version-update:semver-patch"
       - dependency-type: "direct:development"
         update-type: "version-update:semver-patch"
+    
+    # Enable vulnerability alerts and security updates
+    vulnerability-alerts:
+      enabled: true
+    security-updates:
+      enabled: true
     
     # Ignore specific dependencies that require manual review
     ignore:
