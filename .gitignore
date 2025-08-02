@@ -577,7 +577,7 @@ docs/_build/
 /site
 
 # JSDoc
-docs/
+# docs/ - Allow documentation directory
 
 # Docusaurus
 .docusaurus/

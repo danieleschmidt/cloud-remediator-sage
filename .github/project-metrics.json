@@ -1,0 +1,342 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Cloud Remediator Sage - Project Metrics Configuration",
+  "description": "Comprehensive metrics tracking configuration for SDLC automation and project health monitoring",
+  "version": "1.0.0",
+  "lastUpdated": "2025-08-02T00:00:00Z",
+  
+  "project": {
+    "name": "Cloud Remediator Sage",
+    "repository": "danieleschmidt/cloud-remediator-sage",
+    "maintainer": "Terragon Labs",
+    "primary_language": "JavaScript",
+    "frameworks": ["Node.js", "Serverless", "AWS Lambda"],
+    "project_type": "Security Tool",
+    "maturity": "Production Ready"
+  },
+
+  "metrics": {
+    "code_quality": {
+      "complexity_threshold": 15,
+      "test_coverage_threshold": 80,
+      "technical_debt_threshold": "A",
+      "code_duplication_threshold": 3,
+      "security_hotspots_threshold": 0,
+      "maintainability_rating_threshold": "A",
+      "reliability_rating_threshold": "A",
+      "security_rating_threshold": "A"
+    },
+
+    "performance": {
+      "build_time_threshold_minutes": 15,
+      "test_execution_threshold_minutes": 10,
+      "deployment_time_threshold_minutes": 30,
+      "lambda_cold_start_threshold_ms": 5000,
+      "api_response_time_threshold_ms": 500,
+      "memory_usage_threshold_mb": 512
+    },
+
+    "security": {
+      "critical_vulnerabilities_threshold": 0,
+      "high_vulnerabilities_threshold": 5,
+      "medium_vulnerabilities_threshold": 20,
+      "dependency_age_threshold_days": 365,
+      "license_compliance_threshold": 100,
+      "secrets_detection_threshold": 0
+    },
+
+    "reliability": {
+      "uptime_threshold_percent": 99.9,
+      "error_rate_threshold_percent": 1.0,
+      "mttr_threshold_minutes": 30,
+      "mtbf_threshold_hours": 168,
+      "deployment_success_rate_threshold": 95,
+      "rollback_rate_threshold_percent": 5
+    },
+
+    "productivity": {
+      "lead_time_threshold_days": 7,
+      "cycle_time_threshold_days": 3,
+      "pr_review_time_threshold_hours": 24,
+      "deployment_frequency_threshold": "daily",
+      "feature_delivery_velocity": 5,
+      "technical_debt_ratio_threshold": 5
+    }
+  },
+
+  "tracking": {
+    "automated_metrics": {
+      "enabled": true,
+      "collection_interval": "daily",
+      "retention_days": 365,
+      "export_formats": ["json", "csv", "prometheus"]
+    },
+
+    "data_sources": {
+      "github": {
+        "enabled": true,
+        "api_endpoint": "https://api.github.com",
+        "metrics": [
+          "commits",
+          "pull_requests",
+          "issues",
+          "code_reviews",
+          "deployments",
+          "releases"
+        ]
+      },
+      
+      "sonarqube": {
+        "enabled": false,
+        "metrics": [
+          "code_coverage",
+          "technical_debt",
+          "code_smells",
+          "bugs",
+          "vulnerabilities",
+          "duplicated_lines"
+        ]
+      },
+
+      "aws_cloudwatch": {
+        "enabled": true,
+        "metrics": [
+          "lambda_invocations",
+          "lambda_errors",
+          "lambda_duration",
+          "api_gateway_requests",
+          "neptune_performance"
+        ]
+      },
+
+      "prometheus": {
+        "enabled": true,
+        "endpoint": "http://localhost:9090",
+        "metrics": [
+          "application_metrics",
+          "business_metrics",
+          "infrastructure_metrics"
+        ]
+      }
+    }
+  },
+
+  "dashboards": {
+    "executive_dashboard": {
+      "title": "Executive Summary",
+      "metrics": [
+        "deployment_frequency",
+        "lead_time",
+        "mttr",
+        "security_posture",
+        "customer_impact",
+        "cost_optimization"
+      ],
+      "refresh_interval": "daily",
+      "stakeholders": ["executives", "product_managers"]
+    },
+
+    "engineering_dashboard": {
+      "title": "Engineering Metrics",
+      "metrics": [
+        "build_success_rate",
+        "test_coverage",
+        "code_quality",
+        "pr_cycle_time",
+        "deployment_success_rate",
+        "incident_count"
+      ],
+      "refresh_interval": "hourly",
+      "stakeholders": ["engineers", "team_leads"]
+    },
+
+    "security_dashboard": {
+      "title": "Security Posture",
+      "metrics": [
+        "vulnerability_count",
+        "security_scan_results",
+        "compliance_status",
+        "dependency_security",
+        "incident_response_time"
+      ],
+      "refresh_interval": "real_time",
+      "stakeholders": ["security_team", "compliance_team"]
+    },
+
+    "operations_dashboard": {
+      "title": "Operational Health",
+      "metrics": [
+        "system_availability",
+        "performance_metrics",
+        "error_rates",
+        "resource_utilization",
+        "cost_metrics"
+      ],
+      "refresh_interval": "real_time",
+      "stakeholders": ["devops", "sre_team"]
+    }
+  },
+
+  "automation": {
+    "metric_collection": {
+      "enabled": true,
+      "schedule": "0 0 * * *",
+      "timeout_minutes": 30,
+      "retry_attempts": 3,
+      "failure_notification": true
+    },
+
+    "threshold_monitoring": {
+      "enabled": true,
+      "check_interval": "hourly",
+      "notification_channels": ["slack", "email"],
+      "escalation_rules": [
+        {
+          "condition": "critical_threshold_exceeded",
+          "action": "immediate_notification",
+          "recipients": ["on_call_engineer", "team_lead"]
+        },
+        {
+          "condition": "warning_threshold_exceeded",
+          "action": "daily_summary",
+          "recipients": ["team_channel"]
+        }
+      ]
+    },
+
+    "report_generation": {
+      "enabled": true,
+      "schedules": {
+        "daily": "0 9 * * *",
+        "weekly": "0 9 * * 1",
+        "monthly": "0 9 1 * *",
+        "quarterly": "0 9 1 1,4,7,10 *"
+      },
+      "formats": ["pdf", "html", "json"],
+      "distribution": ["email", "slack", "confluence"]
+    }
+  },
+
+  "thresholds": {
+    "green": {
+      "description": "Excellent performance, all metrics within target ranges",
+      "score_range": [90, 100],
+      "action": "maintain_current_practices"
+    },
+    "yellow": {
+      "description": "Good performance with room for improvement",
+      "score_range": [70, 89],
+      "action": "identify_improvement_opportunities"
+    },
+    "red": {
+      "description": "Performance issues requiring immediate attention",
+      "score_range": [0, 69],
+      "action": "immediate_improvement_plan_required"
+    }
+  },
+
+  "reporting": {
+    "stakeholder_reports": {
+      "executive_summary": {
+        "frequency": "monthly",
+        "format": "executive_brief",
+        "content": [
+          "key_metrics_summary",
+          "trend_analysis",
+          "risk_assessment",
+          "investment_recommendations"
+        ]
+      },
+      
+      "team_health_report": {
+        "frequency": "weekly",
+        "format": "detailed_analysis",
+        "content": [
+          "velocity_trends",
+          "quality_metrics",
+          "technical_debt_analysis",
+          "team_satisfaction_index"
+        ]
+      },
+
+      "security_posture_report": {
+        "frequency": "daily",
+        "format": "security_dashboard",
+        "content": [
+          "vulnerability_assessment",
+          "compliance_status",
+          "security_incidents",
+          "remediation_progress"
+        ]
+      }
+    }
+  },
+
+  "integrations": {
+    "jira": {
+      "enabled": false,
+      "project_key": "CRS",
+      "metrics": ["story_points", "cycle_time", "bug_resolution_time"]
+    },
+
+    "confluence": {
+      "enabled": false,
+      "space_key": "CRS",
+      "page_template": "metrics_dashboard"
+    },
+
+    "slack": {
+      "enabled": true,
+      "channels": {
+        "general_updates": "#engineering",
+        "security_alerts": "#security",
+        "critical_alerts": "#incidents"
+      }
+    },
+
+    "email": {
+      "enabled": true,
+      "smtp_server": "smtp.company.com",
+      "distribution_lists": {
+        "engineering": "engineering@terragon.ai",
+        "executives": "leadership@terragon.ai",
+        "security": "security@terragon.ai"
+      }
+    }
+  },
+
+  "data_governance": {
+    "retention_policy": {
+      "raw_metrics": "2_years",
+      "aggregated_metrics": "5_years",
+      "reports": "7_years"
+    },
+
+    "privacy_compliance": {
+      "gdpr_compliant": true,
+      "data_anonymization": true,
+      "consent_management": true
+    },
+
+    "backup_strategy": {
+      "frequency": "daily",
+      "retention": "90_days",
+      "storage_location": "s3://metrics-backup-bucket"
+    }
+  },
+
+  "continuous_improvement": {
+    "metric_evolution": {
+      "review_frequency": "quarterly",
+      "stakeholder_feedback": true,
+      "metric_retirement_process": true,
+      "new_metric_evaluation": true
+    },
+
+    "process_optimization": {
+      "automation_opportunities": "monthly_review",
+      "tool_evaluation": "quarterly",
+      "workflow_optimization": "continuous"
+    }
+  }
+}

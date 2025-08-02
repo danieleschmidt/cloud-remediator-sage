@@ -1,0 +1,127 @@
+# CODEOWNERS file for Cloud Remediator Sage
+# This file defines code ownership for automatic review assignment
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global ownership - fallback for any files not specified below
+* @danieleschmidt @terragon-labs/core-team
+
+# Documentation
+*.md @terragon-labs/documentation-team @terragon-labs/core-team
+/docs/ @terragon-labs/documentation-team @terragon-labs/core-team
+/README.md @terragon-labs/documentation-team @terragon-labs/core-team @terragon-labs/product-team
+
+# Security and compliance
+/SECURITY.md @terragon-labs/security-team @terragon-labs/core-team
+/CODE_OF_CONDUCT.md @terragon-labs/security-team @terragon-labs/core-team
+/docs/security/ @terragon-labs/security-team @terragon-labs/core-team
+/docs/compliance/ @terragon-labs/security-team @terragon-labs/compliance-team
+/.trivyignore @terragon-labs/security-team
+/scripts/security-scan.js @terragon-labs/security-team @terragon-labs/core-team
+/scripts/advanced-security-audit.js @terragon-labs/security-team @terragon-labs/core-team
+
+# Infrastructure and DevOps
+/Dockerfile @terragon-labs/devops-team @terragon-labs/core-team
+/docker-compose.yml @terragon-labs/devops-team @terragon-labs/core-team
+/serverless.yml @terragon-labs/devops-team @terragon-labs/core-team
+/Makefile @terragon-labs/devops-team @terragon-labs/core-team
+/.github/workflows/ @terragon-labs/devops-team @terragon-labs/core-team
+/docs/workflows/ @terragon-labs/devops-team @terragon-labs/core-team
+/docs/guides/administrator/ @terragon-labs/devops-team @terragon-labs/core-team
+/monitoring/ @terragon-labs/devops-team @terragon-labs/sre-team
+
+# Testing
+/tests/ @terragon-labs/core-team @terragon-labs/qa-team
+/jest.config.js @terragon-labs/core-team @terragon-labs/qa-team
+/.eslintrc* @terragon-labs/core-team @terragon-labs/qa-team
+/.prettierrc* @terragon-labs/core-team
+/docs/guides/developer/testing-guide.md @terragon-labs/qa-team @terragon-labs/core-team
+
+# Source code - Lambda functions
+/src/lambda/ @terragon-labs/core-team @terragon-labs/cloud-team
+/src/lambda/prowler-ingest.js @terragon-labs/core-team @terragon-labs/security-team
+/src/lambda/remediation-generator.js @terragon-labs/core-team @terragon-labs/cloud-team
+/src/lambda/risk-scoring.js @terragon-labs/core-team @terragon-labs/security-team
+
+# Source code - Backlog management
+/src/backlog/ @terragon-labs/core-team @terragon-labs/product-team
+/AUTONOMOUS_BACKLOG.md @terragon-labs/core-team @terragon-labs/product-team
+
+# Source code - Monitoring and observability
+/src/monitoring/ @terragon-labs/core-team @terragon-labs/sre-team
+/scripts/metrics-collector.js @terragon-labs/core-team @terragon-labs/sre-team
+/scripts/performance-benchmark.js @terragon-labs/core-team @terragon-labs/sre-team
+/.github/project-metrics.json @terragon-labs/core-team @terragon-labs/sre-team
+
+# Package management and dependencies
+/package.json @terragon-labs/core-team
+/package-lock.json @terragon-labs/core-team
+/scripts/dependency-monitor.js @terragon-labs/core-team @terragon-labs/security-team
+/scripts/generate-sbom.js @terragon-labs/core-team @terragon-labs/security-team
+
+# Build and deployment scripts
+/scripts/ @terragon-labs/core-team @terragon-labs/devops-team
+/scripts/package-release.js @terragon-labs/core-team @terragon-labs/devops-team
+/scripts/repository-maintenance.js @terragon-labs/core-team @terragon-labs/devops-team
+
+# Git and repository configuration
+/.gitignore @terragon-labs/core-team @terragon-labs/devops-team
+/.gitattributes @terragon-labs/core-team @terragon-labs/devops-team
+/.github/ @terragon-labs/core-team @terragon-labs/devops-team
+/.github/CODEOWNERS @danieleschmidt @terragon-labs/core-team
+/.github/ISSUE_TEMPLATE/ @terragon-labs/core-team @terragon-labs/product-team
+/.github/PULL_REQUEST_TEMPLATE.md @terragon-labs/core-team
+
+# Development environment
+/.devcontainer/ @terragon-labs/core-team @terragon-labs/devops-team
+/.vscode/ @terragon-labs/core-team
+/.env.example @terragon-labs/core-team @terragon-labs/devops-team
+/.editorconfig @terragon-labs/core-team
+
+# License and legal
+/LICENSE @danieleschmidt @terragon-labs/legal-team
+/CONTRIBUTING.md @terragon-labs/core-team @terragon-labs/community-team
+
+# Project architecture and design
+/ARCHITECTURE.md @terragon-labs/core-team @terragon-labs/architecture-team
+/PROJECT_CHARTER.md @terragon-labs/core-team @terragon-labs/product-team
+/docs/adr/ @terragon-labs/core-team @terragon-labs/architecture-team
+/docs/ROADMAP.md @terragon-labs/core-team @terragon-labs/product-team
+
+# Reports and metrics (generated files - review not typically required)
+/reports/ @terragon-labs/sre-team
+/coverage/ @terragon-labs/qa-team
+
+# Runbooks and operational procedures
+/docs/runbooks/ @terragon-labs/sre-team @terragon-labs/devops-team @terragon-labs/core-team
+
+# Team-specific configurations
+## Security team for all security-related configurations
+**/*security* @terragon-labs/security-team @terragon-labs/core-team
+**/*Security* @terragon-labs/security-team @terragon-labs/core-team
+
+## DevOps team for all infrastructure and deployment configurations  
+**/*deploy* @terragon-labs/devops-team @terragon-labs/core-team
+**/*Deploy* @terragon-labs/devops-team @terragon-labs/core-team
+**/*infra* @terragon-labs/devops-team @terragon-labs/core-team
+**/*Infra* @terragon-labs/devops-team @terragon-labs/core-team
+
+## QA team for all test-related files
+**/*test* @terragon-labs/qa-team @terragon-labs/core-team
+**/*Test* @terragon-labs/qa-team @terragon-labs/core-team
+**/*.test.js @terragon-labs/qa-team @terragon-labs/core-team
+**/*.spec.js @terragon-labs/qa-team @terragon-labs/core-team
+
+# Emergency overrides
+# Critical security files require security team + lead approval
+/SECURITY.md @terragon-labs/security-team @danieleschmidt
+/scripts/security-scan.js @terragon-labs/security-team @danieleschmidt
+/.github/workflows/security-scan.yml @terragon-labs/security-team @danieleschmidt
+
+# Production deployment configurations require multiple approvals
+/serverless.yml @terragon-labs/devops-team @terragon-labs/security-team @danieleschmidt
+/.github/workflows/cd.yml @terragon-labs/devops-team @terragon-labs/security-team @danieleschmidt
+
+# Repository settings and core configurations
+/.github/CODEOWNERS @danieleschmidt
+/package.json @terragon-labs/core-team @danieleschmidt
+/.gitignore @terragon-labs/core-team @danieleschmidt
