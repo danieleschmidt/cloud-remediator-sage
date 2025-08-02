@@ -1,0 +1,138 @@
+name: ✨ Feature Request
+description: Suggest a new feature or enhancement
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting a new feature! Please help us understand your request by filling out this form.
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      description: Please confirm the following before submitting
+      options:
+        - label: I have searched existing issues and feature requests
+          required: true
+        - label: I have read the project roadmap and this feature is not already planned
+          required: true
+        - label: This feature aligns with the project's goals and scope
+          required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What problem does this feature solve? What pain point are you experiencing?
+      placeholder: Describe the problem or limitation you're facing
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the feature you'd like to see implemented
+      placeholder: A clear and detailed description of what you want to happen
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative Solutions
+      description: Have you considered any alternative solutions or workarounds?
+      placeholder: Describe any alternative solutions or features you've considered
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Feature Category
+      description: Which area does this feature primarily affect?
+      options:
+        - Security Scanning & Integration
+        - Risk Scoring & Prioritization
+        - Remediation & Automation
+        - User Interface & Experience
+        - API & Integrations
+        - Performance & Scalability
+        - Documentation & Guides
+        - Monitoring & Observability
+        - Compliance & Reporting
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority Level
+      description: How important is this feature to you?
+      options:
+        - Low - Nice to have
+        - Medium - Would improve my workflow
+        - High - Important for my use case
+        - Critical - Blocking my adoption/usage
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: user_types
+    attributes:
+      label: User Types
+      description: Which types of users would benefit from this feature?
+      options:
+        - label: Security Engineers
+        - label: DevOps Engineers
+        - label: Compliance/GRC Teams
+        - label: Security Leadership/CISOs
+        - label: Developers/Contributors
+        - label: System Administrators
+
+  - type: textarea
+    id: use_cases
+    attributes:
+      label: Use Cases
+      description: Specific use cases or scenarios where this feature would be valuable
+      placeholder: |
+        1. As a [user type], I want to [action] so that [benefit]
+        2. When [scenario], this feature would help by [specific benefit]
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance Criteria
+      description: What would make this feature complete and successful?
+      placeholder: |
+        - [ ] Criterion 1
+        - [ ] Criterion 2
+        - [ ] Criterion 3
+
+  - type: textarea
+    id: technical_considerations
+    attributes:
+      label: Technical Considerations
+      description: Any technical requirements, constraints, or considerations?
+      placeholder: API requirements, performance needs, integration points, etc.
+
+  - type: textarea
+    id: mockups
+    attributes:
+      label: Mockups/Examples
+      description: Any mockups, examples, or references that might help illustrate the feature
+      placeholder: Links to similar features, UI mockups, API examples, etc.
+
+  - type: checkboxes
+    id: implementation
+    attributes:
+      label: Implementation Interest
+      description: Are you interested in helping implement this feature?
+      options:
+        - label: I'd like to implement this feature myself
+        - label: I can help with testing and feedback
+        - label: I can provide domain expertise/consultation
+        - label: I just want to request the feature
