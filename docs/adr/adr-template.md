@@ -1,42 +1,75 @@
-# ADR-XXXX: [Short descriptive title]
+# ADR-NNN: [Short Title of Solved Problem and Solution]
 
-**Date:** YYYY-MM-DD  
-**Status:** [Proposed | Accepted | Deprecated | Superseded]  
-**Deciders:** [List of decision makers]  
-**Consulted:** [List of people consulted]  
-**Informed:** [List of people informed]  
+**Status**: [Proposed | Accepted | Deprecated | Superseded]
 
-## Context
+**Date**: YYYY-MM-DD
 
-What is the issue that we're seeing that is motivating this decision or change?
+**Deciders**: [List of people involved in the decision]
 
-## Decision
+**Technical Story**: [Optional: Link to issue or technical story]
 
-What is the change that we're proposing or have agreed to implement?
+## Context and Problem Statement
 
-## Consequences
+[Describe the context and problem statement, e.g., in free form using two to three sentences. You may want to articulate the problem in form of a question.]
 
-What becomes easier or more difficult to do and any risks introduced by this change?
+## Decision Drivers
 
-### Positive
+* [driver 1, e.g., a force, facing concern, ...]
+* [driver 2, e.g., a force, facing concern, ...]
+* [driver 3, e.g., a force, facing concern, ...]
 
-- [Positive consequence 1]
-- [Positive consequence 2]
+## Considered Options
 
-### Negative
+* [option 1]
+* [option 2]
+* [option 3]
 
-- [Negative consequence 1]
-- [Negative consequence 2]
+## Decision Outcome
 
-### Neutral
+Chosen option: "[option 1]", because [justification. e.g., only option, which meets k.o. criterion decision driver | which resolves force | ... | comes out best (see below)].
 
-- [Neutral consequence 1]
+### Positive Consequences
 
-## Alternatives Considered
+* [e.g., improvement of quality attribute satisfaction, follows architectural principle, ...]
+* [...]
 
-What other alternatives were considered and why were they not chosen?
+### Negative Consequences
 
-## References
+* [e.g., compromising quality attribute, follows architectural principle, ...]
+* [...]
 
-- [Reference 1]
-- [Reference 2]
+## Pros and Cons of the Options
+
+### [option 1]
+
+[example | description | pointer to more information | ...]
+
+* Good, because [argument a]
+* Good, because [argument b]
+* Bad, because [argument c]
+* [...]
+
+### [option 2]
+
+[example | description | pointer to more information | ...]
+
+* Good, because [argument a]
+* Good, because [argument b]
+* Bad, because [argument c]
+* [...]
+
+### [option 3]
+
+[example | description | pointer to more information | ...]
+
+* Good, because [argument a]
+* Good, because [argument b]
+* Bad, because [argument c]
+* [...]
+
+## Links
+
+* [Link type] [Link to ADR] <!-- example: Refined by [ADR-0005](0005-example.md) -->
+* [Link type] [Link to ADR] <!-- example: Supersedes [ADR-0001](0001-example.md) -->
+* [Link to relevant documentation]
+* [Link to implementation]
