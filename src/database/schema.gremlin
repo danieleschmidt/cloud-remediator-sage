@@ -1,0 +1,199 @@
+// Neptune Graph Database Schema for Cloud Remediator Sage
+// This file documents the graph schema - Neptune doesn't require explicit schema creation
+
+// ============================================================================
+// VERTEX LABELS AND PROPERTIES
+// ============================================================================
+
+// Finding Vertex
+// Represents a security vulnerability or compliance issue
+// Label: Finding
+// Properties:
+//   - id (String, Primary Key): Unique finding identifier
+//   - source (String): Scanner source (prowler, cloudsploit, steampipe)
+//   - severity (String): critical, high, medium, low, info
+//   - category (String): security, compliance, configuration
+//   - subcategory (String): Service category (s3, ec2, iam, etc.)
+//   - title (String): Finding title
+//   - description (String): Detailed description
+//   - recommendation (String): Remediation recommendation
+//   - resourceArn (String): Associated resource ARN
+//   - resourceType (String): AWS resource type
+//   - region (String): AWS region
+//   - accountId (String): AWS account ID
+//   - riskScore (Double): Calculated risk score (0-10)
+//   - blastRadius (Double): Impact radius score (0-10)
+//   - status (String): open, resolved, suppressed, false-positive
+//   - remediationStatus (String): pending, in-progress, completed, failed
+//   - createdAt (String): ISO timestamp
+//   - updatedAt (String): ISO timestamp
+//   - lastSeenAt (String): ISO timestamp
+
+// Asset Vertex
+// Represents a cloud resource
+// Label: Asset
+// Properties:
+//   - arn (String, Primary Key): AWS ARN
+//   - id (String): Resource ID
+//   - type (String): Resource type
+//   - name (String): Resource name
+//   - accountId (String): AWS account ID
+//   - region (String): AWS region
+//   - service (String): AWS service
+//   - criticality (String): critical, high, medium, low, minimal
+//   - environment (String): prod, staging, dev, test
+//   - owner (String): Resource owner
+//   - criticalityScore (Integer): Numerical criticality (1-10)
+//   - blastRadius (Double): Calculated blast radius
+//   - isPublic (Boolean): Public accessibility flag
+//   - hasSensitiveData (Boolean): Contains sensitive data
+//   - monitoringEnabled (Boolean): Monitoring status
+//   - loggingEnabled (Boolean): Logging status
+//   - createdAt (String): ISO timestamp
+//   - updatedAt (String): ISO timestamp
+//   - lastScannedAt (String): Last scan timestamp
+
+// Remediation Vertex
+// Represents an automated fix for a security finding
+// Label: Remediation
+// Properties:
+//   - id (String, Primary Key): Unique remediation identifier
+//   - findingId (String): Associated finding ID
+//   - assetArn (String): Target asset ARN
+//   - type (String): terraform, cloudformation, boto3, cli, manual
+//   - category (String): configuration, iam, network, encryption
+//   - title (String): Remediation title
+//   - riskLevel (String): critical, high, medium, low, minimal
+//   - automationLevel (String): full, partial, assisted, manual
+//   - status (String): pending, approved, executing, completed, failed
+//   - approvalRequired (Boolean): Requires manual approval
+//   - estimatedDuration (Integer): Duration in minutes
+//   - estimatedCost (Double): Cost in USD
+//   - canAutoExecute (Boolean): Can execute automatically
+//   - createdAt (String): ISO timestamp
+//   - updatedAt (String): ISO timestamp
+//   - approvedAt (String): Approval timestamp
+//   - executedAt (String): Execution timestamp
+
+// Account Vertex
+// Represents an AWS account
+// Label: Account
+// Properties:
+//   - accountId (String, Primary Key): AWS account ID
+//   - name (String): Account name
+//   - alias (String): Account alias
+//   - email (String): Contact email
+//   - environment (String): prod, staging, dev, test
+//   - criticality (String): critical, high, medium, low
+//   - complianceFrameworks (String): JSON array of frameworks
+//   - createdAt (String): ISO timestamp
+//   - updatedAt (String): ISO timestamp
+
+// ComplianceFramework Vertex
+// Represents a compliance framework
+// Label: ComplianceFramework
+// Properties:
+//   - name (String, Primary Key): Framework name (pci-dss, hipaa, etc.)
+//   - displayName (String): Human-readable name
+//   - version (String): Framework version
+//   - description (String): Framework description
+//   - requirements (String): JSON array of requirements
+//   - createdAt (String): ISO timestamp
+
+// ============================================================================
+// EDGE LABELS AND PROPERTIES
+// ============================================================================
+
+// Finding -> Asset: affects
+// Indicates a finding affects a specific asset
+// Properties:
+//   - severity (String): Finding severity
+//   - riskScore (Double): Risk score at time of relationship
+//   - discoveredAt (String): When relationship was discovered
+
+// Asset -> Asset: depends-on
+// Indicates dependency relationship between assets
+// Properties:
+//   - dependencyType (String): network, iam, data, configuration
+//   - criticality (String): critical, high, medium, low
+//   - createdAt (String): When dependency was discovered
+
+// Finding -> Remediation: has-remediation
+// Links finding to its remediation
+// Properties:
+//   - generatedAt (String): When remediation was generated
+//   - riskLevel (String): Risk level of remediation
+//   - automationLevel (String): Automation capability
+
+// Asset -> Account: belongs-to
+// Links asset to its AWS account
+// Properties:
+//   - region (String): AWS region
+//   - createdAt (String): When relationship was established
+
+// Finding -> ComplianceFramework: violates
+// Indicates finding violates compliance requirement
+// Properties:
+//   - requirement (String): Specific requirement violated
+//   - severity (String): Violation severity
+//   - impact (String): Business impact
+
+// Account -> ComplianceFramework: must-comply-with
+// Indicates account must comply with framework
+// Properties:
+//   - mandatory (Boolean): Compliance is mandatory
+//   - deadline (String): Compliance deadline
+//   - status (String): compliant, non-compliant, in-progress
+
+// ============================================================================
+// INDEXES AND OPTIMIZATION
+// ============================================================================
+
+// Recommended composite indexes for performance:
+// 1. Finding: (status, severity, riskScore)
+// 2. Finding: (accountId, status, createdAt)
+// 3. Asset: (criticality, environment, lastScannedAt)
+// 4. Asset: (accountId, service, region)
+// 5. Remediation: (status, automationLevel, riskLevel)
+
+// Example Gremlin queries for common operations:
+
+// Find high-risk open findings:
+// g.V().hasLabel('Finding').has('status', 'open').has('riskScore', gte(7.0)).order().by('riskScore', desc)
+
+// Get asset dependencies:
+// g.V().hasLabel('Asset').has('arn', 'arn:aws:s3:::my-bucket').out('depends-on')
+
+// Find compliance violations:
+// g.V().hasLabel('Finding').out('violates').hasLabel('ComplianceFramework').has('name', 'pci-dss')
+
+// Get remediations for findings:
+// g.V().hasLabel('Finding').has('status', 'open').out('has-remediation').has('status', 'pending')
+
+// Calculate blast radius:
+// g.V().hasLabel('Asset').has('arn', 'arn:aws:ec2:us-east-1:123456789012:instance/i-1234567890abcdef0')
+//   .repeat(both('depends-on')).times(3).dedup()
+
+// ============================================================================
+// DATA LOADING PATTERNS
+// ============================================================================
+
+// Batch loading pattern for findings:
+// 1. Create/update Asset vertices first
+// 2. Create Finding vertices
+// 3. Create Finding -> Asset edges
+// 4. Create compliance relationships
+// 5. Generate remediations asynchronously
+
+// Example batch insert (JavaScript):
+/*
+const batch = g.addV('Finding')
+  .property('id', findingId)
+  .property('source', 'prowler')
+  .property('severity', 'high')
+  .property('riskScore', 8.5)
+  .property('status', 'open')
+  .property('createdAt', new Date().toISOString());
+
+await batch.next();
+*/
