@@ -1,0 +1,86 @@
+{
+  "security": {
+    "findings": {
+      "critical": "Crítico",
+      "high": "Alto",
+      "medium": "Medio",
+      "low": "Bajo",
+      "info": "Información"
+    },
+    "categories": {
+      "security": "Seguridad",
+      "compliance": "Cumplimiento",
+      "configuration": "Configuración"
+    },
+    "actions": {
+      "remediate": "Remediar",
+      "investigate": "Investigar",
+      "monitor": "Monitorear",
+      "ignore": "Ignorar"
+    }
+  },
+  "compliance": {
+    "frameworks": {
+      "gdpr": "Reglamento General de Protección de Datos",
+      "ccpa": "Ley de Privacidad del Consumidor de California",
+      "pdpa": "Ley de Protección de Datos Personales",
+      "sox": "Ley Sarbanes-Oxley",
+      "pci-dss": "Estándar de Seguridad de Datos de la Industria de Tarjetas de Pago",
+      "hipaa": "Ley de Portabilidad y Responsabilidad del Seguro Médico",
+      "iso27001": "ISO/IEC 27001",
+      "nist": "Marco de Ciberseguridad NIST"
+    },
+    "status": {
+      "compliant": "Conforme",
+      "non-compliant": "No Conforme",
+      "not-applicable": "No Aplicable"
+    }
+  },
+  "ui": {
+    "common": {
+      "yes": "Sí",
+      "no": "No",
+      "loading": "Cargando...",
+      "error": "Error",
+      "success": "Éxito",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar",
+      "save": "Guardar",
+      "delete": "Eliminar",
+      "edit": "Editar",
+      "view": "Ver"
+    },
+    "navigation": {
+      "dashboard": "Panel de Control",
+      "findings": "Hallazgos de Seguridad",
+      "assets": "Activos",
+      "compliance": "Cumplimiento",
+      "reports": "Informes",
+      "settings": "Configuración"
+    }
+  },
+  "reports": {
+    "titles": {
+      "executive_summary": "Resumen Ejecutivo",
+      "risk_assessment": "Evaluación de Riesgos",
+      "compliance_report": "Informe de Cumplimiento",
+      "security_posture": "Informe de Postura de Seguridad",
+      "vulnerability_report": "Informe de Vulnerabilidades"
+    },
+    "sections": {
+      "overview": "Resumen",
+      "critical_findings": "Hallazgos Críticos",
+      "recommendations": "Recomendaciones",
+      "metrics": "Métricas de Seguridad",
+      "trends": "Análisis de Tendencias"
+    }
+  },
+  "messages": {
+    "loading": "Cargando datos de seguridad...",
+    "no_data": "No hay datos disponibles",
+    "error_occurred": "Ocurrió un error al procesar su solicitud",
+    "success_remediation": "Remediación aplicada exitosamente",
+    "confirm_delete": "¿Está seguro de que desea eliminar este elemento?",
+    "unsaved_changes": "Tiene cambios sin guardar. ¿Desea continuar?"
+  }
+}

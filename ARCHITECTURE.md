@@ -1,13 +1,170 @@
-# Architecture Overview
+# Architecture Documentation
 
-## System Architecture
+## System Overview
 
-The Cloud Remediator Sage is a serverless, multi-cloud security posture management framework designed for autonomous operation. It follows a microservices architecture using AWS Lambda functions orchestrated through a centralized backlog management system.
+The Quantum-Enhanced Cloud Security Posture Management (CSPM) platform is a next-generation autonomous security orchestration system that leverages quantum computing principles for optimal task planning and execution.
+
+## High-Level Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    Cloud Security Ecosystem                     │
+├─────────────────────────────────────────────────────────────────┤
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  │
+│  │   Data Ingestion │  │   Risk Analysis │  │  Auto Execution │  │
+│  │                 │  │                 │  │                 │  │
+│  │ • Prowler       │  │ • Neptune Graph │  │ • Quantum Tasks │  │
+│  │ • CloudSploit   │  │ • ML Scoring    │  │ • Auto Remediate│  │
+│  │ • Steampipe     │  │ • WSJF Priority │  │ • Circuit Break │  │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+         │                        │                        │
+         ▼                        ▼                        ▼
+┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
+│  Lambda Ingest  │  │  Neptune Graph  │  │ Quantum Engine  │
+│                 │  │                 │  │                 │
+│ • Parse Data    │  │ • Store Graph   │  │ • Task Planning │
+│ • Normalize     │  │ • Query Engine  │  │ • Execution     │
+│ • Enrich        │  │ • Relationships │  │ • Monitoring    │
+└─────────────────┘  └─────────────────┘  └─────────────────┘
+```
 
 ## Core Components
 
-### 1. Backlog Management System
-- **Purpose**: Autonomous discovery, prioritization, and execution of security remediation tasks
+### 1. Data Ingestion Layer
+
+#### Purpose
+Collect, normalize, and enrich security findings from multiple sources.
+
+#### Components
+- **Prowler Ingest Lambda** (`src/lambda/prowler-ingest.js`)
+- **Data Parsers** (`src/parsers/`)
+- **Normalization Engine** (`src/services/NormalizationService.js`)
+
+#### Data Flow
+```
+External Scanner → Lambda Function → Data Validation → Neptune Storage
+     │                    │               │                   │
+   Prowler           Parse & Enrich   Validate Schema    Store Graph
+   CloudSploit       Add Metadata     Check Quality      Build Relations
+   Steampipe         Correlate        Deduplicate        Index Data
+```
+
+### 2. Graph Database Layer (Amazon Neptune)
+
+#### Purpose
+Store and query complex relationships between security assets, findings, and remediations.
+
+#### Graph Schema
+```
+┌─────────────┐     has_finding     ┌─────────────┐
+│    Asset    │◄────────────────────│   Finding   │
+│             │                     │             │
+│ • ARN       │     depends_on      │ • Severity  │
+│ • Type      │◄──────────┐         │ • Category  │
+│ • Region    │           │         │ • Status    │
+│ • Tags      │           │         └─────────────┘
+└─────────────┘           │                │
+       │                  │                │ has_remediation
+       │                  │                ▼
+       │            ┌─────────────┐  ┌─────────────┐
+       │            │  Dependency │  │ Remediation │
+       │            │             │  │             │
+       └────────────┤ • Type      │  │ • Template  │
+                    │ • Strength  │  │ • Priority  │
+                    │ • Direction │  │ • Status    │
+                    └─────────────┘  └─────────────┘
+```
+
+#### Query Patterns
+```gremlin
+// Find all critical findings for production assets
+g.V().hasLabel('Asset')
+  .has('environment', 'production')
+  .in('has_finding')
+  .has('severity', 'critical')
+  .values('title')
+
+// Get remediation candidates with highest impact
+g.V().hasLabel('Finding')
+  .has('status', 'open')
+  .out('has_remediation')
+  .order().by('priority', desc)
+  .limit(10)
+```
+
+### 3. Quantum Execution Engine
+
+#### Purpose
+Optimize task planning and execution using quantum computing principles.
+
+#### Core Concepts
+
+##### Quantum Superposition
+Tasks exist in multiple execution states simultaneously until observation (execution).
+```javascript
+// Task can be in multiple states: sequential, parallel, hybrid
+const superpositionStates = [
+  { type: 'sequential', probability: 0.3, estimatedTime: 300 },
+  { type: 'parallel', probability: 0.7, estimatedTime: 120 },
+  { type: 'hybrid', probability: 0.4, estimatedTime: 180 }
+];
+```
+
+##### Quantum Entanglement
+Task dependencies create entangled relationships affecting execution order.
+```javascript
+// Tasks affecting the same resource are entangled
+const entanglement = {
+  taskA: 'remediate-s3-bucket-policy',
+  taskB: 'update-s3-bucket-encryption',
+  strength: 0.85, // High correlation
+  constraint: 'sequential' // Must execute in order
+};
+```
+
+##### Quantum Coherence
+System maintains consistency across parallel executions.
+```javascript
+// Coherence decreases with complexity and increases with success
+quantumCoherence = Math.max(0.1, 
+  quantumCoherence - (complexity * 0.01) + (success * 0.005)
+);
+```
+
+#### Quantum Algorithms
+
+##### 1. Task Planning Algorithm
+```javascript
+async function generateOptimalPlan(context) {
+  // 1. Prepare quantum states
+  const tasks = await loadQuantumTaskStates(context);
+  
+  // 2. Create superposition states
+  const states = await createSuperpositionStates(tasks);
+  
+  // 3. Detect entanglements
+  const entanglements = await detectTaskEntanglements(tasks);
+  
+  // 4. Quantum optimization
+  const optimized = await quantumOptimization(states, entanglements);
+  
+  // 5. Collapse to optimal state
+  return await collapseToOptimalState(optimized);
+}
+```
+
+##### 2. Weighted Shortest Job First (WSJF) Prioritization
+```javascript
+function calculateQuantumPriority(finding, asset) {
+  const value = finding.riskScore || 0;
+  const timeCriticality = calculateTimeCriticality(finding);
+  const riskReduction = calculateRiskReductionValue(finding);
+  const effort = estimateEffortScore(finding);
+  
+  return effort > 0 ? (value + timeCriticality + riskReduction) / effort : 0;
+}
+```
 - **Technology**: Node.js with WSJF (Weighted Shortest Job First) prioritization
 - **Key Files**: `src/backlog/`
 
