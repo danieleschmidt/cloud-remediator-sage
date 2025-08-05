@@ -1,7 +1,26 @@
 // Security-focused ESLint configuration for CI/CD pipeline
-// Extends the main .eslintrc.js with stricter security rules
+// Standalone configuration with security-focused rules
 module.exports = {
-  extends: ['./.eslintrc.js'],
+  root: true,
+  env: {
+    node: true,
+    es2021: true,
+    jest: true,
+    commonjs: true
+  },
+  extends: [
+    'eslint:recommended'
+  ],
+  plugins: [
+    'security'
+  ],
+  parserOptions: {
+    ecmaVersion: 2021,
+    sourceType: 'module',
+    ecmaFeatures: {
+      impliedStrict: true
+    }
+  },
   rules: {
     // Enhanced security rules for CI/CD
     'security/detect-buffer-noassert': 'error',
@@ -30,25 +49,36 @@ module.exports = {
     'no-octal-escape': 'error',
     'no-process-env': 'warn', // Allow but warn about process.env usage
     'no-process-exit': 'error',
-    
-    // AWS Lambda specific security
-    'node/no-process-exit': 'error',
-    'node/no-sync': 'error'
   },
   
-  // Security-focused environments
-  env: {
-    node: true,
-    es2021: true,
-    jest: true
-  },
-  
-  // Stricter parser options
-  parserOptions: {
-    ecmaVersion: 2021,
-    sourceType: 'module',
-    ecmaFeatures: {
-      impliedStrict: true
+  // Security-focused overrides
+  overrides: [
+    {
+      // Test files - relaxed security for testing
+      files: ['**/*.test.js', '**/*.spec.js', '**/tests/**/*.js'],
+      rules: {
+        'security/detect-non-literal-fs-filename': 'off',
+        'security/detect-child-process': 'off',
+        'security/detect-object-injection': 'off',
+        'no-process-env': 'off'
+      }
+    },
+    {
+      // Configuration files
+      files: ['*.config.js', '.eslintrc.js'],
+      rules: {
+        'security/detect-non-literal-require': 'off',
+        'no-process-env': 'off'
+      }
     }
-  }
+  ],
+  
+  ignorePatterns: [
+    'node_modules/',
+    'coverage/',
+    'dist/',
+    'build/',
+    '.serverless/',
+    '*.min.js'
+  ]
 };

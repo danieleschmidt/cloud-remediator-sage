@@ -1,0 +1,86 @@
+{
+  "security": {
+    "findings": {
+      "critical": "Kritisch",
+      "high": "Hoch",
+      "medium": "Mittel",
+      "low": "Niedrig",
+      "info": "Information"
+    },
+    "categories": {
+      "security": "Sicherheit",
+      "compliance": "Compliance",
+      "configuration": "Konfiguration"
+    },
+    "actions": {
+      "remediate": "Beheben",
+      "investigate": "Untersuchen",
+      "monitor": "Überwachen",
+      "ignore": "Ignorieren"
+    }
+  },
+  "compliance": {
+    "frameworks": {
+      "gdpr": "Datenschutz-Grundverordnung",
+      "ccpa": "California Consumer Privacy Act",
+      "pdpa": "Datenschutzgesetz für Personenbezogene Daten",
+      "sox": "Sarbanes-Oxley-Gesetz",
+      "pci-dss": "Zahlungskartenindustrie-Datensicherheitsstandard",
+      "hipaa": "Krankenversicherungsportabilität und -verantwortlichkeitsgesetz",
+      "iso27001": "ISO/IEC 27001",
+      "nist": "NIST Cybersecurity Framework"
+    },
+    "status": {
+      "compliant": "Konform",
+      "non-compliant": "Nicht Konform",
+      "not-applicable": "Nicht Zutreffend"
+    }
+  },
+  "ui": {
+    "common": {
+      "yes": "Ja",
+      "no": "Nein",
+      "loading": "Laden...",
+      "error": "Fehler",
+      "success": "Erfolg",
+      "cancel": "Abbrechen",
+      "confirm": "Bestätigen",
+      "save": "Speichern",
+      "delete": "Löschen",
+      "edit": "Bearbeiten",
+      "view": "Anzeigen"
+    },
+    "navigation": {
+      "dashboard": "Dashboard",
+      "findings": "Sicherheitsergebnisse",
+      "assets": "Assets",
+      "compliance": "Compliance",
+      "reports": "Berichte",
+      "settings": "Einstellungen"
+    }
+  },
+  "reports": {
+    "titles": {
+      "executive_summary": "Zusammenfassung",
+      "risk_assessment": "Risikobewertung",
+      "compliance_report": "Compliance-Bericht",
+      "security_posture": "Sicherheitslage-Bericht",
+      "vulnerability_report": "Schwachstellen-Bericht"
+    },
+    "sections": {
+      "overview": "Überblick",
+      "critical_findings": "Kritische Ergebnisse",
+      "recommendations": "Empfehlungen",
+      "metrics": "Sicherheitsmetriken",
+      "trends": "Trendanalyse"
+    }
+  },
+  "messages": {
+    "loading": "Sicherheitsdaten werden geladen...",
+    "no_data": "Keine Daten verfügbar",
+    "error_occurred": "Bei der Verarbeitung Ihrer Anfrage ist ein Fehler aufgetreten",
+    "success_remediation": "Behebung erfolgreich angewendet",
+    "confirm_delete": "Sind Sie sicher, dass Sie dieses Element löschen möchten?",
+    "unsaved_changes": "Sie haben ungespeicherte Änderungen. Möchten Sie fortfahren?"
+  }
+}

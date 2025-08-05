@@ -1,0 +1,86 @@
+{
+  "security": {
+    "findings": {
+      "critical": "Critique",
+      "high": "Élevé",
+      "medium": "Moyen",
+      "low": "Faible",
+      "info": "Information"
+    },
+    "categories": {
+      "security": "Sécurité",
+      "compliance": "Conformité",
+      "configuration": "Configuration"
+    },
+    "actions": {
+      "remediate": "Corriger",
+      "investigate": "Enquêter",
+      "monitor": "Surveiller",
+      "ignore": "Ignorer"
+    }
+  },
+  "compliance": {
+    "frameworks": {
+      "gdpr": "Règlement Général sur la Protection des Données",
+      "ccpa": "Loi sur la Confidentialité des Consommateurs de Californie",
+      "pdpa": "Loi sur la Protection des Données Personnelles",
+      "sox": "Loi Sarbanes-Oxley",
+      "pci-dss": "Norme de Sécurité des Données de l'Industrie des Cartes de Paiement",
+      "hipaa": "Loi sur la Portabilité et la Responsabilité de l'Assurance Maladie",
+      "iso27001": "ISO/IEC 27001",
+      "nist": "Cadre de Cybersécurité NIST"
+    },
+    "status": {
+      "compliant": "Conforme",
+      "non-compliant": "Non Conforme",
+      "not-applicable": "Non Applicable"
+    }
+  },
+  "ui": {
+    "common": {
+      "yes": "Oui",
+      "no": "Non",
+      "loading": "Chargement...",
+      "error": "Erreur",
+      "success": "Succès",
+      "cancel": "Annuler",
+      "confirm": "Confirmer",
+      "save": "Enregistrer",
+      "delete": "Supprimer",
+      "edit": "Modifier",
+      "view": "Voir"
+    },
+    "navigation": {
+      "dashboard": "Tableau de Bord",
+      "findings": "Découvertes de Sécurité",
+      "assets": "Actifs",
+      "compliance": "Conformité",
+      "reports": "Rapports",
+      "settings": "Paramètres"
+    }
+  },
+  "reports": {
+    "titles": {
+      "executive_summary": "Résumé Exécutif",
+      "risk_assessment": "Évaluation des Risques",
+      "compliance_report": "Rapport de Conformité",
+      "security_posture": "Rapport de Posture de Sécurité",
+      "vulnerability_report": "Rapport de Vulnérabilités"
+    },
+    "sections": {
+      "overview": "Aperçu",
+      "critical_findings": "Découvertes Critiques",
+      "recommendations": "Recommandations",
+      "metrics": "Métriques de Sécurité",
+      "trends": "Analyse des Tendances"
+    }
+  },
+  "messages": {
+    "loading": "Chargement des données de sécurité...",
+    "no_data": "Aucune donnée disponible",
+    "error_occurred": "Une erreur s'est produite lors du traitement de votre demande",
+    "success_remediation": "Correction appliquée avec succès",
+    "confirm_delete": "Êtes-vous sûr de vouloir supprimer cet élément?",
+    "unsaved_changes": "Vous avez des modifications non enregistrées. Voulez-vous continuer?"
+  }
+}

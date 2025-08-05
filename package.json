@@ -46,23 +46,26 @@
   "author": "Terragon Labs",
   "license": "Apache-2.0",
   "devDependencies": {
-    "jest": "^29.7.0",
-    "eslint": "^8.57.0",
+    "@commitlint/cli": "^18.0.0",
+    "@commitlint/config-conventional": "^18.0.0",
+    "@cyclonedx/bom": "^4.0.0",
     "@jest/globals": "^29.7.0",
-    "semantic-release": "^22.0.0",
+    "@pact-foundation/pact": "^15.0.1",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^9.2.0",
     "@semantic-release/npm": "^11.0.0",
-    "@commitlint/cli": "^18.0.0",
-    "@commitlint/config-conventional": "^18.0.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-security": "^3.0.1",
     "husky": "^8.0.3",
-    "@pact-foundation/pact": "^12.0.0",
-    "@cyclonedx/bom": "^4.0.0"
+    "jest": "^29.7.0",
+    "semantic-release": "^22.0.0"
   },
   "dependencies": {
     "aws-sdk": "^2.1691.0",
     "gremlin": "^3.7.2",
+    "joi": "^18.0.0",
     "js-yaml": "^4.1.0"
   }
 }

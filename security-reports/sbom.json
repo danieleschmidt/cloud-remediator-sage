@@ -1,0 +1,732 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.4",
+  "serialNumber": "urn:uuid:75b749de-60fb-4438-8b37-6ea217e8d3e5",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2025-08-05T12:04:32.557Z",
+    "tools": [
+      {
+        "vendor": "Terragon Labs",
+        "name": "SBOM Generator",
+        "version": "1.0.0"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "bom-ref": "cloud-remediator-sage@0.1.0",
+      "name": "cloud-remediator-sage",
+      "version": "0.1.0",
+      "description": "A serverless framework to automate cloud security posture management (CSPM)",
+      "licenses": [
+        {
+          "license": {
+            "name": "Apache-2.0"
+          }
+        }
+      ],
+      "purl": "pkg:npm/cloud-remediator-sage@0.1.0",
+      "externalReferences": []
+    },
+    "properties": [
+      {
+        "name": "cdx:security:classification",
+        "value": "confidential"
+      },
+      {
+        "name": "cdx:security:environment",
+        "value": "development"
+      },
+      {
+        "name": "cdx:compliance:framework",
+        "value": "SOC2,ISO27001"
+      },
+      {
+        "name": "cdx:build:timestamp",
+        "value": "2025-08-05T12:04:32.719Z"
+      },
+      {
+        "name": "cdx:build:version",
+        "value": "local"
+      }
+    ]
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "aws-sdk@2.1692.0",
+      "name": "aws-sdk",
+      "version": "2.1692.0",
+      "scope": "required",
+      "purl": "pkg:npm/aws-sdk@2.1692.0",
+      "licenses": [
+        {
+          "license": {
+            "name": "Apache-2.0"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "6655c6eb49cbad75f964602d0f8a3acc2d7986565c05e2f211560e5ce66dadd2"
+        },
+        {
+          "alg": "SHA-1",
+          "content": "035644efc6b5917550d0987b02622b45bb19ba1e"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.1692.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "gremlin@3.7.3",
+      "name": "gremlin",
+      "version": "3.7.3",
+      "scope": "required",
+      "purl": "pkg:npm/gremlin@3.7.3",
+      "licenses": [
+        {
+          "license": {
+            "name": "Apache-2.0"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1efb3e0d5ad2213ccb538c85b9b6307211e149600802448be2596fc8770a9546"
+        },
+        {
+          "alg": "SHA-1",
+          "content": "38e6ff29b72db98155671be7e9174d40f5379151"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/gremlin/-/gremlin-3.7.3.tgz"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "joi@18.0.0",
+      "name": "joi",
+      "version": "18.0.0",
+      "scope": "required",
+      "purl": "pkg:npm/joi@18.0.0",
+      "licenses": [
+        {
+          "license": {
+            "name": "BSD-3-Clause"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c0c87de52ff1320b85d707661d46b394605970806f0392c6166861403009b64a"
+        },
+        {
+          "alg": "SHA-1",
+          "content": "0cd4f1d6c62b7dc86a9642a54bf46596b5be34c5"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/joi/-/joi-18.0.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "js-yaml@4.1.0",
+      "name": "js-yaml",
+      "version": "4.1.0",
+      "scope": "required",
+      "purl": "pkg:npm/js-yaml@4.1.0",
+      "licenses": [
+        {
+          "license": {
+            "name": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "fbaf61c90088b54dec9d97434c12eb8ffe75d3acd47eacb43910489a7b78336f"
+        },
+        {
+          "alg": "SHA-1",
+          "content": "c8c6ed6347d56e383d33dab20f6402095f9ea467"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/js-yaml/-/js-yaml-4.1.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "@commitlint/cli@18.6.1",
+      "name": "@commitlint/cli",
+      "version": "18.6.1",
+      "scope": "optional",
+      "purl": "pkg:npm/@commitlint/cli@18.6.1",
+      "licenses": [
+        {
+          "license": {
+            "name": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c0a240011c197a8ca99ba4f96a52dd2aabde1b9bc129a7901580baff0fcb7187"
+        },
+        {
+          "alg": "SHA-1",
+          "content": "f965c99168caeb09761c4171f59ca65ce00e7680"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@commitlint/cli/-/@commitlint/cli-18.6.1.tgz"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "@commitlint/config-conventional@18.6.3",
+      "name": "@commitlint/config-conventional",
+      "version": "18.6.3",
+      "scope": "optional",
+      "purl": "pkg:npm/@commitlint/config-conventional@18.6.3",
+      "licenses": [
+        {
+          "license": {
+            "name": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "be25acf56e77a6fd510afe010db61d0d3733e1f39c351bc4d633b51a4e32218b"
+        },
+        {
+          "alg": "SHA-1",
+          "content": "ea096d0becd4b371b6ca585daaa85239f3dd6576"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@commitlint/config-conventional/-/@commitlint/config-conventional-18.6.3.tgz"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "@cyclonedx/bom@4.1.0",
+      "name": "@cyclonedx/bom",
+      "version": "4.1.0",
+      "scope": "optional",
+      "purl": "pkg:npm/@cyclonedx/bom@4.1.0",
+      "licenses": [
+        {
+          "license": {
+            "name": "Apache-2.0"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "e67e8c5d183b1f683aee599d423c3e471c768e4f2755e7f693870f301a9f5da1"
+        },
+        {
+          "alg": "SHA-1",
+          "content": "2df6d684e2e272a7ec6eca01c0c38f139abbf9e9"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@cyclonedx/bom/-/@cyclonedx/bom-4.1.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "@jest/globals@29.7.0",
+      "name": "@jest/globals",
+      "version": "29.7.0",
+      "scope": "optional",
+      "purl": "pkg:npm/@jest/globals@29.7.0",
+      "licenses": [
+        {
+          "license": {
+            "name": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "fef3ee8342600d1c392b88d48677e2b870cc711bf4ce358d60181e822b8086bd"
+        },
+        {
+          "alg": "SHA-1",
+          "content": "1c4b5fa0257307a316340b91ba94512cea0c0e1f"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@jest/globals/-/@jest/globals-29.7.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "@pact-foundation/pact@15.0.1",
+      "name": "@pact-foundation/pact",
+      "version": "15.0.1",
+      "scope": "optional",
+      "purl": "pkg:npm/@pact-foundation/pact@15.0.1",
+      "licenses": [
+        {
+          "license": {
+            "name": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9d212712a90a33e29d7b4c644b92fc3ff9ec50b35dfe8edcdebeee2533c4261c"
+        },
+        {
+          "alg": "SHA-1",
+          "content": "d1fb869f353b0f84deee509ef5c8bc51cdb7eb59"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@pact-foundation/pact/-/@pact-foundation/pact-15.0.1.tgz"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "@semantic-release/changelog@6.0.3",
+      "name": "@semantic-release/changelog",
+      "version": "6.0.3",
+      "scope": "optional",
+      "purl": "pkg:npm/@semantic-release/changelog@6.0.3",
+      "licenses": [
+        {
+          "license": {
+            "name": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "473021d8e3214bca9383351e341d75e6eb452414830873b978d76f876485731c"
+        },
+        {
+          "alg": "SHA-1",
+          "content": "4d1f160398b347bc49e72d53ac3be3e190d2a83d"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@semantic-release/changelog/-/@semantic-release/changelog-6.0.3.tgz"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "@semantic-release/git@10.0.1",
+      "name": "@semantic-release/git",
+      "version": "10.0.1",
+      "scope": "optional",
+      "purl": "pkg:npm/@semantic-release/git@10.0.1",
+      "licenses": [
+        {
+          "license": {
+            "name": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ea88973a2a71a0fa33b0b20be9f9ebd6af17ee7fe103a94f0bb1dd5b9f4e746d"
+        },
+        {
+          "alg": "SHA-1",
+          "content": "2c8251726d9f559b3a1b1a8c2684fe96e3125468"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@semantic-release/git/-/@semantic-release/git-10.0.1.tgz"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "@semantic-release/github@9.2.6",
+      "name": "@semantic-release/github",
+      "version": "9.2.6",
+      "scope": "optional",
+      "purl": "pkg:npm/@semantic-release/github@9.2.6",
+      "licenses": [
+        {
+          "license": {
+            "name": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7aeb5ca2e80fd3e58e1df62aec9e8e3c0eab02fc21f5a7d47a21f614d80d8745"
+        },
+        {
+          "alg": "SHA-1",
+          "content": "f4338b74486016cf2c57800af8c7b08a6a3bbc8d"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@semantic-release/github/-/@semantic-release/github-9.2.6.tgz"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "@semantic-release/npm@11.0.3",
+      "name": "@semantic-release/npm",
+      "version": "11.0.3",
+      "scope": "optional",
+      "purl": "pkg:npm/@semantic-release/npm@11.0.3",
+      "licenses": [
+        {
+          "license": {
+            "name": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "570400c82a9731b7c2bd2eaa2b5edf2514f0e05d8dd39c2615ef5e71fbe31b07"
+        },
+        {
+          "alg": "SHA-1",
+          "content": "c698555653efac83b175f3d9663757dc64af67fa"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@semantic-release/npm/-/@semantic-release/npm-11.0.3.tgz"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "eslint@8.57.1",
+      "name": "eslint",
+      "version": "8.57.1",
+      "scope": "optional",
+      "purl": "pkg:npm/eslint@8.57.1",
+      "licenses": [
+        {
+          "license": {
+            "name": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "cb3eb0b9246ff4cf36d7f00b76358dc6b1ccab18773ab89c25b9e390041ae9d3"
+        },
+        {
+          "alg": "SHA-1",
+          "content": "681290095bbf1ae24ce974536850984095489607"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/eslint/-/eslint-8.57.1.tgz"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "eslint-plugin-node@11.1.0",
+      "name": "eslint-plugin-node",
+      "version": "11.1.0",
+      "scope": "optional",
+      "purl": "pkg:npm/eslint-plugin-node@11.1.0",
+      "licenses": [
+        {
+          "license": {
+            "name": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "0d7c42e6c335453bddb8a0d500be21a03d18516a37d7f209b275c5c5f0fbf5db"
+        },
+        {
+          "alg": "SHA-1",
+          "content": "d5028b4a0452a2d102ad8a66b6b1999bd08d558d"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/eslint-plugin-node/-/eslint-plugin-node-11.1.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "eslint-plugin-security@3.0.1",
+      "name": "eslint-plugin-security",
+      "version": "3.0.1",
+      "scope": "optional",
+      "purl": "pkg:npm/eslint-plugin-security@3.0.1",
+      "licenses": [
+        {
+          "license": {
+            "name": "Apache-2.0"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "761b74b3dac4854cb93acaed654d37e8bfd976f89584da1dab9edc207aadc8b2"
+        },
+        {
+          "alg": "SHA-1",
+          "content": "1093ea9b89240688c91f10ac944684fce16dd3fd"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/eslint-plugin-security/-/eslint-plugin-security-3.0.1.tgz"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "husky@8.0.3",
+      "name": "husky",
+      "version": "8.0.3",
+      "scope": "optional",
+      "purl": "pkg:npm/husky@8.0.3",
+      "licenses": [
+        {
+          "license": {
+            "name": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c1da4b53b1e7622fb7cbddaae37ff844cf6a745ed3cec4893faeeed9eaef815c"
+        },
+        {
+          "alg": "SHA-1",
+          "content": "fe62e2880723d479e1b00637a82092c60ace73f2"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/husky/-/husky-8.0.3.tgz"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "jest@29.7.0",
+      "name": "jest",
+      "version": "29.7.0",
+      "scope": "optional",
+      "purl": "pkg:npm/jest@29.7.0",
+      "licenses": [
+        {
+          "license": {
+            "name": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "679fd6f49e8dcb1fd82b7d610c5d555b70204ad2e5e5092e284e9bc10eb9f353"
+        },
+        {
+          "alg": "SHA-1",
+          "content": "6805bf570039aa317594d99e2fea39df3ecbf0b7"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/jest/-/jest-29.7.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "semantic-release@22.0.12",
+      "name": "semantic-release",
+      "version": "22.0.12",
+      "scope": "optional",
+      "purl": "pkg:npm/semantic-release@22.0.12",
+      "licenses": [
+        {
+          "license": {
+            "name": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "e5bc67687a5484485b8d05aa07456e4090ec82fe5487f12a08ac6647bc70d16e"
+        },
+        {
+          "alg": "SHA-1",
+          "content": "0c108ded0f9b5a5f65e740a633cd5eb436c7dcb1"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/semantic-release/-/semantic-release-22.0.12.tgz"
+        }
+      ]
+    },
+    {
+      "type": "platform",
+      "bom-ref": "aws-lambda",
+      "name": "AWS Lambda",
+      "version": "latest",
+      "description": "AWS Lambda serverless compute service",
+      "scope": "required",
+      "externalReferences": [
+        {
+          "type": "documentation",
+          "url": "https://docs.aws.amazon.com/lambda/"
+        }
+      ]
+    },
+    {
+      "type": "platform",
+      "bom-ref": "aws-neptune",
+      "name": "AWS Neptune",
+      "version": "latest",
+      "description": "AWS Neptune graph database service",
+      "scope": "required",
+      "externalReferences": [
+        {
+          "type": "documentation",
+          "url": "https://docs.aws.amazon.com/neptune/"
+        }
+      ]
+    },
+    {
+      "type": "platform",
+      "bom-ref": "aws-s3",
+      "name": "AWS S3",
+      "version": "latest",
+      "description": "AWS S3 object storage service",
+      "scope": "required",
+      "externalReferences": [
+        {
+          "type": "documentation",
+          "url": "https://docs.aws.amazon.com/s3/"
+        }
+      ]
+    },
+    {
+      "type": "platform",
+      "bom-ref": "nodejs",
+      "name": "Node.js",
+      "version": "v22.18.0",
+      "description": "JavaScript runtime built on Chrome V8 JavaScript engine",
+      "scope": "required",
+      "externalReferences": [
+        {
+          "type": "website",
+          "url": "https://nodejs.org/"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "cloud-remediator-sage@0.1.0",
+      "dependsOn": [
+        "aws-sdk@2.1692.0"
+      ]
+    },
+    {
+      "ref": "cloud-remediator-sage@0.1.0",
+      "dependsOn": [
+        "gremlin@3.7.3"
+      ]
+    },
+    {
+      "ref": "cloud-remediator-sage@0.1.0",
+      "dependsOn": [
+        "joi@18.0.0"
+      ]
+    },
+    {
+      "ref": "cloud-remediator-sage@0.1.0",
+      "dependsOn": [
+        "js-yaml@4.1.0"
+      ]
+    }
+  ],
+  "signature": {
+    "algorithm": "SHA-256",
+    "value": "34767ef4300ab2e84d3d6b2295d4c0377a5db44a8bb9e6f148ed25230c66048d",
+    "timestamp": "2025-08-05T12:04:32.719Z"
+  }
+}

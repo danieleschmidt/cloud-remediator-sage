@@ -1,0 +1,86 @@
+{
+  "security": {
+    "findings": {
+      "critical": "严重",
+      "high": "高",
+      "medium": "中",
+      "low": "低",
+      "info": "信息"
+    },
+    "categories": {
+      "security": "安全",
+      "compliance": "合规",
+      "configuration": "配置"
+    },
+    "actions": {
+      "remediate": "修复",
+      "investigate": "调查",
+      "monitor": "监控",
+      "ignore": "忽略"
+    }
+  },
+  "compliance": {
+    "frameworks": {
+      "gdpr": "通用数据保护条例",
+      "ccpa": "加州消费者隐私法",
+      "pdpa": "个人数据保护法",
+      "sox": "萨班斯-奥克斯利法案",
+      "pci-dss": "支付卡行业数据安全标准",
+      "hipaa": "健康保险便携性和责任法案",
+      "iso27001": "ISO/IEC 27001",
+      "nist": "NIST网络安全框架"
+    },
+    "status": {
+      "compliant": "合规",
+      "non-compliant": "不合规",
+      "not-applicable": "不适用"
+    }
+  },
+  "ui": {
+    "common": {
+      "yes": "是",
+      "no": "否",
+      "loading": "加载中...",
+      "error": "错误",
+      "success": "成功",
+      "cancel": "取消",
+      "confirm": "确认",
+      "save": "保存",
+      "delete": "删除",
+      "edit": "编辑",
+      "view": "查看"
+    },
+    "navigation": {
+      "dashboard": "仪表板",
+      "findings": "安全发现",
+      "assets": "资产",
+      "compliance": "合规",
+      "reports": "报告",
+      "settings": "设置"
+    }
+  },
+  "reports": {
+    "titles": {
+      "executive_summary": "执行摘要",
+      "risk_assessment": "风险评估",
+      "compliance_report": "合规报告",
+      "security_posture": "安全态势报告",
+      "vulnerability_report": "漏洞报告"
+    },
+    "sections": {
+      "overview": "概述",
+      "critical_findings": "关键发现",
+      "recommendations": "建议",
+      "metrics": "安全指标",
+      "trends": "趋势分析"
+    }
+  },
+  "messages": {
+    "loading": "正在加载安全数据...",
+    "no_data": "无可用数据",
+    "error_occurred": "处理您的请求时发生错误",
+    "success_remediation": "修复成功应用",
+    "confirm_delete": "您确定要删除此项目吗？",
+    "unsaved_changes": "您有未保存的更改。是否要继续？"
+  }
+}
