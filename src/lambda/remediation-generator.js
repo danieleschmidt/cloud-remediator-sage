@@ -302,6 +302,21 @@ async function generateRemediation(finding, strategy, logger) {
       }
     });
 
+    // Generate and validate template content
+    const templateValidation = await validateGeneratedTemplate(remediation, logger);
+    if (!templateValidation.isValid) {
+      logger.error('Template validation failed', {
+        findingId: finding.id,
+        errors: templateValidation.errors,
+        warnings: templateValidation.warnings
+      });
+      return null;
+    }
+
+    // Add validation results to metadata
+    remediation.metadata.templateValidation = templateValidation;
+    remediation.metadata.estimatedCost = await calculateRemediationCost(finding, parameters);
+
     return remediation;
 
   } catch (error) {
@@ -487,4 +502,283 @@ function getContentType(templateType) {
     manual: 'application/json'
   };
   return contentTypes[templateType] || 'text/plain';
+}
+
+/**
+ * Validate generated template content
+ */
+async function validateGeneratedTemplate(remediation, logger) {
+  const validation = {
+    isValid: true,
+    errors: [],
+    warnings: [],
+    syntaxCheck: false,
+    logicCheck: false,
+    securityCheck: false
+  };
+
+  try {
+    // Generate template content for validation
+    let templateContent;
+    switch (remediation.templateType) {
+      case 'terraform':
+        templateContent = remediation.generateTerraformTemplate();
+        validation.syntaxCheck = validateTerraformSyntax(templateContent);
+        break;
+      case 'cloudformation':
+        templateContent = remediation.generateCloudFormationTemplate();
+        validation.syntaxCheck = validateCloudFormationSyntax(templateContent);
+        break;
+      case 'boto3':
+        templateContent = remediation.generateBoto3Script();
+        validation.syntaxCheck = validatePython3Syntax(templateContent);
+        break;
+      default:
+        validation.syntaxCheck = true; // Manual templates don't require syntax validation
+    }
+
+    // Basic logic validation
+    validation.logicCheck = validateTemplateLogic(remediation, templateContent);
+    
+    // Security validation
+    validation.securityCheck = validateTemplateSecurity(remediation, templateContent);
+
+    // Check for critical issues
+    if (!validation.syntaxCheck) {
+      validation.errors.push('Template contains syntax errors');
+      validation.isValid = false;
+    }
+
+    if (!validation.logicCheck) {
+      validation.errors.push('Template contains logical inconsistencies');
+      validation.isValid = false;
+    }
+
+    if (!validation.securityCheck) {
+      validation.warnings.push('Template may have security implications');
+    }
+
+    // Validate parameters
+    const paramValidation = validateTemplateParameters(remediation);
+    if (!paramValidation.isValid) {
+      validation.errors.push(...paramValidation.errors);
+      validation.isValid = false;
+    }
+
+    logger.debug('Template validation completed', {
+      remediationId: remediation.id,
+      templateType: remediation.templateType,
+      syntaxCheck: validation.syntaxCheck,
+      logicCheck: validation.logicCheck,
+      securityCheck: validation.securityCheck,
+      isValid: validation.isValid
+    });
+
+  } catch (error) {
+    validation.errors.push(`Validation error: ${error.message}`);
+    validation.isValid = false;
+  }
+
+  return validation;
+}
+
+/**
+ * Validate Terraform template syntax
+ */
+function validateTerraformSyntax(content) {
+  if (!content) return false;
+  
+  try {
+    // Basic HCL syntax validation
+    const requiredSections = ['resource', 'provider'];
+    const hasRequiredSections = requiredSections.some(section => 
+      content.includes(section)
+    );
+    
+    // Check for balanced braces
+    const openBraces = (content.match(/\{/g) || []).length;
+    const closeBraces = (content.match(/\}/g) || []).length;
+    
+    return hasRequiredSections && openBraces === closeBraces;
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Validate CloudFormation template syntax
+ */
+function validateCloudFormationSyntax(content) {
+  if (!content) return false;
+  
+  try {
+    // For YAML CloudFormation templates
+    const yaml = require('js-yaml');
+    const template = yaml.load(content);
+    
+    // Check for required sections
+    return template && 
+           typeof template === 'object' &&
+           (template.Resources || template.AWSTemplateFormatVersion);
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Validate Python3 syntax for Boto3 scripts
+ */
+function validatePython3Syntax(content) {
+  if (!content) return false;
+  
+  try {
+    // Basic Python syntax checks
+    const pythonPatterns = [
+      /import\s+boto3/,
+      /def\s+\w+\(/,
+      /if\s+__name__\s*==\s*['"']__main__['"']/
+    ];
+    
+    return pythonPatterns.some(pattern => pattern.test(content));
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Validate template logic
+ */
+function validateTemplateLogic(remediation, content) {
+  if (!content) return false;
+  
+  try {
+    // Check if template addresses the finding category
+    const category = remediation.metadata?.findingCategory?.toLowerCase() || '';
+    const contentLower = content.toLowerCase();
+    
+    // Basic logic checks based on common security categories
+    const logicChecks = {
+      'encryption': () => contentLower.includes('encrypt') || contentLower.includes('kms'),
+      'access': () => contentLower.includes('policy') || contentLower.includes('permission'),
+      'network': () => contentLower.includes('security') && contentLower.includes('group'),
+      'logging': () => contentLower.includes('log') || contentLower.includes('trail'),
+      'backup': () => contentLower.includes('backup') || contentLower.includes('snapshot')
+    };
+    
+    // If we have a specific check for this category, use it
+    const relevantCheck = Object.keys(logicChecks).find(key => 
+      category.includes(key)
+    );
+    
+    return relevantCheck ? logicChecks[relevantCheck]() : true;
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Validate template security
+ */
+function validateTemplateSecurity(remediation, content) {
+  if (!content) return false;
+  
+  try {
+    const contentLower = content.toLowerCase();
+    
+    // Check for security anti-patterns
+    const securityIssues = [
+      /password\s*=\s*["'][^"']*["']/i,  // Hardcoded passwords
+      /secret\s*=\s*["'][^"']*["']/i,    // Hardcoded secrets
+      /0\.0\.0\.0\/0/,                   // Open to world
+      /\*\.\*/,                         // Wildcard permissions
+    ];
+    
+    // Return false if any security issues found
+    return !securityIssues.some(issue => issue.test(content));
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Validate template parameters
+ */
+function validateTemplateParameters(remediation) {
+  const validation = { isValid: true, errors: [] };
+  
+  try {
+    const params = remediation.parameters || {};
+    
+    // Check required parameters based on template type
+    const requiredParams = {
+      'terraform': ['region'],
+      'cloudformation': ['Region'],
+      'boto3': ['region']
+    };
+    
+    const required = requiredParams[remediation.templateType] || [];
+    
+    for (const param of required) {
+      if (!params[param]) {
+        validation.errors.push(`Missing required parameter: ${param}`);
+        validation.isValid = false;
+      }
+    }
+    
+    // Validate parameter values
+    if (params.region && typeof params.region !== 'string') {
+      validation.errors.push('Region parameter must be a string');
+      validation.isValid = false;
+    }
+    
+  } catch (error) {
+    validation.errors.push(`Parameter validation error: ${error.message}`);
+    validation.isValid = false;
+  }
+  
+  return validation;
+}
+
+/**
+ * Calculate estimated cost of remediation
+ */
+async function calculateRemediationCost(finding, parameters) {
+  try {
+    // Basic cost estimation based on resource type and operation
+    const costEstimates = {
+      's3': { encryption: 0, policy: 0, logging: 0.10 },
+      'ec2': { encryption: 5.00, policy: 0, securityGroup: 0 },
+      'rds': { encryption: 10.00, backup: 5.00, policy: 0 },
+      'iam': { policy: 0, role: 0, user: 0 },
+      'cloudtrail': { enable: 2.00, configure: 1.00 },
+      'lambda': { policy: 0, encrypt: 0.50 }
+    };
+    
+    const resourceType = finding.resource?.type?.toLowerCase() || 'unknown';
+    const category = finding.category?.toLowerCase() || 'policy';
+    
+    const resourceCosts = costEstimates[resourceType] || { default: 0 };
+    const estimatedCost = resourceCosts[category] || resourceCosts.default || 0;
+    
+    return {
+      amount: estimatedCost,
+      currency: 'USD',
+      period: 'monthly',
+      confidence: estimatedCost > 0 ? 'medium' : 'low',
+      factors: [
+        `Resource type: ${resourceType}`,
+        `Operation: ${category}`,
+        'Estimate based on AWS pricing averages'
+      ]
+    };
+    
+  } catch (error) {
+    return {
+      amount: 0,
+      currency: 'USD',
+      period: 'monthly',
+      confidence: 'unknown',
+      error: error.message
+    };
+  }
 }

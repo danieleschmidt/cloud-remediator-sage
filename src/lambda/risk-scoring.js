@@ -6,14 +6,28 @@
 const SecurityAnalysisService = require('../services/SecurityAnalysisService');
 const NeptuneService = require('../services/NeptuneService');
 const { StructuredLogger } = require('../monitoring/logger');
+const { ErrorHandler } = require('../utils/errorHandler');
+const SecurityValidator = require('../validation/SecurityValidator');
 
 const logger = new StructuredLogger('risk-scoring');
+const errorHandler = new ErrorHandler('risk-scoring');
+const securityValidator = new SecurityValidator();
 
-exports.handler = async (event) => {
-  const correlationId = event.correlationId || `risk-${Date.now()}`;
-  logger.setCorrelationId(correlationId);
+exports.handler = errorHandler.createLambdaMiddleware()(async (event, context, childLogger) => {
+  const correlationId = childLogger?.correlationId || event.correlationId || `risk-${Date.now()}`;
+  const log = childLogger || logger.child(correlationId);
   
-  logger.info('Risk scoring started', { 
+  // Validate event input
+  const eventValidation = securityValidator.validateLambdaEvent(event, 'risk-scoring');
+  if (!eventValidation.isValid) {
+    log.error('Invalid event received', null, {
+      errors: eventValidation.errors,
+      securityIssues: eventValidation.securityIssues
+    });
+    throw new Error(`Invalid event: ${eventValidation.errors.join(', ')}`);
+  }
+  
+  log.info('Risk scoring started', { 
     event: event.source || 'manual',
     correlationId 
   });
@@ -62,18 +76,25 @@ exports.handler = async (event) => {
       count: findingsToProcess.length 
     });
 
-    // Process each finding
-    for (const finding of findingsToProcess) {
-      try {
-        await processFindingRiskScore(finding, securityService, neptuneService, results, logger);
-      } catch (error) {
-        logger.error('Failed to process finding risk score', {
-          findingId: finding.id,
-          error: error.message
-        });
-        results.errors++;
-      }
-    }
+    // Process findings in parallel batches
+    const batchSize = event.batchSize || 10; // Configurable batch size
+    const maxConcurrency = event.maxConcurrency || 5; // Limit concurrent operations
+    
+    logger.info('Processing findings in parallel', { 
+      batchSize,
+      maxConcurrency,
+      totalFindings: findingsToProcess.length
+    });
+
+    await processFindingsInBatches(
+      findingsToProcess, 
+      batchSize, 
+      maxConcurrency,
+      securityService, 
+      neptuneService, 
+      results, 
+      logger
+    );
 
     results.executionTime = Date.now() - startTime;
     logger.info('Risk scoring completed', results);
@@ -110,6 +131,109 @@ exports.handler = async (event) => {
     };
   }
 };
+
+/**
+ * Process findings in parallel batches with concurrency control
+ */
+async function processFindingsInBatches(
+  findings, 
+  batchSize, 
+  maxConcurrency, 
+  securityService, 
+  neptuneService, 
+  results, 
+  logger
+) {
+  // Split findings into batches
+  const batches = [];
+  for (let i = 0; i < findings.length; i += batchSize) {
+    batches.push(findings.slice(i, i + batchSize));
+  }
+
+  logger.info(`Processing ${batches.length} batches`, { 
+    totalFindings: findings.length,
+    batchSize 
+  });
+
+  // Process batches with controlled concurrency
+  let activeBatches = [];
+  let batchIndex = 0;
+
+  while (batchIndex < batches.length || activeBatches.length > 0) {
+    // Start new batches up to concurrency limit
+    while (activeBatches.length < maxConcurrency && batchIndex < batches.length) {
+      const batch = batches[batchIndex];
+      const batchPromise = processBatch(
+        batch, 
+        batchIndex,
+        securityService, 
+        neptuneService, 
+        results, 
+        logger
+      );
+      
+      activeBatches.push(batchPromise);
+      batchIndex++;
+    }
+
+    // Wait for at least one batch to complete
+    if (activeBatches.length > 0) {
+      try {
+        await Promise.race(activeBatches);
+      } catch (error) {
+        logger.error('Batch processing error', { error: error.message });
+      }
+
+      // Remove completed batches
+      const stillActive = [];
+      for (const batchPromise of activeBatches) {
+        const completed = await Promise.allSettled([batchPromise]);
+        if (completed[0].status === 'pending') {
+          stillActive.push(batchPromise);
+        }
+      }
+      activeBatches = stillActive;
+    }
+  }
+
+  logger.info('All batches completed');
+}
+
+/**
+ * Process a single batch of findings
+ */
+async function processBatch(batch, batchIndex, securityService, neptuneService, results, logger) {
+  const batchStartTime = Date.now();
+  const batchResults = { processed: 0, errors: 0 };
+
+  logger.debug(`Starting batch ${batchIndex}`, { findingsCount: batch.length });
+
+  // Process findings in this batch in parallel
+  const batchPromises = batch.map(finding => 
+    processFindingRiskScore(finding, securityService, neptuneService, batchResults, logger)
+      .catch(error => {
+        logger.error('Finding processing error in batch', {
+          findingId: finding.id,
+          batchIndex,
+          error: error.message
+        });
+        batchResults.errors++;
+      })
+  );
+
+  await Promise.allSettled(batchPromises);
+
+  // Update overall results
+  results.processed += batchResults.processed;
+  results.errors += batchResults.errors;
+
+  const batchTime = Date.now() - batchStartTime;
+  logger.debug(`Completed batch ${batchIndex}`, {
+    processed: batchResults.processed,
+    errors: batchResults.errors,
+    executionTime: batchTime
+  });
+}
 
 /**
  * Process risk score for individual finding
