@@ -7,6 +7,14 @@
 const { EventEmitter } = require('events');
 const crypto = require('crypto');
 
+// Redis client (optional for distributed caching)
+let redis = null;
+try {
+  redis = require('redis');
+} catch (error) {
+  // Redis not available, will use in-memory only
+}
+
 class QuantumCacheManager extends EventEmitter {
   constructor(options = {}) {
     super();
@@ -91,6 +99,48 @@ class QuantumCacheManager extends EventEmitter {
     // Compression and encryption
     this.compressionThreshold = options.compressionThreshold || 1024; // 1KB
     this.encryptionKey = options.encryptionKey || this.generateEncryptionKey();
+    
+    // Distributed caching with Redis
+    this.redisClient = null;
+    this.redisEnabled = false;
+    
+    if (redis && (options.redisUrl || process.env.REDIS_URL)) {
+      try {
+        this.redisClient = redis.createClient({
+          url: options.redisUrl || process.env.REDIS_URL,
+          retry_strategy: (options) => {
+            if (options.error && options.error.code === 'ECONNREFUSED') {
+              return new Error('Redis server connection refused');
+            }
+            if (options.total_retry_time > 1000 * 60 * 60) {
+              return new Error('Redis retry time exhausted');
+            }
+            if (options.attempt > 3) {
+              return undefined;
+            }
+            return Math.min(options.attempt * 100, 3000);
+          }
+        });
+        
+        this.redisClient.on('connect', () => {
+          this.redisEnabled = true;
+          this.emit('redis:connected');
+        });
+        
+        this.redisClient.on('error', (err) => {
+          this.redisEnabled = false;
+          this.emit('redis:error', err);
+        });
+        
+        this.redisClient.on('end', () => {
+          this.redisEnabled = false;
+          this.emit('redis:disconnected');
+        });
+        
+      } catch (error) {
+        console.warn('Failed to initialize Redis client:', error.message);
+      }
+    }
     
     // Start background processes
     this.startBackgroundProcesses();
@@ -1062,4 +1112,4 @@ class QuantumCacheManager extends EventEmitter {
   }
 }
 
-module.exports = QuantumCacheManager;
+module.exports = { QuantumCacheManager };

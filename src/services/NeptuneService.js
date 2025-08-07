@@ -431,6 +431,156 @@ class NeptuneService {
   }
 
   /**
+   * Get finding by ID
+   * @param {string} findingId - Finding ID
+   * @returns {Promise<Finding|null>} Finding object or null if not found
+   */
+  async getFinding(findingId) {
+    return this.executeWithRetry(async () => {
+      const result = await this.g.V().hasLabel('Finding')
+        .has('id', findingId)
+        .valueMap(true)
+        .toList();
+      
+      return result.length > 0 ? this.mapToFinding(result[0]) : null;
+    });
+  }
+
+  /**
+   * Query remediations with filters
+   * @param {Object} filters - Query filters
+   * @returns {Promise<Array>} Array of remediation objects
+   */
+  async queryRemediations(filters = {}) {
+    return this.executeWithRetry(async () => {
+      let query = this.g.V().hasLabel('Remediation');
+      
+      if (filters.findingId) {
+        query = query.has('findingId', filters.findingId);
+      }
+      if (filters.status) {
+        query = query.has('status', filters.status);
+      }
+      if (filters.priority) {
+        query = query.has('priority', filters.priority);
+      }
+      if (filters.templateType) {
+        query = query.has('templateType', filters.templateType);
+      }
+      
+      const result = await query.valueMap(true).toList();
+      return result.map(this.mapToRemediation.bind(this));
+    });
+  }
+
+  /**
+   * Create a new remediation vertex in Neptune
+   * @param {Remediation} remediation - Remediation object to store
+   * @returns {Promise<void>}
+   */
+  async createRemediation(remediation) {
+    const vertex = remediation.toNeptuneVertex();
+    
+    return this.executeWithRetry(async () => {
+      // Check if remediation already exists
+      const existing = await this.g.V().hasLabel('Remediation')
+        .has('id', remediation.id)
+        .toList();
+
+      if (existing.length > 0) {
+        // Update existing remediation
+        return this.updateRemediation(remediation);
+      }
+
+      // Create new remediation vertex
+      let query = this.g.addV('Remediation').property('id', remediation.id);
+      
+      // Add all properties
+      Object.entries(vertex.properties).forEach(([key, value]) => {
+        if (value !== null && value !== undefined && key !== 'id') {
+          query = query.property(key, value);
+        }
+      });
+
+      await query.next();
+      console.log(`Created remediation vertex: ${remediation.id}`);
+
+      // Create relationship to finding if specified
+      if (remediation.findingId) {
+        await this.createRelationship(
+          remediation.findingId,
+          remediation.id, 
+          'has_remediation',
+          { createdAt: new Date().toISOString() }
+        );
+      }
+    });
+  }
+
+  /**
+   * Update existing remediation in Neptune
+   * @param {Remediation} remediation - Remediation object to update
+   * @returns {Promise<void>}
+   */
+  async updateRemediation(remediation) {
+    const vertex = remediation.toNeptuneVertex();
+    
+    return this.executeWithRetry(async () => {
+      let query = this.g.V().hasLabel('Remediation').has('id', remediation.id);
+
+      // Update properties
+      Object.entries(vertex.properties).forEach(([key, value]) => {
+        if (value !== null && value !== undefined && key !== 'id') {
+          query = query.property(key, value);
+        }
+      });
+
+      await query.next();
+      console.log(`Updated remediation vertex: ${remediation.id}`);
+    });
+  }
+
+  /**
+   * Map Neptune vertex result to Remediation object
+   * @param {Object} vertexMap - Neptune vertex map
+   * @returns {Remediation} Remediation object
+   */
+  mapToRemediation(vertexMap) {
+    const props = {};
+    
+    // Extract properties from Neptune valueMap format
+    Object.entries(vertexMap).forEach(([key, value]) => {
+      if (Array.isArray(value) && value.length > 0) {
+        props[key] = value[0];
+      } else {
+        props[key] = value;
+      }
+    });
+
+    // Handle JSON fields
+    if (props.parameters && typeof props.parameters === 'string') {
+      try {
+        props.parameters = JSON.parse(props.parameters);
+      } catch (e) {
+        console.warn('Failed to parse remediation parameters:', e);
+        props.parameters = {};
+      }
+    }
+
+    if (props.metadata && typeof props.metadata === 'string') {
+      try {
+        props.metadata = JSON.parse(props.metadata);
+      } catch (e) {
+        console.warn('Failed to parse remediation metadata:', e);
+        props.metadata = {};
+      }
+    }
+
+    const { Remediation } = require('../models');
+    return new Remediation(props);
+  }
+
+  /**
    * Map Neptune vertex result to Finding object
    * @param {Object} vertexMap - Neptune vertex map
    * @returns {Finding} Finding object

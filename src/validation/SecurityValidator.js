@@ -663,6 +663,284 @@ class SecurityValidator {
       result.warnings.push('Boto3 template should import boto3 library');
     }
   }
+
+  /**
+   * Validate Lambda event inputs with comprehensive security checks
+   * @param {Object} event - Lambda event object
+   * @param {string} functionName - Name of the Lambda function
+   * @returns {Object} Validation result
+   */
+  validateLambdaEvent(event, functionName = 'unknown') {
+    const result = {
+      isValid: true,
+      errors: [],
+      warnings: [],
+      securityIssues: [],
+      sanitizedEvent: null
+    };
+
+    try {
+      // Deep clone event for sanitization
+      const sanitizedEvent = JSON.parse(JSON.stringify(event));
+
+      // Basic structure validation
+      if (typeof event !== 'object' || event === null) {
+        result.errors.push('Event must be a valid object');
+        result.isValid = false;
+        return result;
+      }
+
+      // Check for injection attempts in string fields
+      this.scanForInjectionAttempts(event, result, '');
+
+      // Validate S3 event structure
+      if (event.Records && Array.isArray(event.Records)) {
+        this.validateS3Records(event.Records, result);
+      }
+
+      // Validate API Gateway event
+      if (event.httpMethod || event.requestContext) {
+        this.validateApiGatewayEvent(event, result);
+      }
+
+      // Validate event size
+      const eventSize = JSON.stringify(event).length;
+      if (eventSize > 256000) { // 256KB limit
+        result.warnings.push(`Event size (${eventSize} bytes) exceeds recommended limit`);
+      }
+
+      // Sanitize sensitive data
+      this.sanitizeEventData(sanitizedEvent);
+      result.sanitizedEvent = sanitizedEvent;
+
+      result.isValid = result.errors.length === 0 && result.securityIssues.length === 0;
+
+    } catch (error) {
+      result.errors.push(`Event validation failed: ${error.message}`);
+      result.isValid = false;
+    }
+
+    return result;
+  }
+
+  /**
+   * Scan for injection attempts in nested objects
+   */
+  scanForInjectionAttempts(obj, result, path) {
+    if (typeof obj === 'string') {
+      if (this.containsInjectionAttempts(obj)) {
+        result.securityIssues.push(`Potential injection attempt detected at ${path}`);
+      }
+    } else if (typeof obj === 'object' && obj !== null) {
+      for (const [key, value] of Object.entries(obj)) {
+        const newPath = path ? `${path}.${key}` : key;
+        this.scanForInjectionAttempts(value, result, newPath);
+      }
+    }
+  }
+
+  /**
+   * Validate S3 event records
+   */
+  validateS3Records(records, result) {
+    for (let i = 0; i < records.length; i++) {
+      const record = records[i];
+      
+      if (!record.s3) {
+        result.errors.push(`Record ${i} missing s3 property`);
+        continue;
+      }
+
+      if (!record.s3.bucket || !record.s3.bucket.name) {
+        result.errors.push(`Record ${i} missing bucket name`);
+      }
+
+      if (!record.s3.object || !record.s3.object.key) {
+        result.errors.push(`Record ${i} missing object key`);
+      }
+
+      // Check for suspicious file patterns
+      if (record.s3.object?.key) {
+        const key = record.s3.object.key;
+        if (key.includes('..') || key.includes('<') || key.includes('>')) {
+          result.securityIssues.push(`Suspicious file path detected: ${key}`);
+        }
+      }
+
+      // Validate source IP if available
+      if (record.requestParameters?.sourceIPAddress) {
+        this.validateSourceIP(record.requestParameters.sourceIPAddress, result);
+      }
+    }
+  }
+
+  /**
+   * Validate API Gateway event
+   */
+  validateApiGatewayEvent(event, result) {
+    // Validate HTTP method
+    if (event.httpMethod && !['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD'].includes(event.httpMethod)) {
+      result.warnings.push(`Unusual HTTP method: ${event.httpMethod}`);
+    }
+
+    // Validate headers
+    if (event.headers) {
+      this.validateHeaders(event.headers, result);
+    }
+
+    // Validate query parameters
+    if (event.queryStringParameters) {
+      this.validateQueryParameters(event.queryStringParameters, result);
+    }
+
+    // Validate body size
+    if (event.body && event.body.length > 10485760) { // 10MB limit
+      result.warnings.push('Request body exceeds recommended size limit');
+    }
+
+    // Check for request source
+    if (event.requestContext?.identity?.sourceIp) {
+      this.validateSourceIP(event.requestContext.identity.sourceIp, result);
+    }
+  }
+
+  /**
+   * Validate HTTP headers
+   */
+  validateHeaders(headers, result) {
+    const suspiciousHeaders = ['x-forwarded-for', 'x-real-ip', 'x-originating-ip'];
+    const requiredHeaders = ['user-agent'];
+
+    // Check for suspicious headers
+    for (const header of suspiciousHeaders) {
+      if (headers[header]) {
+        result.warnings.push(`Potentially spoofed header detected: ${header}`);
+      }
+    }
+
+    // Check for required headers
+    for (const header of requiredHeaders) {
+      if (!headers[header]) {
+        result.warnings.push(`Missing recommended header: ${header}`);
+      }
+    }
+
+    // Check for injection in header values
+    for (const [key, value] of Object.entries(headers)) {
+      if (typeof value === 'string' && this.containsInjectionAttempts(value)) {
+        result.securityIssues.push(`Potential injection in header ${key}`);
+      }
+    }
+  }
+
+  /**
+   * Validate query parameters
+   */
+  validateQueryParameters(params, result) {
+    for (const [key, value] of Object.entries(params)) {
+      if (value && typeof value === 'string') {
+        // Check for injection attempts
+        if (this.containsInjectionAttempts(value)) {
+          result.securityIssues.push(`Potential injection in query parameter ${key}`);
+        }
+
+        // Check for overly long parameters
+        if (value.length > 2048) {
+          result.warnings.push(`Query parameter ${key} is unusually long`);
+        }
+      }
+    }
+  }
+
+  /**
+   * Validate source IP address
+   */
+  validateSourceIP(ip, result) {
+    // Check for private IP ranges (may indicate proxy/forwarding)
+    const privateRanges = [
+      /^10\./,
+      /^192\.168\./,
+      /^172\.(1[6-9]|2[0-9]|3[0-1])\./,
+      /^127\./
+    ];
+
+    if (privateRanges.some(range => range.test(ip))) {
+      result.warnings.push(`Request from private IP range: ${ip}`);
+    }
+
+    // Basic IP format validation
+    const ipPattern = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    if (!ipPattern.test(ip)) {
+      result.warnings.push(`Invalid IP address format: ${ip}`);
+    }
+  }
+
+  /**
+   * Sanitize sensitive data from event
+   */
+  sanitizeEventData(event) {
+    const sensitiveKeys = ['password', 'secret', 'token', 'key', 'credential', 'authorization'];
+    
+    const sanitizeObject = (obj, path = '') => {
+      if (typeof obj !== 'object' || obj === null) {
+        return;
+      }
+
+      for (const [key, value] of Object.entries(obj)) {
+        const lowerKey = key.toLowerCase();
+        
+        if (sensitiveKeys.some(sensitive => lowerKey.includes(sensitive))) {
+          obj[key] = '[REDACTED]';
+        } else if (typeof value === 'object') {
+          sanitizeObject(value, path ? `${path}.${key}` : key);
+        } else if (typeof value === 'string' && this.containsSensitiveInfo({ description: value })) {
+          obj[key] = '[POTENTIALLY_SENSITIVE]';
+        }
+      }
+    };
+
+    sanitizeObject(event);
+  }
+
+  /**
+   * Validate remediation parameters for safety
+   */
+  validateRemediationParameters(parameters) {
+    const result = {
+      isValid: true,
+      errors: [],
+      warnings: [],
+      safetyIssues: []
+    };
+
+    if (!parameters || typeof parameters !== 'object') {
+      result.errors.push('Parameters must be a valid object');
+      result.isValid = false;
+      return result;
+    }
+
+    // Check for dangerous parameter values
+    const dangerousValues = ['*', '0.0.0.0/0', 'public-read-write', 'root'];
+    
+    for (const [key, value] of Object.entries(parameters)) {
+      if (typeof value === 'string' && dangerousValues.includes(value)) {
+        result.safetyIssues.push(`Potentially dangerous parameter value: ${key}=${value}`);
+      }
+
+      // Check for overly permissive CIDR blocks
+      if (typeof value === 'string' && value.includes('/0') && !value.includes('127.0.0.1/')) {
+        result.safetyIssues.push(`Overly permissive CIDR block: ${value}`);
+      }
+
+      // Check for wildcard permissions
+      if (typeof value === 'string' && value.includes('*') && key.toLowerCase().includes('permission')) {
+        result.safetyIssues.push(`Wildcard permission detected: ${key}=${value}`);
+      }
+    }
+
+    result.isValid = result.errors.length === 0 && result.safetyIssues.length === 0;
+    return result;
+  }
 }
 
 module.exports = SecurityValidator;

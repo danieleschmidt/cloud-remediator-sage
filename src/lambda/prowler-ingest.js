@@ -5,17 +5,42 @@
 
 const AWS = require('aws-sdk');
 const SecurityAnalysisService = require('../services/SecurityAnalysisService');
+const NeptuneService = require('../services/NeptuneService');
 const { StructuredLogger } = require('../monitoring/logger');
+const { ErrorHandler } = require('../utils/errorHandler');
+const { CircuitBreaker } = require('../resilience/CircuitBreaker');
 
 const s3 = new AWS.S3();
+const sqs = new AWS.SQS();
 const logger = new StructuredLogger('prowler-ingest');
+const errorHandler = new ErrorHandler('prowler-ingest');
 
-exports.handler = async (event) => {
-  const correlationId = event.Records?.[0]?.responseElements?.['x-amz-request-id'] || 
+// Circuit breakers for external services
+const neptuneCircuitBreaker = new CircuitBreaker({
+  serviceName: 'neptune',
+  failureThreshold: 5,
+  resetTimeout: 30000
+});
+
+const s3CircuitBreaker = new CircuitBreaker({
+  serviceName: 's3',
+  failureThreshold: 3,
+  resetTimeout: 15000
+});
+
+// Configuration constants
+const MAX_RETRIES = 3;
+const BASE_DELAY = 1000;
+const DLQ_URL = process.env.DLQ_URL;
+
+exports.handler = errorHandler.createLambdaMiddleware()(async (event, context, childLogger) => {
+  const correlationId = childLogger?.correlationId || 
+                       event.Records?.[0]?.responseElements?.['x-amz-request-id'] || 
                        `prowler-${Date.now()}`;
   
-  logger.setCorrelationId(correlationId);
-  logger.info('Prowler ingest started', { 
+  const log = childLogger || logger.child(correlationId);
+  
+  log.info('Prowler ingest started', { 
     recordCount: event.Records?.length || 0,
     correlationId 
   });
@@ -28,45 +53,107 @@ exports.handler = async (event) => {
     skipped: 0
   };
 
-  try {
-    // Process each S3 event record
+  // Process each S3 event record with enhanced error handling
+  const processAllRecords = async () => {
     for (const record of event.Records || []) {
-      try {
-        await processS3Record(record, securityService, results, logger);
-      } catch (error) {
-        logger.error('Failed to process S3 record', { 
-          error: error.message,
+      await errorHandler.executeWithRetry(
+        () => processS3RecordWithRetry(record, securityService, results, log),
+        {
+          operationName: 'process_s3_record',
+          correlationId,
           bucket: record.s3?.bucket?.name,
-          key: record.s3?.object?.key 
-        });
-        results.errors++;
-      }
+          key: record.s3?.object?.key
+        }
+      );
     }
+  };
 
-    logger.info('Prowler ingest completed', results);
+  await processAllRecords();
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: 'Prowler findings processed successfully',
-        correlationId,
-        results
-      })
-    };
+  log.info('Prowler ingest completed', results);
 
-  } catch (error) {
-    logger.error('Prowler ingest failed', { error: error.message });
-    
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        error: 'Internal server error',
-        correlationId,
-        message: error.message
-      })
-    };
-  }
+  return {
+    statusCode: 200,
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Correlation-ID': correlationId
+    },
+    body: JSON.stringify({
+      message: 'Prowler findings processed successfully',
+      correlationId,
+      results,
+      timestamp: new Date().toISOString()
+    })
+  };
 };
+
+/**
+ * Process S3 record with retry logic and DLQ support
+ */
+async function processS3RecordWithRetry(record, securityService, results, logger) {
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      await processS3Record(record, securityService, results, logger);
+      return; // Success, exit retry loop
+    } catch (error) {
+      logger.error(`S3 record processing failed (attempt ${attempt}/${MAX_RETRIES})`, { 
+        error: error.message,
+        bucket: record.s3?.bucket?.name,
+        key: record.s3?.object?.key,
+        attempt
+      });
+
+      if (attempt === MAX_RETRIES) {
+        // Final attempt failed, send to DLQ if configured
+        if (DLQ_URL) {
+          await sendToDLQ(record, error.message);
+        }
+        results.errors++;
+        return;
+      }
+
+      // Exponential backoff delay
+      const delay = BASE_DELAY * Math.pow(2, attempt - 1);
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+}
+
+/**
+ * Send failed record to Dead Letter Queue
+ */
+async function sendToDLQ(record, errorMessage) {
+  try {
+    await sqs.sendMessage({
+      QueueUrl: DLQ_URL,
+      MessageBody: JSON.stringify({
+        originalRecord: record,
+        error: errorMessage,
+        failedAt: new Date().toISOString(),
+        source: 'prowler-ingest'
+      }),
+      MessageAttributes: {
+        'ErrorType': {
+          DataType: 'String',
+          StringValue: 'ProcessingFailure'
+        },
+        'Source': {
+          DataType: 'String',
+          StringValue: 'prowler-ingest'
+        }
+      }
+    }).promise();
+    
+    logger.info('Failed record sent to DLQ', {
+      bucket: record.s3?.bucket?.name,
+      key: record.s3?.object?.key
+    });
+  } catch (dlqError) {
+    logger.error('Failed to send record to DLQ', { 
+      error: dlqError.message 
+    });
+  }
+}
 
 /**
  * Process individual S3 record containing Prowler findings
@@ -84,8 +171,10 @@ async function processS3Record(record, securityService, results, logger) {
     return;
   }
 
-  // Get object from S3
-  const s3Object = await s3.getObject({ Bucket: bucket, Key: key }).promise();
+  // Get object from S3 with circuit breaker
+  const s3Object = await s3CircuitBreaker.execute(async () => {
+    return await s3.getObject({ Bucket: bucket, Key: key }).promise();
+  });
   const content = s3Object.Body.toString('utf-8');
 
   let prowlerData;
@@ -104,6 +193,9 @@ async function processS3Record(record, securityService, results, logger) {
     return;
   }
 
+  // Initialize Neptune service for duplicate detection
+  const neptuneService = new NeptuneService();
+  
   // Process each finding in the Prowler report
   const findings = Array.isArray(prowlerData) ? prowlerData : [prowlerData];
   
@@ -115,7 +207,29 @@ async function processS3Record(record, securityService, results, logger) {
         continue;
       }
 
-      // Process the finding
+      // Check for duplicate findings with circuit breaker
+      const findingId = generateFindingId(rawFinding);
+      const existingFinding = await neptuneCircuitBreaker.execute(async () => {
+        return await neptuneService.getFinding(findingId);
+      });
+      
+      if (existingFinding) {
+        // Update existing finding's lastSeen timestamp
+        existingFinding.lastSeen = new Date().toISOString();
+        await neptuneCircuitBreaker.execute(async () => {
+          return await neptuneService.updateFinding(existingFinding);
+        });
+        
+        logger.debug('Updated existing finding', {
+          findingId: existingFinding.id,
+          resource: existingFinding.resource.arn
+        });
+        
+        results.skipped++;
+        continue;
+      }
+
+      // Process new finding
       const finding = await securityService.processFinding(rawFinding, 'prowler');
       results.findings.push({
         id: finding.id,
@@ -126,7 +240,7 @@ async function processS3Record(record, securityService, results, logger) {
       
       results.processed++;
       
-      logger.debug('Processed finding', {
+      logger.debug('Processed new finding', {
         findingId: finding.id,
         severity: finding.severity,
         riskScore: finding.riskScore,
@@ -174,6 +288,23 @@ function validateProwlerData(data) {
     finding.Severity &&
     (finding.ResourceId || finding.ResourceArn)
   );
+}
+
+/**
+ * Generate consistent finding ID for duplicate detection
+ */
+function generateFindingId(rawFinding) {
+  const crypto = require('crypto');
+  
+  // Create unique identifier based on check and resource
+  const identifier = [
+    rawFinding.CheckID,
+    rawFinding.ResourceId || rawFinding.ResourceArn,
+    rawFinding.AccountId,
+    rawFinding.Region
+  ].filter(Boolean).join(':');
+  
+  return crypto.createHash('sha256').update(identifier).digest('hex').substring(0, 16);
 }
 
 /**
