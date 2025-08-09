@@ -31,6 +31,13 @@ class StructuredLogger {
     }
 
     /**
+     * Set correlation ID for current logger instance
+     */
+    setCorrelationId(correlationId) {
+        this.currentCorrelationId = correlationId;
+    }
+
+    /**
      * Get correlation context
      */
     getCorrelationContext(correlationId) {

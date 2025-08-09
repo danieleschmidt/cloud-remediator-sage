@@ -241,7 +241,7 @@ class PrometheusMetrics {
                             output += `${name}_bucket{${bucketLabel}} ${count}\n`;
                         }
                         
-                        const infBucketLabel = labelKey ? `${labelKey},le="+Inf"` : `le="+Inf"`;
+                        const infBucketLabel = labelKey ? `${labelKey},le="+Inf"` : 'le="+Inf"';
                         output += `${name}_bucket{${infBucketLabel}} ${sortedObs.length}\n`;
                         
                         const sumLabel = labelKey ? `${labelKey}` : '';

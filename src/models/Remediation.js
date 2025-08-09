@@ -136,11 +136,11 @@ class Remediation {
     
     const template = {
       terraform: {
-        required_version: ">= 0.14"
+        required_version: '>= 0.14'
       },
       provider: {
         aws: {
-          region: this.parameters.region || "us-east-1"
+          region: this.parameters.region || 'us-east-1'
         }
       },
       resource: this.template.resources || {},
@@ -155,7 +155,7 @@ class Remediation {
     if (this.templateType !== 'cloudformation') return null;
     
     const template = {
-      AWSTemplateFormatVersion: "2010-09-09",
+      AWSTemplateFormatVersion: '2010-09-09',
       Description: this.description,
       Parameters: this.template.parameters || {},
       Resources: this.template.resources || {},
@@ -274,8 +274,8 @@ class RemediationTemplates {
           resources: {
             s3_bucket_public_access_block: {
               aws_s3_bucket_public_access_block: {
-                "${var.bucket_name}": {
-                  bucket: "${var.bucket_name}",
+                '${var.bucket_name}': {
+                  bucket: '${var.bucket_name}',
                   block_public_acls: true,
                   block_public_policy: true,
                   ignore_public_acls: true,
@@ -286,8 +286,8 @@ class RemediationTemplates {
           },
           parameters: {
             bucket_name: {
-              type: "string",
-              description: "S3 bucket name to secure"
+              type: 'string',
+              description: 'S3 bucket name to secure'
             }
           }
         },
@@ -309,12 +309,12 @@ class RemediationTemplates {
             security_group_rule_removal: {
               aws_security_group_rule: {
                 ssh_removal: {
-                  type: "ingress",
+                  type: 'ingress',
                   from_port: 22,
                   to_port: 22,
-                  protocol: "tcp",
-                  cidr_blocks: ["${var.allowed_cidr}"],
-                  security_group_id: "${var.security_group_id}"
+                  protocol: 'tcp',
+                  cidr_blocks: ['${var.allowed_cidr}'],
+                  security_group_id: '${var.security_group_id}'
                 }
               }
             }

@@ -104,7 +104,7 @@ module.exports = (results) => {
   const securityReportPath = path.join(reportsDir, 'security-test-findings.json');
   fs.writeFileSync(securityReportPath, JSON.stringify(securityFindings, null, 2));
 
-  console.log(`\n🔒 Security Test Analysis Complete`);
+  console.log('\n🔒 Security Test Analysis Complete');
   console.log(`📊 Security tests found: ${securityFindings.securityTests.length}`);
   console.log(`⚠️  Potential vulnerabilities: ${securityFindings.vulnerabilityPatterns.length}`);
   console.log(`💡 Recommendations: ${securityFindings.recommendations.length}`);

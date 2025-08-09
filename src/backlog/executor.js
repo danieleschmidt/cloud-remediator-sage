@@ -143,7 +143,7 @@ class BacklogExecutor {
       return true;
       
     } catch (error) {
-      console.error(`❌ Micro cycle failed:`, error);
+      console.error('❌ Micro cycle failed:', error);
       return false;
     }
   }

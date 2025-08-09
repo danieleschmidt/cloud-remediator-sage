@@ -111,8 +111,10 @@ class ComplianceEngine extends EventEmitter {
       return;
     }
 
-    console.log('🏛️ Initializing Global Compliance Engine');
-    console.log(`📋 Active Frameworks: ${Object.keys(this.frameworks).filter(f => this.frameworks[f].enabled).join(', ')}`);
+    if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'test') {
+      console.log('🏛️ Initializing Global Compliance Engine');
+      console.log(`📋 Active Frameworks: ${Object.keys(this.frameworks).filter(f => this.frameworks[f].enabled).join(', ')}`);
+    }
     
     // Set up audit logging
     this.setupAuditLogging();
