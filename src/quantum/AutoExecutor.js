@@ -462,7 +462,7 @@ class QuantumAutoExecutor extends EventEmitter {
       findingId: task.findingId 
     });
     
-    if (remediations.length === 0) {
+    if (!remediations || remediations.length === 0) {
       // Trigger remediation generation
       await this.generateRemediation(finding);
       
@@ -472,7 +472,7 @@ class QuantumAutoExecutor extends EventEmitter {
       });
     }
     
-    if (remediations.length === 0) {
+    if (!remediations || remediations.length === 0) {
       throw new Error(`No remediation available for finding: ${task.findingId}`);
     }
     

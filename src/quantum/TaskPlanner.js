@@ -65,9 +65,15 @@ class QuantumTaskPlanner {
 
       console.log(`✨ Quantum Planning Complete: ${finalPlan.tasks.length} tasks optimized in ${this.metrics.executionTime}ms`);
       
+      // Calculate total risk reduction
+      const totalRiskReduction = finalPlan.estimatedRiskReduction || 0;
+      
       return {
         ...finalPlan,
-        metrics: this.metrics,
+        metrics: {
+          ...this.metrics,
+          totalRiskReduction
+        },
         quantumProperties: this.calculateQuantumProperties(finalPlan)
       };
 
@@ -215,11 +221,16 @@ class QuantumTaskPlanner {
    */
   async detectTaskEntanglements(tasks) {
     const entanglements = [];
+    
+    // Optimize for large task sets by limiting comparisons
+    const maxComparisons = Math.min(tasks.length * (tasks.length - 1) / 2, 10000);
+    let comparisons = 0;
 
-    for (let i = 0; i < tasks.length; i++) {
-      for (let j = i + 1; j < tasks.length; j++) {
+    for (let i = 0; i < tasks.length && comparisons < maxComparisons; i++) {
+      for (let j = i + 1; j < tasks.length && comparisons < maxComparisons; j++) {
         const taskA = tasks[i];
         const taskB = tasks[j];
+        comparisons++;
         
         const correlation = await this.calculateTaskCorrelation(taskA, taskB);
         
@@ -236,11 +247,11 @@ class QuantumTaskPlanner {
           
           // Update quantum properties
           taskA.quantumProperties.entanglement = Math.max(
-            taskA.quantumProperties.entanglement, 
+            taskA.quantumProperties.entanglement || 0, 
             correlation
           );
           taskB.quantumProperties.entanglement = Math.max(
-            taskB.quantumProperties.entanglement, 
+            taskB.quantumProperties.entanglement || 0, 
             correlation
           );
         }

@@ -38,7 +38,7 @@ class TestDataFactory {
       service: overrides.service || 's3',
       category: overrides.category || categories[Math.floor(Math.random() * categories.length)],
       title: overrides.title || `Test security finding ${id}`,
-      description: overrides.description || `This is a test security finding for validation purposes`,
+      description: overrides.description || 'This is a test security finding for validation purposes',
       recommendation: overrides.recommendation || 'Follow security best practices',
       timestamp: overrides.timestamp || new Date().toISOString(),
       metadata: {

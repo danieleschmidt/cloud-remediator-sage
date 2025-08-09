@@ -76,7 +76,7 @@ class MetricsReporter {
       return ((currentCoverage - previousCoverage) * 100).toFixed(1);
     } catch (error) {
       console.warn('Could not calculate coverage delta:', error.message);
-      return "0.0";
+      return '0.0';
     }
   }
 
@@ -207,10 +207,10 @@ class MetricsReporter {
     } catch (error) {
       console.warn('Error calculating DORA metrics:', error.message);
       return {
-        deploy_freq: "0",
-        lead_time: "0",
-        change_fail_rate: "0",
-        mttr: "0"
+        deploy_freq: '0',
+        lead_time: '0',
+        change_fail_rate: '0',
+        mttr: '0'
       };
     }
   }
@@ -221,7 +221,7 @@ class MetricsReporter {
       const commits = execSync('git log --oneline --since="24 hours ago" origin/main', { encoding: 'utf8' });
       return commits.trim().split('\n').filter(line => line).length.toString();
     } catch {
-      return "0";
+      return '0';
     }
   }
 
@@ -231,7 +231,7 @@ class MetricsReporter {
       const prs = execSync('gh pr list --state merged --limit 10 --json createdAt,mergedAt', { encoding: 'utf8' });
       const prData = JSON.parse(prs);
       
-      if (prData.length === 0) return "0";
+      if (prData.length === 0) return '0';
       
       const leadTimes = prData.map(pr => {
         const created = new Date(pr.createdAt);
@@ -242,7 +242,7 @@ class MetricsReporter {
       const avgLeadTime = leadTimes.reduce((sum, time) => sum + time, 0) / leadTimes.length;
       return Math.round(avgLeadTime).toString();
     } catch {
-      return "0";
+      return '0';
     }
   }
 
@@ -257,7 +257,7 @@ class MetricsReporter {
       
       return Math.min(failureRate, 100).toFixed(1);
     } catch {
-      return "0";
+      return '0';
     }
   }
 
@@ -267,7 +267,7 @@ class MetricsReporter {
       const incidents = execSync('gh issue list --label "type:incident" --state closed --limit 10 --json createdAt,closedAt', { encoding: 'utf8' });
       const incidentData = JSON.parse(incidents);
       
-      if (incidentData.length === 0) return "0";
+      if (incidentData.length === 0) return '0';
       
       const resolutionTimes = incidentData.map(incident => {
         const created = new Date(incident.createdAt);
@@ -278,7 +278,7 @@ class MetricsReporter {
       const avgMTTR = resolutionTimes.reduce((sum, time) => sum + time, 0) / resolutionTimes.length;
       return Math.round(avgMTTR).toString();
     } catch {
-      return "0";
+      return '0';
     }
   }
 
@@ -313,15 +313,15 @@ class MetricsReporter {
       const totalCommits = recentCommits.trim().split('\n').length;
       const fixCommits = recentCommits.split('\n').filter(line => line.includes('fix')).length;
       
-      return totalCommits > 0 ? ((fixCommits / totalCommits) * 100).toFixed(1) : "0";
+      return totalCommits > 0 ? ((fixCommits / totalCommits) * 100).toFixed(1) : '0';
     } catch {
-      return "0";
+      return '0';
     }
   }
 
   getPRBackoffState() {
     // Would check actual backoff state from executor
-    return "inactive";
+    return 'inactive';
   }
 
   getTopWSJFItems(backlog) {
@@ -388,35 +388,35 @@ ${report.risks_or_blocks.length > 0
 
   async updatePrometheusMetrics(report) {
     const metrics = [
-      `# HELP backlog_items_total Total number of backlog items`,
-      `# TYPE backlog_items_total gauge`,
+      '# HELP backlog_items_total Total number of backlog items',
+      '# TYPE backlog_items_total gauge',
       `backlog_items_total{status="total"} ${Object.values(report.backlog_size_by_status).reduce((a, b) => a + b, 0)}`,
       ...Object.entries(report.backlog_size_by_status).map(([status, count]) => 
         `backlog_items_total{status="${status.toLowerCase()}"} ${count}`
       ),
       '',
-      `# HELP dora_deployment_frequency_per_day DORA deployment frequency`,
-      `# TYPE dora_deployment_frequency_per_day gauge`,
+      '# HELP dora_deployment_frequency_per_day DORA deployment frequency',
+      '# TYPE dora_deployment_frequency_per_day gauge',
       `dora_deployment_frequency_per_day ${report.dora.deploy_freq}`,
       '',
-      `# HELP dora_lead_time_hours DORA lead time in hours`,
-      `# TYPE dora_lead_time_hours gauge`, 
+      '# HELP dora_lead_time_hours DORA lead time in hours',
+      '# TYPE dora_lead_time_hours gauge', 
       `dora_lead_time_hours ${report.dora.lead_time}`,
       '',
-      `# HELP dora_change_failure_rate_percent DORA change failure rate`,
-      `# TYPE dora_change_failure_rate_percent gauge`,
+      '# HELP dora_change_failure_rate_percent DORA change failure rate',
+      '# TYPE dora_change_failure_rate_percent gauge',
       `dora_change_failure_rate_percent ${report.dora.change_fail_rate}`,
       '',
-      `# HELP dora_mttr_hours DORA mean time to recovery in hours`,
-      `# TYPE dora_mttr_hours gauge`,
+      '# HELP dora_mttr_hours DORA mean time to recovery in hours',
+      '# TYPE dora_mttr_hours gauge',
       `dora_mttr_hours ${report.dora.mttr}`,
       '',
-      `# HELP rerere_auto_resolved_total Conflicts auto-resolved by rerere`,
-      `# TYPE rerere_auto_resolved_total counter`,
+      '# HELP rerere_auto_resolved_total Conflicts auto-resolved by rerere',
+      '# TYPE rerere_auto_resolved_total counter',
       `rerere_auto_resolved_total ${report.rerere_auto_resolved_total}`,
       '',
-      `# HELP ci_failure_rate_percent CI pipeline failure rate`,
-      `# TYPE ci_failure_rate_percent gauge`,
+      '# HELP ci_failure_rate_percent CI pipeline failure rate',
+      '# TYPE ci_failure_rate_percent gauge',
       `ci_failure_rate_percent ${report.ci_failure_rate}`,
       ''
     ].join('\n');
