@@ -11,7 +11,7 @@ const { execSync } = require('child_process');
 // Import modules under test
 const BacklogDiscovery = require('../../src/backlog/discovery');
 const BacklogExecutor = require('../../src/backlog/executor');
-const SecurityAnalyzer = require('../../src/backlog/security');
+const { SecurityAnalyzer } = require('../../src/backlog/security');
 const WSJFCalculator = require('../../src/backlog/wsjf');
 
 describe('Autonomous Backlog Management Integration', () => {

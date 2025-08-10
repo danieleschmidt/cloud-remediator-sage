@@ -1,6 +1,6 @@
 const BacklogDiscovery = require('./discovery');
 const WSJFScoring = require('./wsjf');
-const SecurityChecker = require('./security');
+const { SecurityChecker } = require('./security');
 const MetricsReporter = require('./metrics');
 const { execSync } = require('child_process');
 const fs = require('fs');
@@ -19,6 +19,58 @@ class BacklogExecutor {
     this.ciFailureThreshold = 0.3;
     this.prBackoffActive = false;
     this.completedTasks = [];
+  }
+
+  /**
+   * Execute a single backlog item
+   * @param {Object} item - Backlog item to execute
+   * @returns {Object} Execution result
+   */
+  async executeItem(item) {
+    console.log(`🚀 Executing item: ${item.title}`);
+    
+    const result = {
+      success: false,
+      item: item,
+      errors: [],
+      warnings: [],
+      commitHash: null,
+      branchName: null
+    };
+    
+    try {
+      // Validate item before execution
+      if (!item || !item.id || !item.title) {
+        result.errors.push('Invalid item structure');
+        return result;
+      }
+      
+      // Execute the micro cycle for this item
+      const microCycleSuccess = await this.executeMicroCycle(item, [item]);
+      
+      if (microCycleSuccess) {
+        result.success = true;
+        result.branchName = `terragon/auto-${item.id.toLowerCase()}`;
+        
+        // Get commit hash if available
+        try {
+          result.commitHash = execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim();
+        } catch (error) {
+          result.warnings.push('Could not retrieve commit hash');
+        }
+        
+        console.log(`✅ Successfully executed item: ${item.title}`);
+      } else {
+        result.errors.push('Micro cycle execution failed');
+        console.log(`❌ Failed to execute item: ${item.title}`);
+      }
+      
+    } catch (error) {
+      result.errors.push(`Execution error: ${error.message}`);
+      console.error('❌ Item execution failed:', error);
+    }
+    
+    return result;
   }
 
   async executeMainLoop() {

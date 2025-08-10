@@ -639,25 +639,175 @@ class QuantumTaskPlanner {
     return durationMap[finding.subcategory] || 20; // Default 20 minutes
   }
 
-  // Stub methods for additional functionality
-  async generateMaintenanceTasks(context) { return []; }
-  async generateComplianceTasks(context) { return []; }
-  calculateHybridExecutionTime(critical, regular) { return 0; }
-  applyEntanglementConstraints(state, entanglements) { return []; }
-  calculateTotalRiskReduction(tasks) { return 0; }
-  calculateResourceEfficiency(state) { return 0.8; }
-  calculateTimeToValue(state) { return 0.5; }
-  calculateComplianceImpact(tasks) { return 0.6; }
-  calculateCostEffectiveness(state) { return 0.7; }
-  determineEntanglementType(taskA, taskB) { return 'dependency'; }
-  determineExecutionConstraint(taskA, taskB, correlation) { return 'sequential'; }
-  calculateTaskStartTime(task, completed) { return new Date(); }
-  determineRequiredApprovals(task) { return []; }
-  async generateRollbackPlan(task) { return {}; }
-  generateValidationChecks(task) { return []; }
-  generateMonitoringMetrics(task) { return []; }
-  calculateQuantumAdvantage(plan) { return 0.8; }
-  calculateUncertaintyPrinciple(plan) { return 0.3; }
+  // Implementation methods for comprehensive functionality
+  async generateMaintenanceTasks(context) { 
+    const tasks = [];
+    
+    // Generate proactive maintenance tasks based on context
+    if (context.includeSystemMaintenance) {
+      tasks.push({
+        id: 'maintenance-logs',
+        type: 'maintenance',
+        priority: 3,
+        quantumWeight: 2,
+        estimatedDuration: 15,
+        riskReduction: 2,
+        parallelizable: true,
+        quantumProperties: { coherence: 0.7, entanglement: 0, superposition: 0.6 },
+        metadata: { severity: 'medium', category: 'maintenance' }
+      });
+    }
+    
+    return tasks; 
+  }
+  
+  async generateComplianceTasks(context) { 
+    const tasks = [];
+    
+    // Generate compliance-related tasks
+    if (context.complianceRequired) {
+      tasks.push({
+        id: 'compliance-audit',
+        type: 'compliance',
+        priority: 7,
+        quantumWeight: 6,
+        estimatedDuration: 45,
+        riskReduction: 8,
+        parallelizable: false,
+        quantumProperties: { coherence: 0.8, entanglement: 0, superposition: 0.3 },
+        metadata: { severity: 'high', category: 'compliance' }
+      });
+    }
+    
+    return tasks; 
+  }
+  
+  calculateHybridExecutionTime(critical, regular) { 
+    const criticalTime = critical.reduce((sum, task) => sum + (task.estimatedDuration || 0), 0);
+    const regularTime = Math.max(...regular.map(task => task.estimatedDuration || 0));
+    return criticalTime + regularTime;
+  }
+  
+  applyEntanglementConstraints(state, entanglements) { 
+    const constraints = [];
+    
+    entanglements.forEach(entanglement => {
+      if (entanglement.constraint === 'sequential') {
+        constraints.push({
+          type: 'sequential',
+          tasks: [entanglement.taskA, entanglement.taskB],
+          reason: `Tasks are entangled with strength ${entanglement.strength}`
+        });
+      }
+    });
+    
+    return constraints;
+  }
+  
+  calculateTotalRiskReduction(tasks) { 
+    return tasks.reduce((total, task) => total + (task.riskReduction || 0), 0);
+  }
+  
+  calculateResourceEfficiency(state) { 
+    if (!state.tasks || state.tasks.length === 0) return 0.8;
+    
+    const parallelTasks = state.tasks.filter(t => t.parallelizable).length;
+    const totalTasks = state.tasks.length;
+    
+    return parallelTasks / totalTasks;
+  }
+  
+  calculateTimeToValue(state) { 
+    if (!state.estimatedTime) return 0.5;
+    
+    // Normalize time to value (lower time = lower ratio)
+    return Math.min(state.estimatedTime / 3600, 1.0); // Max 1 hour = 1.0
+  }
+  
+  calculateComplianceImpact(tasks) { 
+    const complianceTasks = tasks.filter(t => t.type === 'compliance' || t.type === 'security');
+    return complianceTasks.length / Math.max(tasks.length, 1);
+  }
+  
+  calculateCostEffectiveness(state) { 
+    if (!state.tasks || state.tasks.length === 0) return 0.7;
+    
+    // Simple cost model based on task count and complexity
+    const complexity = state.tasks.reduce((sum, task) => sum + (task.estimatedDuration || 0), 0);
+    return Math.max(0.1, 1 - (complexity / 1000)); // Normalize to 0-1 scale
+  }
+  
+  determineEntanglementType(taskA, taskB) { 
+    if (taskA.assetArn === taskB.assetArn) return 'resource-dependency';
+    if (taskA.metadata.service === taskB.metadata.service) return 'service-correlation';
+    if (taskA.metadata.category === taskB.metadata.category) return 'category-correlation';
+    return 'weak-correlation';
+  }
+  
+  determineExecutionConstraint(taskA, taskB, correlation) { 
+    if (correlation > 0.8) return 'sequential';
+    if (correlation > 0.5) return 'coordinated';
+    return 'parallel';
+  }
+  
+  calculateTaskStartTime(task, completed) { 
+    const baseTime = new Date();
+    const offset = completed.length * 5; // 5 minutes per completed task
+    return new Date(baseTime.getTime() + (offset * 60000));
+  }
+  
+  determineRequiredApprovals(task) { 
+    const approvals = [];
+    
+    if (task.priority > 8) approvals.push('security-team');
+    if (task.riskReduction > 7) approvals.push('risk-manager');
+    if (task.type === 'compliance') approvals.push('compliance-officer');
+    
+    return approvals;
+  }
+  
+  async generateRollbackPlan(task) { 
+    return {
+      steps: [
+        'Create backup of current state',
+        'Document changes made',
+        'Prepare rollback scripts'
+      ],
+      estimatedTime: Math.ceil((task.estimatedDuration || 20) * 0.3),
+      automated: task.parallelizable || false
+    };
+  }
+  
+  generateValidationChecks(task) { 
+    const checks = ['verify-functionality', 'check-security', 'validate-performance'];
+    
+    if (task.type === 'security') checks.push('security-scan');
+    if (task.type === 'compliance') checks.push('compliance-check');
+    
+    return checks;
+  }
+  
+  generateMonitoringMetrics(task) { 
+    return [
+      'execution-time',
+      'success-rate',
+      'error-count',
+      `${task.type}-specific-metrics`
+    ];
+  }
+  
+  calculateQuantumAdvantage(plan) { 
+    const parallelEfficiency = plan.tasks.filter(t => t.parallelizable).length / Math.max(plan.tasks.length, 1);
+    const riskEfficiency = plan.estimatedRiskReduction / Math.max(plan.totalTasks, 1);
+    
+    return (parallelEfficiency + riskEfficiency) / 2;
+  }
+  
+  calculateUncertaintyPrinciple(plan) { 
+    // Higher complexity = higher uncertainty
+    const complexity = plan.tasks.reduce((sum, task) => sum + (task.estimatedDuration || 0), 0);
+    return Math.min(complexity / 1000, 0.9);
+  }
 }
 
 module.exports = QuantumTaskPlanner;

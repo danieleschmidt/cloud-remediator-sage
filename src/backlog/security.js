@@ -357,4 +357,179 @@ class SecurityChecker {
   }
 }
 
-module.exports = SecurityChecker;
+/**
+ * Security Analyzer for vulnerability detection and reporting
+ * Extends SecurityChecker with analysis capabilities
+ */
+class SecurityAnalyzer extends SecurityChecker {
+  constructor(workspacePath = process.cwd()) {
+    super();
+    this.workspacePath = workspacePath;
+  }
+
+  /**
+   * Scan for vulnerabilities in the workspace
+   */
+  async scanForVulnerabilities() {
+    const vulnerabilities = [];
+    
+    try {
+      // Run SAST scan
+      const sastPassed = await this.runSAST();
+      if (!sastPassed) {
+        vulnerabilities.push({
+          type: 'static-analysis',
+          severity: 'high',
+          description: 'SAST scan detected security issues',
+          file: 'multiple files',
+          line: null
+        });
+      }
+      
+      // Run SCA scan
+      const scaPassed = await this.runSCA();
+      if (!scaPassed) {
+        vulnerabilities.push({
+          type: 'dependency',
+          severity: 'high',
+          description: 'Vulnerable dependencies detected',
+          file: 'package.json',
+          line: null
+        });
+      }
+      
+      // Check input validation
+      const inputValidationPassed = await this.checkInputValidation();
+      if (!inputValidationPassed) {
+        vulnerabilities.push({
+          type: 'input-validation',
+          severity: 'medium',
+          description: 'Input validation issues detected',
+          file: 'multiple files',
+          line: null
+        });
+      }
+      
+      // Check secrets management
+      const secretsPassed = await this.checkSecretsManagement();
+      if (!secretsPassed) {
+        vulnerabilities.push({
+          type: 'secrets',
+          severity: 'critical',
+          description: 'Hardcoded secrets detected',
+          file: 'multiple files',
+          line: null
+        });
+      }
+      
+      return vulnerabilities;
+      
+    } catch (error) {
+      console.error('Vulnerability scan failed:', error.message);
+      return [{
+        type: 'scan-error',
+        severity: 'unknown',
+        description: `Vulnerability scan failed: ${error.message}`,
+        file: null,
+        line: null
+      }];
+    }
+  }
+
+  /**
+   * Generate security analysis report
+   */
+  async generateSecurityReport() {
+    const reportPath = path.join(this.workspacePath, 'reports', 'security-analysis.json');
+    
+    try {
+      // Ensure reports directory exists
+      const reportsDir = path.dirname(reportPath);
+      if (!fs.existsSync(reportsDir)) {
+        fs.mkdirSync(reportsDir, { recursive: true });
+      }
+      
+      const vulnerabilities = await this.scanForVulnerabilities();
+      const sbomGenerated = await this.generateSBOM();
+      
+      const report = {
+        timestamp: new Date().toISOString(),
+        workspace: this.workspacePath,
+        summary: {
+          totalVulnerabilities: vulnerabilities.length,
+          critical: vulnerabilities.filter(v => v.severity === 'critical').length,
+          high: vulnerabilities.filter(v => v.severity === 'high').length,
+          medium: vulnerabilities.filter(v => v.severity === 'medium').length,
+          low: vulnerabilities.filter(v => v.severity === 'low').length
+        },
+        vulnerabilities: vulnerabilities,
+        sbom: {
+          generated: sbomGenerated,
+          path: sbomGenerated ? `${this.sbomDir}/sbom-${new Date().toISOString().split('T')[0]}.json` : null
+        },
+        recommendations: this.generateSecurityRecommendations(vulnerabilities)
+      };
+      
+      fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
+      console.log(`✅ Security report generated: ${reportPath}`);
+      
+      return report;
+      
+    } catch (error) {
+      console.error('Security report generation failed:', error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * Generate security recommendations based on vulnerabilities
+   */
+  generateSecurityRecommendations(vulnerabilities) {
+    const recommendations = [];
+    
+    const criticalVulns = vulnerabilities.filter(v => v.severity === 'critical');
+    const highVulns = vulnerabilities.filter(v => v.severity === 'high');
+    
+    if (criticalVulns.length > 0) {
+      recommendations.push({
+        priority: 'critical',
+        action: 'Address critical security vulnerabilities immediately',
+        description: `Found ${criticalVulns.length} critical vulnerabilities that require immediate attention`,
+        items: criticalVulns.map(v => v.description)
+      });
+    }
+    
+    if (highVulns.length > 0) {
+      recommendations.push({
+        priority: 'high',
+        action: 'Plan remediation for high-severity issues',
+        description: `Found ${highVulns.length} high-severity vulnerabilities`,
+        items: highVulns.map(v => v.description)
+      });
+    }
+    
+    // Check if secrets were found
+    if (vulnerabilities.some(v => v.type === 'secrets')) {
+      recommendations.push({
+        priority: 'critical',
+        action: 'Implement proper secrets management',
+        description: 'Use environment variables or secure vaults for sensitive data',
+        items: ['Audit codebase for hardcoded secrets', 'Implement AWS Parameter Store or similar', 'Add pre-commit hooks to prevent secret commits']
+      });
+    }
+    
+    // Check if dependency vulnerabilities exist
+    if (vulnerabilities.some(v => v.type === 'dependency')) {
+      recommendations.push({
+        priority: 'high',
+        action: 'Update vulnerable dependencies',
+        description: 'Update packages to latest secure versions',
+        items: ['Run npm audit fix', 'Review dependency-check report', 'Consider alternative packages if updates not available']
+      });
+    }
+    
+    return recommendations;
+  }
+}
+
+module.exports = { SecurityChecker, SecurityAnalyzer };

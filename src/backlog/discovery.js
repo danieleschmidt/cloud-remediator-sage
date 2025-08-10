@@ -27,6 +27,14 @@ class BacklogDiscovery {
     return this.deduplicateItems(items);
   }
 
+  /**
+   * Scan for security and operational improvements
+   * Alias for discoverAll() for backward compatibility
+   */
+  async scanForImprovements() {
+    return await this.discoverAll();
+  }
+
   loadYamlBacklog() {
     try {
       if (!fs.existsSync(this.backlogFile)) return [];
