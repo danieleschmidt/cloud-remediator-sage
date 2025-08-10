@@ -326,6 +326,38 @@ class SecurityValidator {
   }
 
   /**
+   * Validate asset compliance requirements
+   */
+  async validateAssetCompliance(asset, result) {
+    // Check for compliance requirements based on asset criticality
+    if (asset.criticality === 'critical') {
+      if (!asset.monitoringEnabled) {
+        result.configurationIssues.push('Critical assets must have monitoring enabled for compliance');
+      }
+      
+      if (!asset.loggingEnabled) {
+        result.configurationIssues.push('Critical assets must have logging enabled for compliance');
+      }
+      
+      if (!asset.encryption?.atRest) {
+        result.configurationIssues.push('Critical assets must have encryption at rest enabled');
+      }
+    }
+    
+    // Check environment-specific compliance
+    if (asset.environment === 'production') {
+      if (!asset.backupEnabled) {
+        result.configurationIssues.push('Production assets should have backup enabled');
+      }
+    }
+    
+    // Check for required tags for compliance
+    if (!asset.tags || Object.keys(asset.tags).length === 0) {
+      result.configurationIssues.push('Assets should have compliance tags for governance');
+    }
+  }
+
+  /**
    * Validate asset network security
    */
   async validateAssetNetworkSecurity(asset, result) {
@@ -379,6 +411,35 @@ class SecurityValidator {
     // Validate automation level
     if (remediation.automationLevel === 'automated' && remediation.riskLevel === 'high') {
       result.safetyIssues.push('High-risk remediation should not be fully automated');
+    }
+  }
+
+  /**
+   * Validate remediation effectiveness
+   */
+  async validateRemediationEffectiveness(remediation, result) {
+    // Check if remediation has measurable success criteria
+    if (!remediation.successCriteria || remediation.successCriteria.length === 0) {
+      result.effectivenessIssues = result.effectivenessIssues || [];
+      result.effectivenessIssues.push('Remediation lacks measurable success criteria');
+    }
+    
+    // Check if remediation has validation steps
+    if (!remediation.validationSteps || remediation.validationSteps.length === 0) {
+      result.effectivenessIssues = result.effectivenessIssues || [];
+      result.effectivenessIssues.push('Remediation lacks validation steps');
+    }
+    
+    // Check if remediation addresses the finding properly
+    if (remediation.findingId && !remediation.targetResource) {
+      result.effectivenessIssues = result.effectivenessIssues || [];
+      result.effectivenessIssues.push('Remediation should specify target resource');
+    }
+    
+    // Estimate effectiveness based on remediation type
+    if (remediation.estimatedEffectiveness < 0.7) {
+      result.effectivenessIssues = result.effectivenessIssues || [];
+      result.effectivenessIssues.push('Remediation has low estimated effectiveness (<70%)');
     }
   }
 
@@ -535,8 +596,12 @@ class SecurityValidator {
   }
 
   isValidArnFormat(arn) {
+    // More comprehensive ARN pattern that handles various AWS service formats
     const arnPattern = /^arn:aws:[a-zA-Z0-9-]+:[a-zA-Z0-9-]*:\d{12}:.+$/;
-    return arnPattern.test(arn);
+    const arnPatternWithoutAccount = /^arn:aws:[a-zA-Z0-9-]+:[a-zA-Z0-9-]*::.+$/; // Some services don't use account ID
+    const arnPatternGlobal = /^arn:aws:[a-zA-Z0-9-]+::[a-zA-Z0-9-]*:.+$/; // Global services
+    
+    return arnPattern.test(arn) || arnPatternWithoutAccount.test(arn) || arnPatternGlobal.test(arn);
   }
 
   containsSensitiveInfo(finding) {

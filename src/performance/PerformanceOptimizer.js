@@ -489,7 +489,7 @@ class PerformanceOptimizer extends EventEmitter {
     const accessCount = this.metrics.queryExecutionTimes.get(queryKey) || 0;
     const frequencyMultiplier = accessCount > 10 ? 2.0 : 1.0;
     
-    return Math.floor(basesTTL * sizeMultiplier * frequencyMultiplier);
+    return Math.floor(baseTTL * sizeMultiplier * frequencyMultiplier);
   }
 
   /**

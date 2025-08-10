@@ -85,7 +85,7 @@ exports.handler = errorHandler.createLambdaMiddleware()(async (event, context, c
       timestamp: new Date().toISOString()
     })
   };
-};
+});
 
 /**
  * Process S3 record with retry logic and DLQ support
