@@ -127,7 +127,7 @@ exports.handler = errorHandler.createLambdaMiddleware()(async (event, context, c
         correlationId,
         message: error.message,
         results
-      })
+      });
     };
   }
 };
