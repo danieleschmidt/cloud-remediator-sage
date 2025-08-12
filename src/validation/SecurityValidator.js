@@ -118,6 +118,7 @@ class SecurityValidator {
     } catch (error) {
       result.isValid = false;
       result.errors.push(`Asset validation failed: ${error.message}`);
+      console.error('Asset validation error:', error);
       return result;
     }
   }
@@ -294,8 +295,8 @@ class SecurityValidator {
    */
   async validateAssetSecurity(asset, result) {
     // Check for public exposure
-    if (asset.isPubliclyAccessible && asset.isPubliclyAccessible()) {
-      if (asset.containsSensitiveData && asset.containsSensitiveData()) {
+    if (asset.isPubliclyAccessible && typeof asset.isPubliclyAccessible === 'function' && asset.isPubliclyAccessible()) {
+      if (asset.containsSensitiveData && typeof asset.containsSensitiveData === 'function' && asset.containsSensitiveData()) {
         result.securityIssues.push('Asset with sensitive data is publicly accessible');
       }
       
@@ -306,21 +307,23 @@ class SecurityValidator {
     
     // Check encryption status
     if (asset.encryption) {
-      if (!asset.encryption.atRest && asset.containsSensitiveData?.()) {
+      if (!asset.encryption.atRest && asset.containsSensitiveData && typeof asset.containsSensitiveData === 'function' && asset.containsSensitiveData()) {
         result.securityIssues.push('Sensitive data asset lacks encryption at rest');
       }
       
-      if (!asset.encryption.inTransit && asset.isPubliclyAccessible?.()) {
+      if (!asset.encryption.inTransit && asset.isPubliclyAccessible && typeof asset.isPubliclyAccessible === 'function' && asset.isPubliclyAccessible()) {
         result.securityIssues.push('Publicly accessible asset lacks encryption in transit');
       }
     }
     
     // Check monitoring and logging
     if (!asset.monitoringEnabled && asset.criticality === 'critical') {
+      result.configurationIssues = result.configurationIssues || [];
       result.configurationIssues.push('Critical asset should have monitoring enabled');
     }
     
-    if (!asset.loggingEnabled && asset.isPubliclyAccessible?.()) {
+    if (!asset.loggingEnabled && asset.isPubliclyAccessible && typeof asset.isPubliclyAccessible === 'function' && asset.isPubliclyAccessible()) {
+      result.configurationIssues = result.configurationIssues || [];
       result.configurationIssues.push('Publicly accessible asset should have logging enabled');
     }
   }
@@ -329,6 +332,9 @@ class SecurityValidator {
    * Validate asset compliance requirements
    */
   async validateAssetCompliance(asset, result) {
+    // Initialize arrays if they don't exist
+    result.configurationIssues = result.configurationIssues || [];
+    
     // Check for compliance requirements based on asset criticality
     if (asset.criticality === 'critical') {
       if (!asset.monitoringEnabled) {
@@ -361,15 +367,21 @@ class SecurityValidator {
    * Validate asset network security
    */
   async validateAssetNetworkSecurity(asset, result) {
+    // Initialize arrays if they don't exist
+    result.configurationIssues = result.configurationIssues || [];
+    result.securityIssues = result.securityIssues || [];
+    
     if (!asset.securityGroups || asset.securityGroups.length === 0) {
       result.configurationIssues.push('Asset has no security groups defined');
       return;
     }
     
     for (const sg of asset.securityGroups) {
-      if (!sg.rules) continue;
+      if (!sg.rules || !Array.isArray(sg.rules)) continue;
       
       for (const rule of sg.rules) {
+        if (!rule || !rule.source) continue;
+        
         // Check for overly permissive rules
         if (rule.source === '0.0.0.0/0' && rule.ports?.includes('22')) {
           result.securityIssues.push('Security group allows SSH access from anywhere');
@@ -387,9 +399,27 @@ class SecurityValidator {
   }
 
   /**
+   * Validate remediation schema
+   */
+  async validateRemediationSchema(remediation, result) {
+    const schema = this.getRemediationSchema();
+    
+    try {
+      await schema.validateAsync(remediation, { abortEarly: false });
+    } catch (error) {
+      error.details.forEach(detail => {
+        result.errors.push(`Remediation schema validation: ${detail.message}`);
+      });
+    }
+  }
+
+  /**
    * Validate remediation safety
    */
   async validateRemediationSafety(remediation, result) {
+    // Ensure safetyIssues array exists
+    result.safetyIssues = result.safetyIssues || [];
+    
     // Check for destructive operations
     if (this.isDestructiveOperation(remediation)) {
       if (!remediation.rollbackPlan || Object.keys(remediation.rollbackPlan).length === 0) {
@@ -418,27 +448,25 @@ class SecurityValidator {
    * Validate remediation effectiveness
    */
   async validateRemediationEffectiveness(remediation, result) {
+    result.effectivenessIssues = result.effectivenessIssues || [];
+    
     // Check if remediation has measurable success criteria
     if (!remediation.successCriteria || remediation.successCriteria.length === 0) {
-      result.effectivenessIssues = result.effectivenessIssues || [];
       result.effectivenessIssues.push('Remediation lacks measurable success criteria');
     }
     
     // Check if remediation has validation steps
     if (!remediation.validationSteps || remediation.validationSteps.length === 0) {
-      result.effectivenessIssues = result.effectivenessIssues || [];
       result.effectivenessIssues.push('Remediation lacks validation steps');
     }
     
     // Check if remediation addresses the finding properly
-    if (remediation.findingId && !remediation.targetResource) {
-      result.effectivenessIssues = result.effectivenessIssues || [];
+    if (remediation.findingId && !remediation.targetResource && !remediation.assetArn) {
       result.effectivenessIssues.push('Remediation should specify target resource');
     }
     
     // Estimate effectiveness based on remediation type
-    if (remediation.estimatedEffectiveness < 0.7) {
-      result.effectivenessIssues = result.effectivenessIssues || [];
+    if (remediation.estimatedEffectiveness !== undefined && remediation.estimatedEffectiveness < 0.7) {
       result.effectivenessIssues.push('Remediation has low estimated effectiveness (<70%)');
     }
   }
@@ -452,7 +480,10 @@ class SecurityValidator {
       return;
     }
     
-    switch (remediation.templateType) {
+    // Set default template type if not provided
+    const templateType = remediation.templateType || 'terraform';
+    
+    switch (templateType) {
       case 'terraform':
         this.validateTerraformTemplate(remediation.template, result);
         break;
@@ -463,7 +494,7 @@ class SecurityValidator {
         this.validateBoto3Template(remediation.template, result);
         break;
       default:
-        result.warnings.push(`Unknown template type: ${remediation.templateType}`);
+        result.warnings.push(`Unknown template type: ${templateType}`);
     }
   }
 
@@ -529,6 +560,41 @@ class SecurityValidator {
     });
     
     this.schemaCache.set('asset', schema);
+    return schema;
+  }
+
+  /**
+   * Get remediation validation schema
+   */
+  getRemediationSchema() {
+    if (this.schemaCache.has('remediation')) {
+      return this.schemaCache.get('remediation');
+    }
+    
+    const schema = Joi.object({
+      id: Joi.string().required(),
+      findingId: Joi.string(),
+      assetArn: Joi.string(),
+      type: Joi.string().required(),
+      templateType: Joi.string().valid('terraform', 'cloudformation', 'boto3', 'script'),
+      category: Joi.string(),
+      title: Joi.string(),
+      description: Joi.string(),
+      template: Joi.alternatives().try(Joi.object(), Joi.string()),
+      rollbackPlan: Joi.object(),
+      automationLevel: Joi.string().valid('manual', 'semi-automated', 'automated'),
+      riskLevel: Joi.string().valid('low', 'medium', 'high', 'critical'),
+      estimatedDowntime: Joi.number().min(0),
+      maintenanceWindow: Joi.string(),
+      approvalRequired: Joi.boolean(),
+      successCriteria: Joi.array(),
+      validationSteps: Joi.array(),
+      targetResource: Joi.string(),
+      estimatedEffectiveness: Joi.number().min(0).max(1),
+      metadata: Joi.object()
+    });
+    
+    this.schemaCache.set('remediation', schema);
     return schema;
   }
 
@@ -631,20 +697,39 @@ class SecurityValidator {
 
   isDestructiveOperation(remediation) {
     const destructiveKeywords = ['delete', 'remove', 'terminate', 'destroy', 'drop'];
+    
+    // Check template content
     const template = JSON.stringify(remediation.template || {}).toLowerCase();
-    return destructiveKeywords.some(keyword => template.includes(keyword));
+    if (destructiveKeywords.some(keyword => template.includes(keyword))) {
+      return true;
+    }
+    
+    // Check remediation type/action
+    const action = (remediation.action || remediation.type || '').toLowerCase();
+    if (destructiveKeywords.some(keyword => action.includes(keyword))) {
+      return true;
+    }
+    
+    // Check title/description for destructive operations
+    const description = (remediation.title || remediation.description || '').toLowerCase();
+    if (destructiveKeywords.some(keyword => description.includes(keyword))) {
+      return true;
+    }
+    
+    return false;
   }
 
   calculateValidationScore(result) {
     let score = 100;
     
     // Deduct points for issues
-    score -= result.errors.length * 25;
-    score -= result.securityIssues.length * 20;
-    score -= result.safetyIssues?.length * 15 || 0;
-    score -= result.complianceIssues.length * 10;
-    score -= result.warnings.length * 5;
-    score -= result.configurationIssues?.length * 5 || 0;
+    score -= (result.errors?.length || 0) * 25;
+    score -= (result.securityIssues?.length || 0) * 20;
+    score -= (result.safetyIssues?.length || 0) * 15;
+    score -= (result.complianceIssues?.length || 0) * 10;
+    score -= (result.warnings?.length || 0) * 5;
+    score -= (result.configurationIssues?.length || 0) * 5;
+    score -= (result.effectivenessIssues?.length || 0) * 5;
     
     return Math.max(0, score);
   }
