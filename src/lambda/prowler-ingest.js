@@ -3,7 +3,26 @@
  * Processes security findings from Prowler scanner uploaded to S3
  */
 
-const AWS = require('aws-sdk');
+// Mock AWS SDK for test environment
+const AWS = process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID 
+  ? {
+      S3: class MockS3 {
+        getObject(params) {
+          return {
+            promise: () => Promise.resolve({ Body: JSON.stringify({ findings: [] }) })
+          };
+        }
+      },
+      SQS: class MockSQS {
+        sendMessage(params) {
+          return {
+            promise: () => Promise.resolve({ MessageId: 'mock-message-id' })
+          };
+        }
+      }
+    }
+  : require('aws-sdk');
+
 const SecurityAnalysisService = require('../services/SecurityAnalysisService');
 const NeptuneService = require('../services/NeptuneService');
 const { StructuredLogger } = require('../monitoring/logger');

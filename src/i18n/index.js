@@ -209,7 +209,7 @@ class I18nManager {
    */
   interpolate(template, params) {
     return template.replace(/\{\{(\w+)\}\}/g, (match, key) => {
-      return params.hasOwnProperty(key) ? params[key] : match;
+      return Object.prototype.hasOwnProperty.call(params, key) ? params[key] : match;
     });
   }
 

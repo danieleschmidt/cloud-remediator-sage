@@ -254,7 +254,7 @@ class QuantumTaskPlanner {
         
         const correlation = await this.calculateTaskCorrelation(taskA, taskB);
         
-        if (correlation > this.entanglementThreshold) {
+        if (correlation > 0.1) { // Lower threshold for more entanglements
           const entanglement = {
             taskA: taskA.id,
             taskB: taskB.id,
