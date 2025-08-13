@@ -10,6 +10,7 @@ const QuantumAutoExecutor = require('./quantum/AutoExecutor');
 const QuantumTaskPlanner = require('./quantum/TaskPlanner');
 const ResilienceManager = require('./reliability/ResilienceManager');
 const PerformanceManager = require('./performance/PerformanceManager');
+const QuantumOptimizer = require('./performance/QuantumOptimizer');
 const i18nManager = require('./i18n');
 
 // Initialize global logger
@@ -27,6 +28,7 @@ class CloudRemediatorSage {
 
     this.logger = logger;
     this.performanceManager = new PerformanceManager();
+    this.quantumOptimizer = new QuantumOptimizer();
     this.resilienceManager = new ResilienceManager();
     this.neptuneService = new NeptuneService();
     this.securityService = new SecurityAnalysisService();
