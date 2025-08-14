@@ -222,7 +222,7 @@ const contractTestUtils = {
     
     return {
       hasRequiredFields: requiredFields.every(field => 
-        contract.body.findings[0].hasOwnProperty(field)
+        Object.prototype.hasOwnProperty.call(contract.body.findings[0], field)
       ),
       hasValidSeverity: ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'].includes(
         contract.body.findings[0].severity

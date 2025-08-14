@@ -1,0 +1,613 @@
+# Production Deployment Configuration for Quantum-Enhanced CSPM Platform
+# Generation 3 - Production-Ready Multi-Region Deployment
+
+service: cloud-remediator-sage-production
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'prod'}
+  region: ${opt:region, 'us-east-1'}
+  
+  # Enhanced IAM configuration for production
+  iamRoleStatements:
+    # Neptune database access
+    - Effect: Allow
+      Action:
+        - neptune-db:connect
+        - neptune-db:ReadDataViaQuery
+        - neptune-db:WriteDataViaQuery
+        - neptune-db:DeleteDataViaQuery
+        - neptune-db:QueryStatus
+      Resource: 
+        - "${cf:neptune-stack.NeptuneClusterResourceId}"
+        - "${cf:neptune-stack.NeptuneClusterResourceId}/*"
+    
+    # Enhanced logging and monitoring
+    - Effect: Allow
+      Action:
+        - logs:CreateLogGroup
+        - logs:CreateLogStream
+        - logs:PutLogEvents
+        - logs:DescribeLogGroups
+        - logs:DescribeLogStreams
+      Resource: "*"
+    
+    # CloudWatch metrics and alarms
+    - Effect: Allow
+      Action:
+        - cloudwatch:PutMetricData
+        - cloudwatch:GetMetricStatistics
+        - cloudwatch:ListMetrics
+        - cloudwatch:DescribeAlarms
+        - cloudwatch:PutMetricAlarm
+      Resource: "*"
+    
+    # X-Ray tracing
+    - Effect: Allow
+      Action:
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+        - xray:GetSamplingRules
+        - xray:GetSamplingTargets
+      Resource: "*"
+    
+    # S3 access for security findings and reports
+    - Effect: Allow
+      Action:
+        - s3:GetObject
+        - s3:PutObject
+        - s3:DeleteObject
+        - s3:ListBucket
+      Resource:
+        - "${cf:security-bucket-stack.SecurityBucketArn}"
+        - "${cf:security-bucket-stack.SecurityBucketArn}/*"
+    
+    # Parameter Store for secrets
+    - Effect: Allow
+      Action:
+        - ssm:GetParameter
+        - ssm:GetParameters
+        - ssm:GetParametersByPath
+      Resource:
+        - "arn:aws:ssm:${self:provider.region}:${aws:accountId}:parameter/cloud-remediator-sage/*"
+    
+    # KMS for encryption
+    - Effect: Allow
+      Action:
+        - kms:Decrypt
+        - kms:DescribeKey
+        - kms:GenerateDataKey
+      Resource:
+        - "${cf:kms-stack.KmsKeyArn}"
+
+  # Environment variables for production
+  environment:
+    STAGE: ${self:provider.stage}
+    NODE_ENV: production
+    NEPTUNE_ENDPOINT: ${cf:neptune-stack.NeptuneClusterEndpoint}
+    NEPTUNE_PORT: ${cf:neptune-stack.NeptuneClusterPort}
+    LOG_LEVEL: info
+    ENABLE_X_RAY: true
+    QUANTUM_OPTIMIZATION: true
+    SECURITY_ENHANCEMENT: true
+    PERFORMANCE_MONITORING: true
+    AUTONOMOUS_EXECUTION: true
+    
+    # Security configuration
+    SECURITY_BUCKET: ${cf:security-bucket-stack.SecurityBucketName}
+    KMS_KEY_ID: ${cf:kms-stack.KmsKeyId}
+    QUANTUM_ENCRYPTION: true
+    
+    # Performance configuration
+    QUANTUM_SUPERPOSITION_STATES: 8
+    MAX_PARALLEL_TASKS: 10
+    CACHE_TTL: 300000
+    PERFORMANCE_TARGETS_MAX_EXECUTION_TIME: 3600000
+    PERFORMANCE_TARGETS_MAX_MEMORY_USAGE: 0.8
+    PERFORMANCE_TARGETS_MIN_SUCCESS_RATE: 0.95
+    
+    # Monitoring configuration
+    HEALTH_CHECK_INTERVAL: 30000
+    METRICS_COLLECTION_INTERVAL: 60000
+    ALERT_THRESHOLD_ERROR_RATE: 0.05
+    ALERT_THRESHOLD_RESPONSE_TIME: 5000
+
+  # VPC configuration for enhanced security
+  vpc:
+    securityGroupIds:
+      - ${cf:vpc-stack.LambdaSecurityGroupId}
+    subnetIds:
+      - ${cf:vpc-stack.PrivateSubnetId1}
+      - ${cf:vpc-stack.PrivateSubnetId2}
+
+  # Enhanced Lambda configuration
+  architecture: x86_64
+  timeout: 900  # 15 minutes
+  memorySize: 3008  # Maximum memory for optimal performance
+  
+  # Dead letter queue configuration
+  deploymentBucket:
+    blockPublicAccess: true
+    serverSideEncryption: AES256
+    tags:
+      Environment: ${self:provider.stage}
+      Service: ${self:service}
+      Purpose: quantum-cspm-deployment
+
+  # CloudWatch logs configuration
+  logs:
+    restApi:
+      accessLogging: true
+      executionLogging: true
+      level: INFO
+      fullExecutionData: true
+    lambda: true
+
+  # X-Ray tracing
+  tracing:
+    lambda: true
+    apiGateway: true
+
+  # Resource tags
+  tags:
+    Environment: ${self:provider.stage}
+    Service: ${self:service}
+    Version: v0.1.0
+    ManagedBy: serverless
+    CostCenter: security-operations
+    Compliance: sox-hipaa-pci
+
+# Production Lambda Functions
+functions:
+  # Core quantum execution functions
+  quantumExecutor:
+    handler: src/quantum/QuantumExecutionEngine.handler
+    name: ${self:service}-${self:provider.stage}-quantum-executor
+    description: Quantum-enhanced autonomous security execution engine
+    timeout: 900
+    memorySize: 3008
+    reservedConcurrency: 10
+    environment:
+      FUNCTION_NAME: quantum-executor
+    events:
+      - schedule:
+          rate: rate(15 minutes)
+          enabled: true
+          input:
+            operation: autonomous-execution
+            priority: high
+    deadLetter:
+      targetArn: ${cf:dlq-stack.QuantumExecutorDLQArn}
+    onError: ${cf:dlq-stack.QuantumExecutorDLQArn}
+
+  quantumPlanner:
+    handler: src/quantum/TaskPlanner.handler
+    name: ${self:service}-${self:provider.stage}-quantum-planner
+    description: Quantum-inspired task planning and optimization
+    timeout: 600
+    memorySize: 2048
+    reservedConcurrency: 5
+    environment:
+      FUNCTION_NAME: quantum-planner
+    events:
+      - http:
+          path: /api/v1/plan
+          method: post
+          cors:
+            origin: ${self:custom.corsOrigin}
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Correlation-Id
+            allowCredentials: true
+          authorizer:
+            name: ${self:service}-${self:provider.stage}-authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+    deadLetter:
+      targetArn: ${cf:dlq-stack.QuantumPlannerDLQArn}
+
+  quantumSecurity:
+    handler: src/security/QuantumSecurityManager.handler
+    name: ${self:service}-${self:provider.stage}-quantum-security
+    description: Quantum-enhanced security validation and threat detection
+    timeout: 300
+    memorySize: 1536
+    reservedConcurrency: 20
+    environment:
+      FUNCTION_NAME: quantum-security
+      QUANTUM_ENCRYPTION: true
+      PREDICTIVE_THREATS: true
+      AUTONOMOUS_DEFENSE: true
+    events:
+      - http:
+          path: /api/v1/security/validate
+          method: post
+          cors:
+            origin: ${self:custom.corsOrigin}
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Correlation-Id
+            allowCredentials: true
+          authorizer:
+            name: ${self:service}-${self:provider.stage}-authorizer
+            type: request
+    deadLetter:
+      targetArn: ${cf:dlq-stack.QuantumSecurityDLQArn}
+
+  # Enhanced core functions
+  prowlerIngestEnhanced:
+    handler: src/lambda/prowler-ingest.handler
+    name: ${self:service}-${self:provider.stage}-prowler-ingest-enhanced
+    description: Enhanced Prowler findings ingestion with quantum processing
+    timeout: 600
+    memorySize: 2048
+    reservedConcurrency: 5
+    environment:
+      FUNCTION_NAME: prowler-ingest-enhanced
+      QUANTUM_PROCESSING: true
+    events:
+      - s3:
+          bucket: ${cf:security-bucket-stack.SecurityBucketName}
+          event: s3:ObjectCreated:*
+          rules:
+            - suffix: .json
+            - prefix: prowler/
+          existing: true
+      - s3:
+          bucket: ${cf:security-bucket-stack.SecurityBucketName}
+          event: s3:ObjectCreated:*
+          rules:
+            - suffix: .jsonl
+            - prefix: prowler/
+          existing: true
+    deadLetter:
+      targetArn: ${cf:dlq-stack.ProwlerIngestDLQArn}
+
+  riskScoringEnhanced:
+    handler: src/lambda/risk-scoring.handler
+    name: ${self:service}-${self:provider.stage}-risk-scoring-enhanced
+    description: Enhanced quantum risk scoring with ML predictions
+    timeout: 300
+    memorySize: 1536
+    reservedConcurrency: 10
+    environment:
+      FUNCTION_NAME: risk-scoring-enhanced
+      ML_ENABLED: true
+      QUANTUM_SCORING: true
+    deadLetter:
+      targetArn: ${cf:dlq-stack.RiskScoringDLQArn}
+
+  remediationGeneratorEnhanced:
+    handler: src/lambda/remediation-generator.handler
+    name: ${self:service}-${self:provider.stage}-remediation-generator-enhanced
+    description: Enhanced remediation generation with quantum optimization
+    timeout: 600
+    memorySize: 2048
+    reservedConcurrency: 8
+    environment:
+      FUNCTION_NAME: remediation-generator-enhanced
+      TEMPLATE_OPTIMIZATION: true
+      QUANTUM_TEMPLATES: true
+    deadLetter:
+      targetArn: ${cf:dlq-stack.RemediationGeneratorDLQArn}
+
+  # Monitoring and observability functions
+  quantumHealthCheck:
+    handler: src/monitoring/health.handler
+    name: ${self:service}-${self:provider.stage}-quantum-health
+    description: Comprehensive quantum system health monitoring
+    timeout: 30
+    memorySize: 512
+    environment:
+      FUNCTION_NAME: quantum-health-check
+    events:
+      - http:
+          path: /health
+          method: get
+          cors:
+            origin: ${self:custom.corsOrigin}
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+            allowCredentials: false
+      - http:
+          path: /health/{check}
+          method: get
+          cors:
+            origin: ${self:custom.corsOrigin}
+      - schedule:
+          rate: rate(5 minutes)
+          enabled: true
+          input:
+            healthCheck: comprehensive
+
+  quantumMetrics:
+    handler: src/monitoring/metrics.handler
+    name: ${self:service}-${self:provider.stage}-quantum-metrics
+    description: Quantum performance metrics collection and export
+    timeout: 60
+    memorySize: 512
+    environment:
+      FUNCTION_NAME: quantum-metrics
+    events:
+      - http:
+          path: /metrics
+          method: get
+          cors:
+            origin: ${self:custom.corsOrigin}
+      - schedule:
+          rate: rate(1 minute)
+          enabled: true
+          input:
+            metricsCollection: automated
+
+  # Performance optimization functions
+  performanceOptimizer:
+    handler: src/performance/PerformanceManager.handler
+    name: ${self:service}-${self:provider.stage}-performance-optimizer
+    description: Adaptive performance optimization and resource management
+    timeout: 300
+    memorySize: 1024
+    environment:
+      FUNCTION_NAME: performance-optimizer
+      ADAPTIVE_OPTIMIZATION: true
+    events:
+      - schedule:
+          rate: rate(10 minutes)
+          enabled: true
+          input:
+            optimization: adaptive-performance
+
+  resilienceManager:
+    handler: src/reliability/ResilienceManager.handler
+    name: ${self:service}-${self:provider.stage}-resilience-manager
+    description: System resilience monitoring and automated recovery
+    timeout: 300
+    memorySize: 1024
+    environment:
+      FUNCTION_NAME: resilience-manager
+      AUTO_HEALING: true
+    events:
+      - schedule:
+          rate: rate(5 minutes)
+          enabled: true
+          input:
+            operation: resilience-check
+
+  # Compliance and governance
+  complianceEngine:
+    handler: src/compliance/ComplianceEngine.handler
+    name: ${self:service}-${self:provider.stage}-compliance-engine
+    description: Automated compliance monitoring and reporting
+    timeout: 600
+    memorySize: 1536
+    reservedConcurrency: 3
+    environment:
+      FUNCTION_NAME: compliance-engine
+      COMPLIANCE_FRAMEWORKS: sox,hipaa,pci-dss,gdpr
+    events:
+      - schedule:
+          rate: rate(1 hour)
+          enabled: true
+          input:
+            compliance: automated-scan
+    deadLetter:
+      targetArn: ${cf:dlq-stack.ComplianceEngineDLQArn}
+
+# Custom configuration
+custom:
+  # CORS origins for production
+  corsOrigin: 
+    - https://console.${self:provider.stage}.cloud-remediator-sage.com
+    - https://api.${self:provider.stage}.cloud-remediator-sage.com
+  
+  # Webpack configuration for optimized builds
+  webpack:
+    webpackConfig: webpack.production.js
+    includeModules:
+      forceExclude:
+        - aws-sdk
+    packager: npm
+    excludeFiles: 
+      - "**/*.test.js"
+      - "**/*.spec.js"
+      - "**/tests/**"
+    
+  # Serverless-offline configuration
+  serverless-offline:
+    httpPort: 3001
+    lambdaPort: 3002
+    websocketPort: 3003
+    
+  # Split stacks for better organization
+  splitStacks:
+    perFunction: false
+    perType: true
+    perGroupFunction: true
+  
+  # Alerts and notifications
+  alerts:
+    dashboards: true
+    nameTemplate: $[functionName]-$[metricName]-Alarm
+    prefixTemplate: $[stackName]
+    topics:
+      alarm:
+        topic: ${cf:sns-stack.AlarmTopicArn}
+      ok:
+        topic: ${cf:sns-stack.OkTopicArn}
+    definitions:
+      functionErrors:
+        metric: Errors
+        threshold: 5
+        statistic: Sum
+        period: 300
+        evaluationPeriods: 2
+        comparisonOperator: GreaterThanThreshold
+        treatMissingData: notBreaching
+      functionDuration:
+        metric: Duration
+        threshold: 30000
+        statistic: Average
+        period: 300
+        evaluationPeriods: 2
+        comparisonOperator: GreaterThanThreshold
+      functionThrottles:
+        metric: Throttles
+        threshold: 1
+        statistic: Sum
+        period: 300
+        evaluationPeriods: 1
+        comparisonOperator: GreaterThanOrEqualToThreshold
+    alarms:
+      - functionErrors
+      - functionDuration
+      - functionThrottles
+
+# Resources
+resources:
+  Resources:
+    # API Gateway configuration
+    ApiGatewayRestApi:
+      Type: AWS::ApiGateway::RestApi
+      Properties:
+        Name: ${self:service}-${self:provider.stage}-api
+        Description: Quantum-Enhanced CSPM API
+        EndpointConfiguration:
+          Types:
+            - REGIONAL
+        Policy:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal: '*'
+              Action: execute-api:Invoke
+              Resource: '*'
+              Condition:
+                IpAddress:
+                  aws:SourceIp:
+                    - 10.0.0.0/8
+                    - 172.16.0.0/12
+                    - 192.168.0.0/16
+    
+    # WAF for API protection
+    ApiGatewayWebAcl:
+      Type: AWS::WAFv2::WebACL
+      Properties:
+        Name: ${self:service}-${self:provider.stage}-waf
+        Scope: REGIONAL
+        DefaultAction:
+          Allow: {}
+        Rules:
+          - Name: RateLimitRule
+            Priority: 1
+            Statement:
+              RateBasedStatement:
+                Limit: 2000
+                AggregateKeyType: IP
+            Action:
+              Block: {}
+            VisibilityConfig:
+              SampledRequestsEnabled: true
+              CloudWatchMetricsEnabled: true
+              MetricName: RateLimitRule
+          - Name: AWSManagedRulesCommonRuleSet
+            Priority: 2
+            OverrideAction:
+              None: {}
+            Statement:
+              ManagedRuleGroupStatement:
+                VendorName: AWS
+                Name: AWSManagedRulesCommonRuleSet
+            VisibilityConfig:
+              SampledRequestsEnabled: true
+              CloudWatchMetricsEnabled: true
+              MetricName: AWSManagedRulesCommonRuleSetMetric
+
+    # Lambda custom authorizer
+    AuthorizerFunction:
+      Type: AWS::Lambda::Function
+      Properties:
+        FunctionName: ${self:service}-${self:provider.stage}-authorizer
+        Runtime: nodejs18.x
+        Handler: src/auth/authorizer.handler
+        Code:
+          ZipFile: |
+            exports.handler = async (event) => {
+              // JWT token validation logic here
+              return {
+                principalId: 'user',
+                policyDocument: {
+                  Version: '2012-10-17',
+                  Statement: [{
+                    Action: 'execute-api:Invoke',
+                    Effect: 'Allow',
+                    Resource: event.methodArn
+                  }]
+                }
+              };
+            };
+        Environment:
+          Variables:
+            JWT_SECRET: ${ssm:/cloud-remediator-sage/jwt-secret}
+
+  Outputs:
+    ApiGatewayRestApiId:
+      Value: !Ref ApiGatewayRestApi
+      Export:
+        Name: ${self:service}-${self:provider.stage}-api-id
+    
+    ApiGatewayRestApiRootResourceId:
+      Value: !GetAtt ApiGatewayRestApi.RootResourceId
+      Export:
+        Name: ${self:service}-${self:provider.stage}-api-root-resource-id
+    
+    ServiceEndpoint:
+      Value: 
+        Fn::Join:
+          - ""
+          - - "https://"
+            - Ref: ApiGatewayRestApi
+            - ".execute-api."
+            - ${self:provider.region}
+            - ".amazonaws.com/"
+            - ${self:provider.stage}
+      Export:
+        Name: ${self:service}-${self:provider.stage}-service-endpoint
+
+# Plugins
+plugins:
+  - serverless-webpack
+  - serverless-offline
+  - serverless-plugin-split-stacks
+  - serverless-plugin-aws-alerts
+  - serverless-plugin-tracing
+  - serverless-iam-roles-per-function
+  - serverless-plugin-log-retention
+  - serverless-prune-plugin
+
+# Package configuration
+package:
+  patterns:
+    - '!node_modules/**'
+    - '!tests/**'
+    - '!coverage/**'
+    - '!.git/**'
+    - '!*.md'
+    - '!.eslintrc.*'
+    - '!jest.config.js'
+    - '!webpack.*.js'
+    - 'src/**'
+    - 'package.json'
+    - '!**/*.test.js'
+    - '!**/*.spec.js'

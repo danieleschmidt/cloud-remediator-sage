@@ -1,7 +1,6 @@
 // Security-focused ESLint configuration for CI/CD pipeline
 // Standalone configuration with security-focused rules
 module.exports = {
-  root: true,
   env: {
     node: true,
     es2021: true,

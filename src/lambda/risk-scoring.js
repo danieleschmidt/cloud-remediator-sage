@@ -130,7 +130,7 @@ exports.handler = errorHandler.createLambdaMiddleware()(async (event, context, c
       })
     };
   }
-};
+}
 
 /**
  * Process findings in parallel batches with concurrency control

@@ -247,7 +247,7 @@ function sanitizeInput(input) {
 
   return input
     .replace(/[<>'"&]/g, '') // Remove HTML/XML special characters
-    .replace(/[\x00-\x1F\x7F]/g, '') // Remove control characters
+    .replace(/[\x00-\x1F\x7F]/g, '') // eslint-disable-line no-control-regex
     .trim()
     .substring(0, 1000); // Limit length
 }

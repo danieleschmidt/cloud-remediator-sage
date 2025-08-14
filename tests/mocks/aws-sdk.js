@@ -341,7 +341,7 @@ class MockDynamoDB {
     this.tables = new Map();
   }
   
-  DocumentClient = class {
+  DocumentClient = class DocumentClient {
     constructor(config = {}) {
       this.config = config;
       this.parent = this;
