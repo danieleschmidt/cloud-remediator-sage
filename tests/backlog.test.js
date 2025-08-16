@@ -279,7 +279,7 @@ describe('Autonomous Backlog Management System', () => {
 
     test('should identify stale items correctly', () => {
       const oldDate = '2025-06-01';
-      const newDate = '2025-07-25';
+      const newDate = new Date().toISOString().split('T')[0]; // Today's date
 
       expect(reporter.isStale(oldDate, 7)).toBe(true);
       expect(reporter.isStale(newDate, 7)).toBe(false);

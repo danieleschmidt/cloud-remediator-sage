@@ -59,6 +59,7 @@ class QuantumAutoExecutor extends EventEmitter {
    */
   async executeAutonomousRemediation(executionContext = {}) {
     if (this.isExecuting) {
+      this.logger.warn('Executor already running, skipping execution');
       throw new Error('Executor is already running');
     }
 
@@ -78,7 +79,13 @@ class QuantumAutoExecutor extends EventEmitter {
     try {
       // Phase 1: Quantum Planning
       console.log('🌌 Phase 1: Quantum Task Planning');
-      this.currentPlan = await this.taskPlanner.generateOptimalPlan(executionContext);
+      try {
+        this.currentPlan = await this.taskPlanner.generateOptimalPlan(executionContext);
+      } catch (planningError) {
+        this.logger.error('Planning failed', { error: planningError.message });
+        this.isExecuting = false;
+        throw new Error('Planning failed');
+      }
       
       this.emit('planningComplete', {
         executionId,
@@ -133,7 +140,9 @@ class QuantumAutoExecutor extends EventEmitter {
     } catch (error) {
       const errorResults = await this.handleExecutionError(error, executionId);
       this.emit('executionError', errorResults);
-      throw errorResults;
+      this.isExecuting = false;
+      this.resetExecutionState();
+      throw error;
     } finally {
       this.isExecuting = false;
       this.resetExecutionState();
@@ -381,8 +390,7 @@ class QuantumAutoExecutor extends EventEmitter {
       if (!results.executionDetails) results.executionDetails = [];
       results.executionDetails.push(taskResult);
       
-      // Update counters
-      results.tasksExecuted = (results.tasksExecuted || 0) + 1;
+      // Update counters  
       results.tasksSucceeded = (results.tasksSucceeded || 0) + 1;
       results.totalRiskReduction = (results.totalRiskReduction || 0) + (task.riskReduction || 0);
       
@@ -417,12 +425,14 @@ class QuantumAutoExecutor extends EventEmitter {
         riskReduction: 0
       };
       
+      // Update failed counter
+      results.tasksFailed = (results.tasksFailed || 0) + 1;
+      
       // Initialize results structure if needed
       if (!results.executionDetails) results.executionDetails = [];
       results.executionDetails.push(taskResult);
       
       // Update counters
-      results.tasksExecuted = (results.tasksExecuted || 0) + 1;
       results.tasksFailed = (results.tasksFailed || 0) + 1;
       
       // Move to failed tasks
@@ -643,9 +653,12 @@ class QuantumAutoExecutor extends EventEmitter {
   collapseSuperpositonState(tasks) {
     // Find and collapse the superposition state for these tasks
     for (const state of this.superpositionStates) {
-      if (tasks.some(task => state.tasks.includes(task))) {
+      if (state.tasks && tasks.some(task => state.tasks.includes(task))) {
         state.state = 'collapsed';
         state.coherence *= 0.9; // Slight coherence loss
+      } else if (state.id && tasks.some(task => task.id === state.id)) {
+        state.state = 'collapsed';
+        state.coherence *= 0.9;
       }
     }
   }

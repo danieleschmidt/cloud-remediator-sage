@@ -341,7 +341,8 @@ class MockDynamoDB {
     this.tables = new Map();
   }
   
-  DocumentClient = class DocumentClient {
+  get DocumentClient() {
+    return class DocumentClient {
     constructor(config = {}) {
       this.config = config;
       this.parent = this;
@@ -417,7 +418,8 @@ class MockDynamoDB {
         promise: () => Promise.resolve({ Items: items })
       };
     }
-  };
+    };
+  }
 }
 
 // Factory function to create complete AWS mock

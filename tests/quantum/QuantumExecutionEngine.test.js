@@ -626,7 +626,7 @@ describe('QuantumExecutionEngine', () => {
     test('should use performance manager for execution', async () => {
       await engine.executeQuantumRemediation();
 
-      expect(mockPerformanceManager.executeWithPerformance).toHaveBeenCalledTimes(2);
+      expect(mockPerformanceManager.executeWithPerformance).toHaveBeenCalledTimes(3);
       // Once for planning, once for execution
     });
 
