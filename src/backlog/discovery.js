@@ -9,27 +9,32 @@ class BacklogDiscovery {
   }
 
   async discoverAll() {
-    const items = [];
-    
-    // Load existing backlog
-    items.push(...this.loadYamlBacklog());
-    
-    // Discover from GitHub issues
-    items.push(...await this.discoverGitHubIssues());
-    
-    // Discover from codebase TODOs
-    items.push(...this.discoverCodebaseTodos());
-    
-    // Discover from failing tests
-    items.push(...this.discoverFailingTests());
-    
-    // Generate security-focused sample items for testing if no items found
-    if (items.length === 0 && (process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID)) {
-      items.push(...this.generateSampleSecurityItems());
+    try {
+      const items = [];
+      
+      // Load existing backlog
+      items.push(...this.loadYamlBacklog());
+      
+      // Discover from GitHub issues
+      items.push(...await this.discoverGitHubIssues());
+      
+      // Discover from codebase TODOs
+      items.push(...this.discoverCodebaseTodos());
+      
+      // Discover from failing tests
+      items.push(...this.discoverFailingTests());
+      
+      // Generate security-focused sample items for testing if no items found
+      if (items.length === 0 && (process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID)) {
+        items.push(...this.generateSampleSecurityItems());
+      }
+      
+      // Deduplicate and normalize
+      return this.deduplicateItems(items);
+    } catch (error) {
+      console.error('Discovery failed:', error.message);
+      return [];
     }
-    
-    // Deduplicate and normalize
-    return this.deduplicateItems(items);
   }
 
   /**

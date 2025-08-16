@@ -142,10 +142,6 @@ class QuantumTaskPlanner {
       }
       
       if (!asset) {
-        // For testing purposes, if Neptune explicitly returns null, return null
-        if (process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID) {
-          return null;
-        }
         asset = this.createMockAsset(finding);
       }
 
