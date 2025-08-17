@@ -8,7 +8,7 @@
     "test:unit": "jest --testPathPattern=\"tests/.*\\.test\\.js\" --testPathIgnorePatterns=\"tests/integration/\" --testPathIgnorePatterns=\"tests/contract/\" --testPathIgnorePatterns=\"tests/performance/\"",
     "test:integration": "jest --testPathPattern=\"tests/integration/.*\\.test\\.js\"",
     "test:contract": "jest --testPathPattern=\"tests/contract/.*\\.test\\.js\"",
-    "lint": "eslint src/ tests/",
+    "lint": "eslint src/ tests/ --config eslint.config.js",
     "lint:security": "eslint src/ tests/ --config .eslintrc.security.js",
     "build": "npm run lint && npm run test",
     "backlog": "node src/backlog/index.js",

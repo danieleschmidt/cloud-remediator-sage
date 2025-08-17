@@ -1,4 +1,7 @@
+const js = require('@eslint/js');
+
 module.exports = [
+  js.configs.recommended,
   {
     languageOptions: {
       ecmaVersion: 2021,
@@ -14,8 +17,15 @@ module.exports = [
         exports: 'readonly',
         global: 'readonly',
         console: 'readonly',
-        // AWS Lambda globals
-        AWS: 'readonly',
+        setTimeout: 'readonly',
+        setInterval: 'readonly',
+        setImmediate: 'readonly',
+        clearTimeout: 'readonly',
+        clearInterval: 'readonly',
+        clearImmediate: 'readonly',
+        URL: 'readonly',
+        URLSearchParams: 'readonly',
+        Intl: 'readonly',
         // Jest globals
         describe: 'readonly',
         it: 'readonly',
@@ -28,10 +38,6 @@ module.exports = [
         jest: 'readonly'
       }
     },
-    plugins: {
-      security: require('eslint-plugin-security'),
-      node: require('eslint-plugin-node')
-    },
     rules: {
       // Basic quality rules
       'no-unused-vars': 'warn',
@@ -42,13 +48,6 @@ module.exports = [
       'no-trailing-spaces': 'off',
       'semi': ['error', 'always'],
       'quotes': ['error', 'single', { 'avoidEscape': true }],
-      
-      // Security rules  
-      'security/detect-unsafe-regex': 'warn',
-      'security/detect-eval-with-expression': 'error',
-      'security/detect-non-literal-fs-filename': 'off',
-      'security/detect-child-process': 'off',
-      'security/detect-object-injection': 'off',
       
       // Disable problematic rules
       'no-template-curly-in-string': 'off',
@@ -75,9 +74,6 @@ module.exports = [
     files: ['**/*.test.js', '**/*.spec.js', '**/tests/**/*.js'],
     rules: {
       'no-console': 'off',
-      'security/detect-non-literal-fs-filename': 'off',
-      'security/detect-child-process': 'off',
-      'node/no-unpublished-require': 'off',
       'require-jsdoc': 'off'
     }
   },
@@ -94,8 +90,7 @@ module.exports = [
     files: ['src/lambda/**/*.js'],
     rules: {
       'no-console': 'off',
-      'prefer-destructuring': 'off',
-      'security/detect-object-injection': 'off'
+      'prefer-destructuring': 'off'
     }
   }
 ];

@@ -8,6 +8,12 @@ const NeptuneService = require('./services/NeptuneService');
 const SecurityAnalysisService = require('./services/SecurityAnalysisService');
 const QuantumAutoExecutor = require('./quantum/AutoExecutor');
 const QuantumTaskPlanner = require('./quantum/TaskPlanner');
+const QuantumSelfHealer = require('./quantum/QuantumSelfHealer');
+const AIExecutionOptimizer = require('./quantum/AIExecutionOptimizer');
+const AdvancedThreatDetector = require('./security/AdvancedThreatDetector');
+const AdvancedErrorHandler = require('./reliability/AdvancedErrorHandler');
+const QuantumAutoScaler = require('./scaling/QuantumAutoScaler');
+const DistributedProcessingEngine = require('./distributed/DistributedProcessingEngine');
 const ResilienceManager = require('./reliability/ResilienceManager');
 const PerformanceManager = require('./performance/PerformanceManager');
 const QuantumOptimizer = require('./performance/QuantumOptimizer');
@@ -34,6 +40,12 @@ class CloudRemediatorSage {
     this.securityService = new SecurityAnalysisService();
     this.autoExecutor = new QuantumAutoExecutor();
     this.taskPlanner = new QuantumTaskPlanner();
+    this.selfHealer = new QuantumSelfHealer();
+    this.aiOptimizer = new AIExecutionOptimizer();
+    this.threatDetector = new AdvancedThreatDetector();
+    this.errorHandler = new AdvancedErrorHandler();
+    this.autoScaler = new QuantumAutoScaler();
+    this.distributedEngine = new DistributedProcessingEngine();
     this.i18n = i18nManager;
     
     this.initialized = false;
@@ -94,6 +106,30 @@ class CloudRemediatorSage {
       );
       this.logger.info('Quantum task planner initialized');
 
+      // Initialize quantum self-healing system
+      await this.selfHealer.initialize();
+      this.logger.info('Quantum self-healing system initialized');
+
+      // Initialize AI execution optimizer
+      await this.aiOptimizer.initialize();
+      this.logger.info('AI execution optimizer initialized');
+
+      // Initialize advanced threat detection
+      await this.threatDetector.initialize();
+      this.logger.info('Advanced threat detection system initialized');
+
+      // Initialize advanced error handling
+      await this.errorHandler.initialize();
+      this.logger.info('Advanced error handling system initialized');
+
+      // Initialize quantum auto-scaling
+      await this.autoScaler.initialize();
+      this.logger.info('Quantum auto-scaling system initialized');
+
+      // Initialize distributed processing engine
+      await this.distributedEngine.initialize();
+      this.logger.info('Distributed processing engine initialized');
+
       this.initialized = true;
       this.logger.info('Cloud Remediator Sage platform initialized successfully');
 
@@ -114,21 +150,52 @@ class CloudRemediatorSage {
     }
 
     try {
+      // Advanced threat detection on incoming findings
+      const threatAnalysis = await this.threatDetector.analyzeThreat({
+        type: 'finding-ingestion',
+        source: source,
+        data: rawFinding
+      }, { component: 'finding-processor' });
+
+      // If high threat detected, handle with enhanced security
+      if (threatAnalysis.riskScore >= 0.7) {
+        this.logger.warn('High-risk finding detected', {
+          threatLevel: threatAnalysis.threatLevel,
+          riskScore: threatAnalysis.riskScore,
+          source
+        });
+      }
+
       const finding = await this.securityService.processFinding(rawFinding, source);
       
       this.logger.info('Finding processed successfully', {
         findingId: finding.id,
         source: finding.source,
         severity: finding.severity,
-        resourceArn: finding.resource.arn
+        resourceArn: finding.resource?.arn,
+        threatAnalysis: threatAnalysis.threatLevel
       });
 
       return finding;
     } catch (error) {
+      // Enhanced error handling
+      const errorRecord = await this.errorHandler.handleError(error, {
+        operation: 'processFinding',
+        component: 'finding-processor',
+        source,
+        rawFinding: JSON.stringify(rawFinding).substring(0, 200)
+      });
+
+      // If error was recovered, try again
+      if (errorRecord.recovered) {
+        this.logger.info('Retrying after error recovery', { errorId: errorRecord.id });
+        return await this.processFinding(rawFinding, source);
+      }
+
       this.logger.error('Failed to process finding', {
         error: error.message,
         source,
-        rawFinding: JSON.stringify(rawFinding).substring(0, 200)
+        errorId: errorRecord.id
       });
       throw error;
     }
@@ -239,6 +306,12 @@ class CloudRemediatorSage {
           neptuneService: await this.checkServiceHealth(() => this.neptuneService.healthCheck()),
           taskPlanner: await this.checkServiceHealth(() => this.taskPlanner.healthCheck?.() || { status: 'healthy' }),
           autoExecutor: await this.checkServiceHealth(() => this.autoExecutor.healthCheck?.() || { status: 'healthy' }),
+          selfHealer: await this.checkServiceHealth(() => this.selfHealer.getHealthStatus()),
+          aiOptimizer: await this.checkServiceHealth(() => this.aiOptimizer.getHealthStatus()),
+          threatDetector: await this.checkServiceHealth(() => this.threatDetector.getDetectionStatus()),
+          errorHandler: await this.checkServiceHealth(() => this.errorHandler.getErrorHandlingStatus()),
+          autoScaler: await this.checkServiceHealth(() => this.autoScaler.getScalingStatus()),
+          distributedEngine: await this.checkServiceHealth(() => this.distributedEngine.getDistributedSystemStatus()),
           i18n: { status: 'healthy' }
         }
       };
