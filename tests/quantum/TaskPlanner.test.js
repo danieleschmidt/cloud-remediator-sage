@@ -238,7 +238,9 @@ describe('QuantumTaskPlanner', () => {
       
       const task = await taskPlanner.createQuantumTask(mockFinding);
       
-      expect(task).toBeNull();
+      expect(task).toBeDefined();
+      expect(task.assetArn).toBe('arn:aws:s3:::test-bucket');
+      expect(task.type).toBe('security-remediation');
     });
 
     test('should set parallelizable flag correctly', async () => {

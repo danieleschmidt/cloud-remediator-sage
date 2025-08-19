@@ -105,7 +105,7 @@ export const options = {
 };
 
 export default function () {
-  const baseUrl = __ENV.API_BASE_URL || 'http://localhost:3000';
+  const baseUrl = (typeof __ENV !== 'undefined' ? __ENV.API_BASE_URL : null) || 'http://localhost:3000';
   
   // Select random test data
   const randomItem = testData[Math.floor(Math.random() * testData.length)];
@@ -113,11 +113,12 @@ export default function () {
   const batch = testData.slice(0, batchSize);
   
   // Test different load scenarios
-  if (__ITER % 4 === 0) {
+  const iterValue = (typeof __ITER !== 'undefined' ? __ITER : Math.floor(Math.random() * 100));
+  if (iterValue % 4 === 0) {
     testSingleItemProcessing(baseUrl, randomItem);
-  } else if (__ITER % 4 === 1) {
+  } else if (iterValue % 4 === 1) {
     testBatchProcessing(baseUrl, batch);
-  } else if (__ITER % 4 === 2) {
+  } else if (iterValue % 4 === 2) {
     testPriorityQueue(baseUrl, batch);
   } else {
     testConcurrentAnalysis(baseUrl, randomItem);

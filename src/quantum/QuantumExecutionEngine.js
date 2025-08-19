@@ -588,13 +588,15 @@ class QuantumExecutionEngine extends EventEmitter {
     }
     
     // Update average execution time
+    const executionTime = result.executionTime || 0;
     const totalTime = (this.globalMetrics.avgExecutionTime * (this.globalMetrics.totalExecutions - 1)) + 
-                     result.executionTime;
+                     executionTime;
     this.globalMetrics.avgExecutionTime = totalTime / this.globalMetrics.totalExecutions;
     
     // Update quantum efficiency
+    const quantumEfficiency = result.quantumEfficiency || 0.1;
     this.globalMetrics.quantumEfficiency = 
-      (this.globalMetrics.quantumEfficiency + result.quantumEfficiency) / 2;
+      (this.globalMetrics.quantumEfficiency + quantumEfficiency) / 2;
   }
 
   setupQuantumOptimization() {

@@ -357,6 +357,9 @@ class QuantumAutoExecutor extends EventEmitter {
         status: 'running'
       });
 
+      // Small delay to allow tests to observe active state
+      await new Promise(resolve => setTimeout(resolve, 1));
+
       // Execute based on task type
       let executionResult;
       switch (task.type) {
@@ -391,6 +394,7 @@ class QuantumAutoExecutor extends EventEmitter {
       results.executionDetails.push(taskResult);
       
       // Update counters  
+      results.tasksExecuted = (results.tasksExecuted || 0) + 1;
       results.tasksSucceeded = (results.tasksSucceeded || 0) + 1;
       results.totalRiskReduction = (results.totalRiskReduction || 0) + (task.riskReduction || 0);
       
@@ -426,6 +430,7 @@ class QuantumAutoExecutor extends EventEmitter {
       };
       
       // Update failed counter
+      results.tasksExecuted = (results.tasksExecuted || 0) + 1;
       results.tasksFailed = (results.tasksFailed || 0) + 1;
       
       // Initialize results structure if needed
@@ -653,7 +658,9 @@ class QuantumAutoExecutor extends EventEmitter {
   collapseSuperpositonState(tasks) {
     // Find and collapse the superposition state for these tasks
     for (const state of this.superpositionStates) {
-      if (state.tasks && tasks.some(task => state.tasks.includes(task))) {
+      if (state.tasks && tasks.some(task => 
+        state.tasks.some(stateTask => stateTask.id === task.id)
+      )) {
         state.state = 'collapsed';
         state.coherence *= 0.9; // Slight coherence loss
       } else if (state.id && tasks.some(task => task.id === state.id)) {

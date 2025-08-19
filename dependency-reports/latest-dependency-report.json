@@ -1,0 +1,1112 @@
+{
+  "timestamp": "2025-08-19T04:34:24.106Z",
+  "project": {
+    "name": "cloud-remediator-sage",
+    "version": "0.1.0"
+  },
+  "checks": {
+    "vulnerabilities": {
+      "total": 0,
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "details": []
+    },
+    "outdated": {
+      "total": 10,
+      "packages": []
+    },
+    "licenses": {
+      "compliant": [
+        {
+          "name": "aws-sdk",
+          "version": "2.1692.0",
+          "license": "Apache-2.0",
+          "licenseFile": false
+        },
+        {
+          "name": "gremlin",
+          "version": "3.7.3",
+          "license": "Apache-2.0",
+          "licenseFile": true
+        },
+        {
+          "name": "joi",
+          "version": "18.0.0",
+          "license": "BSD-3-Clause",
+          "licenseFile": false
+        },
+        {
+          "name": "js-yaml",
+          "version": "4.1.0",
+          "license": "MIT",
+          "licenseFile": true
+        },
+        {
+          "name": "@commitlint/cli",
+          "version": "18.6.1",
+          "license": "MIT",
+          "licenseFile": false
+        },
+        {
+          "name": "@commitlint/config-conventional",
+          "version": "18.6.3",
+          "license": "MIT",
+          "licenseFile": false
+        },
+        {
+          "name": "@cyclonedx/bom",
+          "version": "4.1.0",
+          "license": "Apache-2.0",
+          "licenseFile": true
+        },
+        {
+          "name": "@jest/globals",
+          "version": "29.7.0",
+          "license": "MIT",
+          "licenseFile": true
+        },
+        {
+          "name": "@pact-foundation/pact",
+          "version": "15.0.1",
+          "license": "MIT",
+          "licenseFile": true
+        },
+        {
+          "name": "@semantic-release/changelog",
+          "version": "6.0.3",
+          "license": "MIT",
+          "licenseFile": true
+        },
+        {
+          "name": "@semantic-release/git",
+          "version": "10.0.1",
+          "license": "MIT",
+          "licenseFile": true
+        },
+        {
+          "name": "@semantic-release/github",
+          "version": "9.2.6",
+          "license": "MIT",
+          "licenseFile": true
+        },
+        {
+          "name": "@semantic-release/npm",
+          "version": "11.0.3",
+          "license": "MIT",
+          "licenseFile": true
+        },
+        {
+          "name": "eslint",
+          "version": "8.57.1",
+          "license": "MIT",
+          "licenseFile": true
+        },
+        {
+          "name": "eslint-plugin-node",
+          "version": "11.1.0",
+          "license": "MIT",
+          "licenseFile": true
+        },
+        {
+          "name": "eslint-plugin-security",
+          "version": "3.0.1",
+          "license": "Apache-2.0",
+          "licenseFile": true
+        },
+        {
+          "name": "husky",
+          "version": "8.0.3",
+          "license": "MIT",
+          "licenseFile": true
+        },
+        {
+          "name": "jest",
+          "version": "29.7.0",
+          "license": "MIT",
+          "licenseFile": true
+        },
+        {
+          "name": "semantic-release",
+          "version": "22.0.12",
+          "license": "MIT",
+          "licenseFile": true
+        }
+      ],
+      "nonCompliant": [],
+      "unknown": [],
+      "summary": {
+        "Apache-2.0": 4,
+        "BSD-3-Clause": 1,
+        "MIT": 14
+      }
+    },
+    "duplicates": {
+      "total": 85,
+      "duplicates": [
+        {
+          "package": "npm",
+          "versions": [
+            "10.9.3",
+            "8.0.2",
+            "6.1.0",
+            "9.2.2",
+            "5.1.2",
+            "7.1.0",
+            "4.0.1",
+            "1.1.0",
+            "3.0.0",
+            "8.0.1",
+            "9.0.0",
+            "4.0.0",
+            "6.0.3",
+            "4.0.2",
+            "20.0.0",
+            "6.2.0",
+            "3.2.2",
+            "9.1.0",
+            "0.11.0",
+            "0.4.3",
+            "3.1.1",
+            "2.0.0",
+            "3.0.1",
+            "7.1.3",
+            "5.0.1",
+            "6.2.1",
+            "1.0.0",
+            "1.0.2",
+            "5.0.0",
+            "2.3.0",
+            "2.0.2",
+            "19.0.1",
+            "7.4.3",
+            "5.4.1",
+            "4.2.0",
+            "4.1.3",
+            "7.0.0",
+            "2.0.1",
+            "1.1.4",
+            "1.0.1",
+            "7.0.6",
+            "4.4.1",
+            "5.2.0",
+            "0.2.0",
+            "8.0.0",
+            "0.1.13",
+            "2.2.1",
+            "2.0.3",
+            "3.1.2",
+            "1.0.16",
+            "3.3.1",
+            "3.0.3",
+            "10.4.5",
+            "4.2.11",
+            "8.1.0",
+            "7.0.2",
+            "0.6.3",
+            "0.1.4",
+            "9.0.5",
+            "5.1.1",
+            "3.4.3",
+            "1.3.1",
+            "6.0.2",
+            "5.5.0",
+            "7.0.1",
+            "9.0.1",
+            "6.0.1",
+            "11.0.0",
+            "10.0.1",
+            "10.4.3",
+            "14.0.3",
+            "7.1.2",
+            "1.0.5",
+            "3.3.6",
+            "1.2.4",
+            "1.0.3",
+            "3.0.2",
+            "1.0.4",
+            "2.1.3",
+            "11.2.0",
+            "6.0.0",
+            "7.1.1",
+            "12.0.2",
+            "10.0.0",
+            "11.0.1",
+            "18.0.2",
+            "7.0.3",
+            "1.11.1",
+            "0.12.0",
+            "4.1.0",
+            "2.1.2",
+            "7.7.2",
+            "3.1.0",
+            "2.1.1",
+            "2.8.5",
+            "8.0.5",
+            "3.2.0",
+            "2.5.0",
+            "3.0.21",
+            "1.1.3",
+            "12.0.0",
+            "4.2.3",
+            "9.4.0",
+            "2.1.0",
+            "1.3.0",
+            "0.2.14",
+            "6.4.6",
+            "3.0.4",
+            "4.3.0"
+          ],
+          "count": 109
+        },
+        {
+          "package": "git-raw-commits",
+          "versions": [
+            "2.0.11",
+            "4.1.0",
+            "5.0.0",
+            "6.0.0",
+            "8.1.2",
+            "3.0.3",
+            "2.3.0",
+            "5.2.0",
+            "7.0.1",
+            "0.8.1",
+            "2.8.9",
+            "2.5.0",
+            "5.7.2",
+            "0.6.0",
+            "3.6.2",
+            "3.2.2",
+            "0.18.1",
+            "4.0.0",
+            "20.2.9"
+          ],
+          "count": 19
+        },
+        {
+          "package": "semantic-release",
+          "versions": [
+            "22.0.12",
+            "4.0.0",
+            "5.0.0",
+            "5.2.0",
+            "8.0.1",
+            "7.0.2",
+            "3.0.0",
+            "10.4.3",
+            "5.3.0",
+            "6.0.0",
+            "4.1.0"
+          ],
+          "count": 11
+        },
+        {
+          "package": "@semantic-release/npm",
+          "versions": [
+            "11.0.3",
+            "4.0.0",
+            "5.0.0",
+            "5.2.0",
+            "8.0.1",
+            "3.0.0",
+            "5.3.0",
+            "6.0.0",
+            "4.1.0"
+          ],
+          "count": 9
+        },
+        {
+          "package": "signale",
+          "versions": [
+            "1.4.0",
+            "3.2.1",
+            "2.4.2",
+            "1.9.3",
+            "1.1.3",
+            "1.0.5",
+            "2.0.0",
+            "3.0.0",
+            "5.5.0"
+          ],
+          "count": 9
+        },
+        {
+          "package": "env-ci",
+          "versions": [
+            "10.0.0",
+            "8.0.1",
+            "5.0.0",
+            "3.0.0",
+            "4.0.0",
+            "5.3.0",
+            "6.0.0",
+            "4.1.0"
+          ],
+          "count": 8
+        },
+        {
+          "package": "@isaacs/cliui",
+          "versions": [
+            "8.0.2",
+            "6.1.0",
+            "6.2.1",
+            "9.2.2",
+            "5.1.2",
+            "7.1.0",
+            "8.1.0"
+          ],
+          "count": 7
+        },
+        {
+          "package": "@istanbuljs/load-nyc-config",
+          "versions": [
+            "1.1.0",
+            "1.0.10",
+            "4.1.0",
+            "3.14.1",
+            "5.0.0",
+            "2.3.0",
+            "1.0.3"
+          ],
+          "count": 7
+        },
+        {
+          "package": "read-pkg",
+          "versions": [
+            "9.0.1",
+            "7.0.2",
+            "10.4.3",
+            "6.0.2",
+            "8.3.0",
+            "4.41.0",
+            "0.1.0"
+          ],
+          "count": 7
+        },
+        {
+          "package": "git-log-parser",
+          "versions": [
+            "1.2.1",
+            "2.3.8",
+            "5.1.2",
+            "1.0.0",
+            "1.1.1",
+            "2.0.5"
+          ],
+          "count": 6
+        },
+        {
+          "package": "cacache",
+          "versions": [
+            "19.0.1",
+            "2.0.2",
+            "10.4.5",
+            "10.4.3",
+            "9.0.5"
+          ],
+          "count": 5
+        },
+        {
+          "package": "help-me",
+          "versions": [
+            "4.2.0",
+            "2.0.2",
+            "8.1.0",
+            "5.1.6",
+            "3.6.2"
+          ],
+          "count": 5
+        },
+        {
+          "package": "pkg-conf",
+          "versions": [
+            "2.1.0",
+            "2.0.0",
+            "1.3.0",
+            "1.0.0",
+            "3.0.0"
+          ],
+          "count": 5
+        },
+        {
+          "package": "send",
+          "versions": [
+            "0.19.0",
+            "2.6.9",
+            "2.0.0",
+            "1.0.2",
+            "1.6.0"
+          ],
+          "count": 5
+        },
+        {
+          "package": "@semantic-release/github",
+          "versions": [
+            "9.2.6",
+            "4.0.0",
+            "5.0.0",
+            "5.2.0"
+          ],
+          "count": 4
+        },
+        {
+          "package": "duplexer2",
+          "versions": [
+            "0.1.4",
+            "2.3.8",
+            "5.1.2",
+            "1.1.1"
+          ],
+          "count": 4
+        },
+        {
+          "package": "from2",
+          "versions": [
+            "2.3.0",
+            "2.3.8",
+            "5.1.2",
+            "1.1.1"
+          ],
+          "count": 4
+        },
+        {
+          "package": "gremlin",
+          "versions": [
+            "3.7.3",
+            "6.0.3",
+            "1.2.1",
+            "9.0.1"
+          ],
+          "count": 4
+        },
+        {
+          "package": "nearley",
+          "versions": [
+            "2.20.1",
+            "2.20.3",
+            "0.4.6",
+            "0.1.15"
+          ],
+          "count": 4
+        },
+        {
+          "package": "pkg-dir",
+          "versions": [
+            "4.2.0",
+            "4.1.0",
+            "5.0.0",
+            "2.3.0"
+          ],
+          "count": 4
+        },
+        {
+          "package": "readable-stream",
+          "versions": [
+            "4.7.0",
+            "6.0.3",
+            "3.3.0",
+            "1.2.1"
+          ],
+          "count": 4
+        },
+        {
+          "package": "xmlbuilder2",
+          "versions": [
+            "3.1.1",
+            "1.0.10",
+            "3.14.1",
+            "1.0.3"
+          ],
+          "count": 4
+        },
+        {
+          "package": "@eslint/eslintrc",
+          "versions": [
+            "2.1.4",
+            "6.12.6",
+            "0.4.1"
+          ],
+          "count": 3
+        },
+        {
+          "package": "@octokit/plugin-paginate-rest",
+          "versions": [
+            "9.2.2",
+            "20.0.0",
+            "12.6.0"
+          ],
+          "count": 3
+        },
+        {
+          "package": "@octokit/plugin-throttling",
+          "versions": [
+            "8.2.0",
+            "20.0.0",
+            "12.6.0"
+          ],
+          "count": 3
+        },
+        {
+          "package": "babel-plugin-istanbul",
+          "versions": [
+            "6.1.1",
+            "5.2.1",
+            "6.3.1"
+          ],
+          "count": 3
+        },
+        {
+          "package": "bl",
+          "versions": [
+            "4.1.0",
+            "5.7.1",
+            "3.6.2"
+          ],
+          "count": 3
+        },
+        {
+          "package": "body-parser",
+          "versions": [
+            "1.20.3",
+            "2.6.9",
+            "2.0.0"
+          ],
+          "count": 3
+        },
+        {
+          "package": "eslint",
+          "versions": [
+            "8.57.1",
+            "6.12.6",
+            "0.4.1"
+          ],
+          "count": 3
+        },
+        {
+          "package": "express",
+          "versions": [
+            "4.21.2",
+            "2.6.9",
+            "2.0.0"
+          ],
+          "count": 3
+        },
+        {
+          "package": "finalhandler",
+          "versions": [
+            "1.3.1",
+            "2.6.9",
+            "2.0.0"
+          ],
+          "count": 3
+        },
+        {
+          "package": "globby",
+          "versions": [
+            "14.1.0",
+            "7.0.5",
+            "6.0.0"
+          ],
+          "count": 3
+        },
+        {
+          "package": "marked-terminal",
+          "versions": [
+            "6.2.0",
+            "6.2.1",
+            "5.5.0"
+          ],
+          "count": 3
+        },
+        {
+          "package": "minipass-flush",
+          "versions": [
+            "1.0.5",
+            "3.3.6",
+            "4.0.0"
+          ],
+          "count": 3
+        },
+        {
+          "package": "minipass-pipeline",
+          "versions": [
+            "1.2.4",
+            "3.3.6",
+            "4.0.0"
+          ],
+          "count": 3
+        },
+        {
+          "package": "minipass-sized",
+          "versions": [
+            "1.0.3",
+            "3.3.6",
+            "4.0.0"
+          ],
+          "count": 3
+        },
+        {
+          "package": "node-gyp",
+          "versions": [
+            "11.3.0",
+            "3.1.1",
+            "5.0.0"
+          ],
+          "count": 3
+        },
+        {
+          "package": "semver",
+          "versions": [
+            "7.6.0",
+            "6.0.0",
+            "4.0.0"
+          ],
+          "count": 3
+        },
+        {
+          "package": "stream-combiner2",
+          "versions": [
+            "1.1.1",
+            "2.3.8",
+            "5.1.2"
+          ],
+          "count": 3
+        },
+        {
+          "package": "tar",
+          "versions": [
+            "7.4.3",
+            "3.0.1",
+            "5.0.0"
+          ],
+          "count": 3
+        },
+        {
+          "package": "tempy",
+          "versions": [
+            "3.1.0",
+            "3.0.0",
+            "2.19.0"
+          ],
+          "count": 3
+        },
+        {
+          "package": "tinyglobby",
+          "versions": [
+            "0.2.14",
+            "6.4.6",
+            "4.0.3"
+          ],
+          "count": 3
+        },
+        {
+          "package": "@babel/core",
+          "versions": [
+            "7.28.0",
+            "6.3.1"
+          ],
+          "count": 2
+        },
+        {
+          "package": "@babel/helper-compilation-targets",
+          "versions": [
+            "7.27.2",
+            "6.3.1"
+          ],
+          "count": 2
+        },
+        {
+          "package": "@jest/console",
+          "versions": [
+            "29.7.0",
+            "3.0.0"
+          ],
+          "count": 2
+        },
+        {
+          "package": "@jest/core",
+          "versions": [
+            "29.7.0",
+            "3.0.0"
+          ],
+          "count": 2
+        },
+        {
+          "package": "@jest/reporters",
+          "versions": [
+            "29.7.0",
+            "3.0.0"
+          ],
+          "count": 2
+        },
+        {
+          "package": "@jest/test-sequencer",
+          "versions": [
+            "29.7.0",
+            "3.0.0"
+          ],
+          "count": 2
+        },
+        {
+          "package": "@jest/transform",
+          "versions": [
+            "29.7.0",
+            "3.0.0"
+          ],
+          "count": 2
+        },
+        {
+          "package": "@npmcli/agent",
+          "versions": [
+            "3.0.0",
+            "10.4.3"
+          ],
+          "count": 2
+        },
+        {
+          "package": "@pnpm/network.ca-file",
+          "versions": [
+            "1.0.2",
+            "4.2.10"
+          ],
+          "count": 2
+        },
+        {
+          "package": "@semantic-release/release-notes-generator",
+          "versions": [
+            "12.1.0",
+            "7.0.1"
+          ],
+          "count": 2
+        },
+        {
+          "package": "ansi-escapes",
+          "versions": [
+            "4.3.2",
+            "0.21.3"
+          ],
+          "count": 2
+        },
+        {
+          "package": "babel-jest",
+          "versions": [
+            "29.7.0",
+            "3.0.0"
+          ],
+          "count": 2
+        },
+        {
+          "package": "crypto-random-string",
+          "versions": [
+            "4.0.0",
+            "1.4.0"
+          ],
+          "count": 2
+        },
+        {
+          "package": "decamelize-keys",
+          "versions": [
+            "1.1.1",
+            "1.0.1"
+          ],
+          "count": 2
+        },
+        {
+          "package": "encoding",
+          "versions": [
+            "0.1.13",
+            "0.6.3"
+          ],
+          "count": 2
+        },
+        {
+          "package": "eslint-plugin-node",
+          "versions": [
+            "11.1.0",
+            "6.3.1"
+          ],
+          "count": 2
+        },
+        {
+          "package": "eslint-utils",
+          "versions": [
+            "2.1.0",
+            "1.3.0"
+          ],
+          "count": 2
+        },
+        {
+          "package": "fast-glob",
+          "versions": [
+            "3.3.3",
+            "5.1.2"
+          ],
+          "count": 2
+        },
+        {
+          "package": "flat-cache",
+          "versions": [
+            "3.2.0",
+            "3.0.2"
+          ],
+          "count": 2
+        },
+        {
+          "package": "foreground-child",
+          "versions": [
+            "3.3.1",
+            "4.1.0"
+          ],
+          "count": 2
+        },
+        {
+          "package": "hosted-git-info",
+          "versions": [
+            "8.1.0",
+            "10.4.3"
+          ],
+          "count": 2
+        },
+        {
+          "package": "http-proxy",
+          "versions": [
+            "1.18.1",
+            "4.0.7"
+          ],
+          "count": 2
+        },
+        {
+          "package": "import-fresh",
+          "versions": [
+            "3.3.1",
+            "4.0.0"
+          ],
+          "count": 2
+        },
+        {
+          "package": "jest-circus",
+          "versions": [
+            "29.7.0",
+            "3.0.0"
+          ],
+          "count": 2
+        },
+        {
+          "package": "jest-config",
+          "versions": [
+            "29.7.0",
+            "3.0.0"
+          ],
+          "count": 2
+        },
+        {
+          "package": "jest-message-util",
+          "versions": [
+            "29.7.0",
+            "3.0.0"
+          ],
+          "count": 2
+        },
+        {
+          "package": "jest-resolve",
+          "versions": [
+            "29.7.0",
+            "3.0.0"
+          ],
+          "count": 2
+        },
+        {
+          "package": "jest-runtime",
+          "versions": [
+            "29.7.0",
+            "3.0.0"
+          ],
+          "count": 2
+        },
+        {
+          "package": "jest-validate",
+          "versions": [
+            "29.7.0",
+            "6.3.0"
+          ],
+          "count": 2
+        },
+        {
+          "package": "jest-worker",
+          "versions": [
+            "29.7.0",
+            "8.1.1"
+          ],
+          "count": 2
+        },
+        {
+          "package": "load-json-file",
+          "versions": [
+            "4.0.0",
+            "3.0.0"
+          ],
+          "count": 2
+        },
+        {
+          "package": "make-fetch-happen",
+          "versions": [
+            "14.0.3",
+            "1.0.0"
+          ],
+          "count": 2
+        },
+        {
+          "package": "path-scurry",
+          "versions": [
+            "1.11.1",
+            "10.4.3"
+          ],
+          "count": 2
+        },
+        {
+          "package": "pretty-format",
+          "versions": [
+            "29.7.0",
+            "5.2.0"
+          ],
+          "count": 2
+        },
+        {
+          "package": "rc",
+          "versions": [
+            "1.2.8",
+            "2.0.1"
+          ],
+          "count": 2
+        },
+        {
+          "package": "read-pkg-up",
+          "versions": [
+            "11.0.0",
+            "4.41.0"
+          ],
+          "count": 2
+        },
+        {
+          "package": "spdx-correct",
+          "versions": [
+            "3.2.0",
+            "3.0.1"
+          ],
+          "count": 2
+        },
+        {
+          "package": "stack-utils",
+          "versions": [
+            "2.0.6",
+            "2.0.0"
+          ],
+          "count": 2
+        },
+        {
+          "package": "tar-fs",
+          "versions": [
+            "2.1.3",
+            "1.1.4"
+          ],
+          "count": 2
+        },
+        {
+          "package": "tar-stream",
+          "versions": [
+            "2.2.0",
+            "3.6.2"
+          ],
+          "count": 2
+        },
+        {
+          "package": "through2",
+          "versions": [
+            "4.0.2",
+            "3.6.2"
+          ],
+          "count": 2
+        },
+        {
+          "package": "url",
+          "versions": [
+            "0.10.3",
+            "1.3.2"
+          ],
+          "count": 2
+        },
+        {
+          "package": "validate-npm-package-license",
+          "versions": [
+            "3.0.4",
+            "3.0.1"
+          ],
+          "count": 2
+        }
+      ]
+    },
+    "size": {
+      "total": 101616307,
+      "totalHuman": "96.91 MB",
+      "packages": [
+        {
+          "name": "aws-sdk",
+          "size": 98158637,
+          "sizeHuman": "93.61 MB"
+        },
+        {
+          "name": "gremlin",
+          "size": 2495083,
+          "sizeHuman": "2.38 MB"
+        },
+        {
+          "name": "joi",
+          "size": 557849,
+          "sizeHuman": "544.77 KB"
+        },
+        {
+          "name": "js-yaml",
+          "size": 404738,
+          "sizeHuman": "395.25 KB"
+        }
+      ]
+    },
+    "unused": {
+      "total": 0,
+      "packages": []
+    },
+    "compliance": {
+      "securityPolicy": {
+        "securityScanning": true,
+        "auditProcess": true,
+        "score": 100
+      },
+      "licenseCompliance": {
+        "licenseChecking": false,
+        "score": 0
+      },
+      "updatePolicy": {
+        "automatedUpdates": true,
+        "score": 100
+      },
+      "auditTrail": {
+        "changeTracking": true,
+        "commitLinting": false,
+        "score": 50
+      }
+    }
+  },
+  "recommendations": [
+    {
+      "priority": "low",
+      "category": "performance",
+      "title": "Duplicate dependencies found",
+      "description": "85 packages have multiple versions installed",
+      "action": "Consider deduplicating dependencies with `npm dedupe`"
+    }
+  ],
+  "score": 95
+}
