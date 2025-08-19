@@ -1,0 +1,711 @@
+{
+  "timestamp": "2025-08-19T04:34:27.161Z",
+  "project": {
+    "name": "cloud-remediator-sage",
+    "version": "0.1.0"
+  },
+  "metrics": {
+    "coverage": {
+      "error": "Command failed: npm test -- --coverage --silent --passWithNoTests\nFAIL tests/quantum/AutoExecutor.test.js (54.868 s)\n  ● QuantumAutoExecutor › executeTask › should handle task execution failure\n\n    expect(received).toBe(expected) // Object.is equality\n\n    Expected: 1\n    Received: 2\n\n      346 |       await executor.executeTask(mockTask, mockResults);\n      347 |       \n    > 348 |       expect(mockResults.tasksExecuted).toBe(1);\n          |                                         ^\n      349 |       expect(mockResults.tasksFailed).toBe(1);\n      350 |       expect(mockResults.tasksSucceeded).toBe(0);\n      351 |       \n\n      at Object.toBe (tests/quantum/AutoExecutor.test.js:348:41)\n\n  ● QuantumAutoExecutor › executeTask › should update active tasks during execution\n\n    expect(received).toBe(expected) // Object.is equality\n\n    Expected: true\n    Received: false\n\n      359 |       \n      360 |       // Task should be active during execution\n    > 361 |       expect(executor.activeTasks.has('task-1')).toBe(true);\n          |                                                  ^\n      362 |       \n      363 |       await executionPromise;\n      364 |       \n\n      at Object.toBe (tests/quantum/AutoExecutor.test.js:361:50)\n\n  ● QuantumAutoExecutor › executeSecurityRemediation › should execute remediation when finding exists\n\n    Remediation application failed: remediation-finding-1\n\n      568 |     \n      569 |     if (Math.random() > successProbability) {\n    > 570 |       throw new Error(`Remediation application failed: ${remediation.id}`);\n          |             ^\n      571 |     }\n      572 |     \n      573 |     return {\n\n      at QuantumAutoExecutor.applyRemediation (src/quantum/AutoExecutor.js:570:13)\n      at QuantumAutoExecutor.executeSecurityRemediation (src/quantum/AutoExecutor.js:534:20)\n      at Object.<anonymous> (tests/quantum/AutoExecutor.test.js:409:22)\n\n  ● QuantumAutoExecutor › Error Handling and Recovery › should handle execution errors gracefully\n\n    expect(received).rejects.toThrow(expected)\n\n    Expected substring: \"Critical error\"\n    Received message:   \"Planning failed\"\n\n          85 |         this.logger.error('Planning failed', { error: planningError.message });\n          86 |         this.isExecuting = false;\n        > 87 |         throw new Error('Planning failed');\n             |               ^\n          88 |       }\n          89 |       \n          90 |       this.emit('planningComplete', {\n\n      at QuantumAutoExecutor.executeAutonomousRemediation (src/quantum/AutoExecutor.js:87:15)\n      at Object.<anonymous> (tests/quantum/AutoExecutor.test.js:495:7)\n      at Object.toThrow (node_modules/expect/build/index.js:218:22)\n      at Object.toThrow (tests/quantum/AutoExecutor.test.js:496:18)\n\nFAIL tests/quantum-enhancements.test.js (24.971 s)\n  ● Enhanced Quantum Features › Quantum Self-Healing System › should heal quantum failures\n\n    expect(received).toBeGreaterThan(expected)\n\n    Expected: > 0\n    Received:   0\n\n      81 |       expect(healingResult).toBeDefined();\n      82 |       expect(healingResult.success).toBeDefined();\n    > 83 |       expect(healingResult.duration).toBeGreaterThan(0);\n         |                                      ^\n      84 |     });\n      85 |\n      86 |     test('should update quantum coherence based on healing success', async () => {\n\n      at Object.toBeGreaterThan (tests/quantum-enhancements.test.js:83:38)\n\nhint: Using 'master' as the name for the initial branch. This default branch name\nhint: is subject to change. To configure the initial branch name to use in all\nhint: of your new repositories, which will suppress this warning, call:\nhint: \nhint: \tgit config --global init.defaultBranch <name>\nhint: \nhint: Names commonly chosen instead of 'master' are 'main', 'trunk' and\nhint: 'development'. The just-created branch can be renamed via this command:\nhint: \nhint: \tgit branch -m <name>\nno git remotes found\nhint: Using 'master' as the name for the initial branch. This default branch name\nhint: is subject to change. To configure the initial branch name to use in all\nhint: of your new repositories, which will suppress this warning, call:\nhint: \nhint: \tgit config --global init.defaultBranch <name>\nhint: \nhint: Names commonly chosen instead of 'master' are 'main', 'trunk' and\nhint: 'development'. The just-created branch can be renamed via this command:\nhint: \nhint: \tgit branch -m <name>\n/bin/sh: 1: cannot create ./reports/eslint-security.json: Directory nonexistent\n/bin/sh: 1: dependency-check: not found\nnpm error code ENOLOCK\nnpm error audit This command requires an existing lockfile.\nnpm error audit Try creating one first with: npm i --package-lock-only\nnpm error audit Original error: loadVirtual requires existing shrinkwrap file\nnpm error A complete log of this run can be found in: /root/.npm/_logs/2025-08-19T04_35_49_474Z-debug-0.log\nhint: Using 'master' as the name for the initial branch. This default branch name\nhint: is subject to change. To configure the initial branch name to use in all\nhint: of your new repositories, which will suppress this warning, call:\nhint: \nhint: \tgit config --global init.defaultBranch <name>\nhint: \nhint: Names commonly chosen instead of 'master' are 'main', 'trunk' and\nhint: 'development'. The just-created branch can be renamed via this command:\nhint: \nhint: \tgit branch -m <name>\nnpm error Missing script: \"test\"\nnpm error\nnpm error To see a list of scripts, run:\nnpm error   npm run\nnpm error A complete log of this run can be found in: /root/.npm/_logs/2025-08-19T04_35_50_031Z-debug-0.log\nhint: Using 'master' as the name for the initial branch. This default branch name\nhint: is subject to change. To configure the initial branch name to use in all\nhint: of your new repositories, which will suppress this warning, call:\nhint: \nhint: \tgit config --global init.defaultBranch <name>\nhint: \nhint: Names commonly chosen instead of 'master' are 'main', 'trunk' and\nhint: 'development'. The just-created branch can be renamed via this command:\nhint: \nhint: \tgit branch -m <name>\nno git remotes found\nhint: Using 'master' as the name for the initial branch. This default branch name\nhint: is subject to change. To configure the initial branch name to use in all\nhint: of your new repositories, which will suppress this warning, call:\nhint: \nhint: \tgit config --global init.defaultBranch <name>\nhint: \nhint: Names commonly chosen instead of 'master' are 'main', 'trunk' and\nhint: 'development'. The just-created branch can be renamed via this command:\nhint: \nhint: \tgit branch -m <name>\nInvalid option '--ext' - perhaps you meant '-c'?\nYou're using eslint.config.js, some command line flags are no longer available. Please see https://eslint.org/docs/latest/use/command-line-interface for details.\n/bin/sh: 1: dependency-check: not found\nnpm error code ENOLOCK\nnpm error audit This command requires an existing lockfile.\nnpm error audit Try creating one first with: npm i --package-lock-only\nnpm error audit Original error: loadVirtual requires existing shrinkwrap file\nnpm error A complete log of this run can be found in: /root/.npm/_logs/2025-08-19T04_35_51_411Z-debug-0.log\n/bin/sh: 1: cyclonedx-bom: not found\nhint: Using 'master' as the name for the initial branch. This default branch name\nhint: is subject to change. To configure the initial branch name to use in all\nhint: of your new repositories, which will suppress this warning, call:\nhint: \nhint: \tgit config --global init.defaultBranch <name>\nhint: \nhint: Names commonly chosen instead of 'master' are 'main', 'trunk' and\nhint: 'development'. The just-created branch can be renamed via this command:\nhint: \nhint: \tgit branch -m <name>\nnpm error Missing script: \"test\"\nnpm error\nnpm error To see a list of scripts, run:\nnpm error   npm run\nnpm error A complete log of this run can be found in: /root/.npm/_logs/2025-08-19T04_35_51_905Z-debug-0.log\nFAIL tests/integration/backlog-integration.test.js\n  ● Autonomous Backlog Management Integration › End-to-End Backlog Processing › should discover, analyze, prioritize, and execute security improvements\n\n    TypeError: securityAnalyzer.analyzeVulnerabilities is not a function\n\n      107 |       // Phase 2: Security Analysis\n      108 |       const securityAnalyzer = new SecurityAnalyzer(testWorkspace);\n    > 109 |       const securityAnalysis = await securityAnalyzer.analyzeVulnerabilities();\n          |                                                       ^\n      110 |       \n      111 |       expect(securityAnalysis).toBeDefined();\n      112 |       expect(securityAnalysis.vulnerabilities).toBeDefined();\n\n      at Object.analyzeVulnerabilities (tests/integration/backlog-integration.test.js:109:55)\n\n  ● Autonomous Backlog Management Integration › End-to-End Backlog Processing › should handle security vulnerability detection and remediation\n\n    expect(received).toBeDefined()\n\n    Received: undefined\n\n      147 |         v.type === 'sql_injection' || v.description?.includes('injection')\n      148 |       );\n    > 149 |       expect(sqlInjectionVuln).toBeDefined();\n          |                                ^\n      150 |       \n      151 |       // Should detect missing input validation\n      152 |       const validationVuln = vulnerabilities.find(v => \n\n      at Object.toBeDefined (tests/integration/backlog-integration.test.js:149:32)\n\n  ● Autonomous Backlog Management Integration › End-to-End Backlog Processing › should maintain git history during automated changes\n\n    expect(received).toBe(expected) // Object.is equality\n\n    Expected: true\n    Received: false\n\n      179 |       \n      180 |       const result = await executor.executeItem(testItem);\n    > 181 |       expect(result.success).toBe(true);\n          |                              ^\n      182 |       \n      183 |       // Check that git history was updated\n      184 |       const finalCommitCount = execSync('git rev-list --count HEAD').toString().trim();\n\n      at Object.toBe (tests/integration/backlog-integration.test.js:181:30)\n\n  ● Autonomous Backlog Management Integration › Security-Focused Integration Tests › should prioritize security vulnerabilities over other improvements\n\n    TypeError: wsjfCalculator.calculateScore is not a function\n\n      200 |         // Security items should get bonus scoring\n      201 |         const securityBonus = item.category === 'security' ? 2 : 0;\n    > 202 |         const wsjfScore = wsjfCalculator.calculateScore({\n          |                                          ^\n      203 |           businessValue: (item.businessValue || 5) + securityBonus,\n      204 |           urgency: item.urgency || 3,\n      205 |           jobSize: item.jobSize || 2\n\n      at calculateScore (tests/integration/backlog-integration.test.js:202:42)\n          at Array.map (<anonymous>)\n      at Object.map (tests/integration/backlog-integration.test.js:199:38)\n\n  ● Autonomous Backlog Management Integration › Security-Focused Integration Tests › should generate security reports during analysis\n\n    expect(received).toBeDefined()\n\n    Received: undefined\n\n      225 |       expect(report.timestamp).toBeDefined();\n      226 |       expect(report.vulnerabilities).toBeDefined();\n    > 227 |       expect(report.riskScore).toBeDefined();\n          |                                ^\n      228 |       expect(report.recommendations).toBeDefined();\n      229 |     });\n      230 |\n\n      at Object.toBeDefined (tests/integration/backlog-integration.test.js:227:32)\n\n  ● Autonomous Backlog Management Integration › Security-Focused Integration Tests › should validate all changes before committing\n\n    expect(received).toContain(expected) // indexOf\n\n    Matcher error: received value must not be null nor undefined\n\n    Received has value: undefined\n\n      250 |       // Should fail validation and not commit\n      251 |       expect(result.success).toBe(false);\n    > 252 |       expect(result.error).toContain('validation');\n          |                            ^\n      253 |       \n      254 |       // Git history should be unchanged\n      255 |       const commitMessage = execSync('git log -1 --pretty=%B').toString();\n\n      at Object.toContain (tests/integration/backlog-integration.test.js:252:28)\n\nFAIL tests/contract/api-contracts.test.js\n  ● Security API Contract Tests › Security Findings API › should return security findings with correct structure\n\n    TypeError: provider.given is not a function\n\n      74 |       \n      75 |       await provider\n    > 76 |         .given('security findings exist')\n         |          ^\n      77 |         .uponReceiving('a request for security findings')\n      78 |         .withRequest({\n      79 |           method: 'GET',\n\n      at Object.given (tests/contract/api-contracts.test.js:76:10)\n\n  ● Security API Contract Tests › Security Findings API › should accept security finding submission with validation\n\n    TypeError: provider.given is not a function\n\n      102 |       \n      103 |       await provider\n    > 104 |         .given('security analysis service is available')\n          |          ^\n      105 |         .uponReceiving('a security finding submission')\n      106 |         .withRequest({\n      107 |           method: 'POST',\n\n      at Object.given (tests/contract/api-contracts.test.js:104:10)\n\n  ● Security API Contract Tests › Risk Scoring API › should calculate risk scores for security findings\n\n    TypeError: provider.given is not a function\n\n      148 |       \n      149 |       await provider\n    > 150 |         .given('risk scoring service is operational')\n          |          ^\n      151 |         .uponReceiving('a risk scoring request')\n      152 |         .withRequest({\n      153 |           method: 'POST',\n\n      at Object.given (tests/contract/api-contracts.test.js:150:10)\n\n  ● Security API Contract Tests › Remediation API › should generate remediation scripts for security findings\n\n    TypeError: provider.given is not a function\n\n      204 |       \n      205 |       await provider\n    > 206 |         .given('remediation service is available')\n          |          ^\n      207 |         .uponReceiving('a remediation generation request')\n      208 |         .withRequest({\n      209 |           method: 'POST',\n\n      at Object.given (tests/contract/api-contracts.test.js:206:10)\n\n  ● Security API Contract Tests › Remediation API › should handle high-risk remediations with approval requirements\n\n    TypeError: provider.given is not a function\n\n      267 |       \n      268 |       await provider\n    > 269 |         .given('high-risk remediation is requested')\n          |          ^\n      270 |         .uponReceiving('a high-risk remediation request')\n      271 |         .withRequest({\n      272 |           method: 'POST',\n\n      at Object.given (tests/contract/api-contracts.test.js:269:10)\n\n  ● Security API Contract Tests › Backlog Management API › should create backlog items from security findings\n\n    TypeError: provider.given is not a function\n\n      318 |       \n      319 |       await provider\n    > 320 |         .given('backlog management service is available')\n          |          ^\n      321 |         .uponReceiving('a backlog item creation request')\n      322 |         .withRequest({\n      323 |           method: 'POST',\n\n      at Object.given (tests/contract/api-contracts.test.js:320:10)\n\n  ● Security API Contract Tests › Error Handling Contracts › should handle authentication errors correctly\n\n    TypeError: provider.given is not a function\n\n      364 |     it('should handle authentication errors correctly', async () => {\n      365 |       await provider\n    > 366 |         .given('authentication token is invalid')\n          |          ^\n      367 |         .uponReceiving('a request with invalid token')\n      368 |         .withRequest({\n      369 |           method: 'GET',\n\n      at Object.given (tests/contract/api-contracts.test.js:366:10)\n\n  ● Security API Contract Tests › Error Handling Contracts › should handle validation errors for malformed requests\n\n    TypeError: provider.given is not a function\n\n      403 |       \n      404 |       await provider\n    > 405 |         .given('request validation is enabled')\n          |          ^\n      406 |         .uponReceiving('a malformed finding submission')\n      407 |         .withRequest({\n      408 |           method: 'POST',\n\n      at Object.given (tests/contract/api-contracts.test.js:405:10)\n\nFAIL tests/backlog.test.js\n  ● Autonomous Backlog Management System › Integration Tests › should handle errors gracefully in discovery\n\n    expect(received).toEqual(expected) // deep equality\n\n    - Expected  -  1\n    + Received  + 62\n\n    - Array []\n    + Array [\n    +   Object {\n    +     \"acceptance_criteria\": Array [\n    +       \"All user inputs are validated\",\n    +       \"Parameterized queries implemented\",\n    +       \"Security tests added\",\n    +     ],\n    +     \"category\": \"security\",\n    +     \"created_at\": \"2025-08-19\",\n    +     \"description\": \"Add input validation and parameterized queries to prevent SQL injection attacks\",\n    +     \"effort\": 5,\n    +     \"id\": \"SEC-001\",\n    +     \"links\": Array [],\n    +     \"risk_reduction\": 9,\n    +     \"risk_tier\": \"high\",\n    +     \"status\": \"NEW\",\n    +     \"time_criticality\": 8,\n    +     \"title\": \"Implement SQL injection prevention\",\n    +     \"type\": \"security\",\n    +     \"value\": 9,\n    +   },\n    +   Object {\n    +     \"acceptance_criteria\": Array [\n    +       \"Input validation middleware created\",\n    +       \"All endpoints protected\",\n    +       \"Unit tests added\",\n    +     ],\n    +     \"category\": \"security\",\n    +     \"created_at\": \"2025-08-19\",\n    +     \"description\": \"Implement comprehensive input validation to prevent injection attacks\",\n    +     \"effort\": 3,\n    +     \"id\": \"SEC-002\",\n    +     \"links\": Array [],\n    +     \"risk_reduction\": 8,\n    +     \"risk_tier\": \"high\",\n    +     \"status\": \"NEW\",\n    +     \"time_criticality\": 7,\n    +     \"title\": \"Add input validation middleware\",\n    +     \"type\": \"security\",\n    +     \"value\": 8,\n    +   },\n    +   Object {\n    +     \"acceptance_criteria\": Array [\n    +       \"All dependencies updated\",\n    +       \"No breaking changes introduced\",\n    +       \"Security audit passes\",\n    +     ],\n    +     \"category\": \"maintenance\",\n    +     \"created_at\": \"2025-08-19\",\n    +     \"description\": \"Update all dependencies to patch security vulnerabilities\",\n    +     \"effort\": 2,\n    +     \"id\": \"MAINT-001\",\n    +     \"links\": Array [],\n    +     \"risk_reduction\": 6,\n    +     \"risk_tier\": \"medium\",\n    +     \"status\": \"NEW\",\n    +     \"time_criticality\": 5,\n    +     \"title\": \"Update dependencies to latest versions\",\n    +     \"type\": \"maintenance\",\n    +     \"value\": 6,\n    +   },\n    + ]\n\n      401 |       const items = await discovery.discoverAll();\n      402 |       \n    > 403 |       expect(items).toEqual([]); // Should return empty array on error\n          |                     ^\n      404 |     });\n      405 |   });\n      406 | });\n\n      at Object.toEqual (tests/backlog.test.js:403:21)\n\nPASS tests/quantum/QuantumExecutionEngine.test.js\nPASS tests/validation/SecurityValidator.test.js\nPASS tests/quantum/TaskPlanner.test.js\nPASS tests/i18n/I18nManager.test.js\nPASS tests/compliance/ComplianceEngine.test.js\nPASS tests/basic.test.js\nPASS tests/csrm-005.test.js\nPASS tests/csrm-003.test.js\nFAIL tests/integration/lambda-integration.test.js\n  ● Test suite failed to run\n\n    TypeError: CircuitBreaker is not a constructor\n\n      36 |\n      37 | // Circuit breakers for external services\n    > 38 | const neptuneCircuitBreaker = new CircuitBreaker({\n         |                               ^\n      39 |   serviceName: 'neptune',\n      40 |   failureThreshold: 5,\n      41 |   resetTimeout: 30000\n\n      at Object.<anonymous> (src/lambda/prowler-ingest.js:38:31)\n      at Object.require (tests/integration/lambda-integration.test.js:61:23)\n\nFailed to collect coverage from /root/repo/src/lambda/risk-scoring.js\nERROR: /root/repo/src/lambda/risk-scoring.js: Unexpected token, expected \",\" (138:0)\n\n  136 |  * Process findings in parallel batches with concurrency control\n  137 |  */\n> 138 | async function processFindingsInBatches(\n      | ^\n  139 |   findings, \n  140 |   batchSize, \n  141 |   maxConcurrency, \nSTACK: SyntaxError: /root/repo/src/lambda/risk-scoring.js: Unexpected token, expected \",\" (138:0)\n\n  136 |  * Process findings in parallel batches with concurrency control\n  137 |  */\n> 138 | async function processFindingsInBatches(\n      | ^\n  139 |   findings, \n  140 |   batchSize, \n  141 |   maxConcurrency, \n    at constructor (/root/repo/node_modules/@babel/parser/src/parse-error.ts:95:45)\n    at Parser.toParseError [as raise] (/root/repo/node_modules/@babel/parser/src/tokenizer/index.ts:1503:19)\n    at Parser.raise [as unexpected] (/root/repo/node_modules/@babel/parser/src/tokenizer/index.ts:1543:16)\n    at Parser.unexpected [as expect] (/root/repo/node_modules/@babel/parser/src/parser/util.ts:157:12)\n    at Parser.expect [as parseCallExpressionArguments] (/root/repo/node_modules/@babel/parser/src/parser/expression.ts:1023:14)\n    at Parser.parseCallExpressionArguments [as parseCoverCallAndAsyncArrowHead] (/root/repo/node_modules/@babel/parser/src/parser/expression.ts:914:29)\n    at Parser.parseCoverCallAndAsyncArrowHead [as parseSubscript] (/root/repo/node_modules/@babel/parser/src/parser/expression.ts:796:19)\n    at Parser.parseSubscript [as parseSubscripts] (/root/repo/node_modules/@babel/parser/src/parser/expression.ts:755:19)\n    at Parser.parseSubscripts [as parseExprSubscripts] (/root/repo/node_modules/@babel/parser/src/parser/expression.ts:740:17)\n    at Parser.parseExprSubscripts [as parseUpdate] (/root/repo/node_modules/@babel/parser/src/parser/expression.ts:713:21)\n    at Parser.parseUpdate [as parseMaybeUnary] (/root/repo/node_modules/@babel/parser/src/parser/expression.ts:675:23)\n    at Parser.parseMaybeUnary [as parseMaybeUnaryOrPrivate] (/root/repo/node_modules/@babel/parser/src/parser/expression.ts:409:14)\n    at Parser.parseMaybeUnaryOrPrivate [as parseExprOps] (/root/repo/node_modules/@babel/parser/src/parser/expression.ts:421:23)\n    at Parser.parseExprOps [as parseMaybeConditional] (/root/repo/node_modules/@babel/parser/src/parser/expression.ts:376:23)\n    at Parser.parseMaybeConditional [as parseMaybeAssign] (/root/repo/node_modules/@babel/parser/src/parser/expression.ts:301:21)\n    at Parser.parseMaybeAssign (/root/repo/node_modules/@babel/parser/src/parser/expression.ts:345:25)\n    at Parser.parseMaybeAssign [as parseExpressionBase] (/root/repo/node_modules/@babel/parser/src/parser/expression.ts:226:23)\n    at parseExpressionBase (/root/repo/node_modules/@babel/parser/src/parser/expression.ts:217:39)\n    at Parser.callback [as allowInAnd] (/root/repo/node_modules/@babel/parser/src/parser/expression.ts:3187:16)\n    at Parser.allowInAnd [as parseExpression] (/root/repo/node_modules/@babel/parser/src/parser/expression.ts:217:17)\n    at Parser.parseExpression [as parseStatementContent] (/root/repo/node_modules/@babel/parser/src/parser/statement.ts:683:23)\n    at Parser.parseStatementContent [as parseStatementLike] (/root/repo/node_modules/@babel/parser/src/parser/statement.ts:477:17)\n    at Parser.parseStatementLike [as parseModuleItem] (/root/repo/node_modules/@babel/parser/src/parser/statement.ts:414:17)\n    at Parser.parseModuleItem [as parseBlockOrModuleBlockBody] (/root/repo/node_modules/@babel/parser/src/parser/statement.ts:1438:16)\n    at Parser.parseBlockOrModuleBlockBody [as parseBlockBody] (/root/repo/node_modules/@babel/parser/src/parser/statement.ts:1412:10)\n    at Parser.parseBlockBody [as parseProgram] (/root/repo/node_modules/@babel/parser/src/parser/statement.ts:229:10)\n    at Parser.parseProgram [as parseTopLevel] (/root/repo/node_modules/@babel/parser/src/parser/statement.ts:203:25)\n    at Parser.parseTopLevel [as parse] (/root/repo/node_modules/@babel/parser/src/parser/index.ts:93:10)\n    at parse (/root/repo/node_modules/@babel/parser/src/index.ts:92:38)\n    at parser (/root/repo/node_modules/@babel/core/src/parser/index.ts:28:19)\n    at parser.next (<anonymous>)\n    at normalizeFile (/root/repo/node_modules/@babel/core/src/transformation/normalize-file.ts:49:24)\n    at normalizeFile.next (<anonymous>)\n    at run (/root/repo/node_modules/@babel/core/src/transformation/index.ts:40:36)\n    at run.next (<anonymous>)\n    at transform (/root/repo/node_modules/@babel/core/src/transform.ts:29:20)\n    at transform.next (<anonymous>)\n    at step (/root/repo/node_modules/gensync/index.js:261:32)\n    at /root/repo/node_modules/gensync/index.js:273:13\n    at async.call.result.err.err (/root/repo/node_modules/gensync/index.js:223:11)\nJest: \"global\" coverage threshold for statements (60%) not met: 24.77%\nJest: \"global\" coverage threshold for branches (60%) not met: 22.29%\nJest: \"global\" coverage threshold for lines (60%) not met: 24.78%\nJest: \"global\" coverage threshold for functions (60%) not met: 25.38%\nJest: \"./src/backlog/\" coverage threshold for statements (70%) not met: 40.32%\nJest: \"./src/backlog/\" coverage threshold for branches (70%) not met: 28.25%\nJest: \"./src/backlog/\" coverage threshold for lines (70%) not met: 41.14%\nJest: \"./src/backlog/\" coverage threshold for functions (70%) not met: 44.61%\nJest: \"./src/lambda/\" coverage threshold for statements (65%) not met: 0%\nJest: \"./src/lambda/\" coverage threshold for branches (65%) not met: 0%\nJest: \"./src/lambda/\" coverage threshold for lines (65%) not met: 0%\nJest: \"./src/lambda/\" coverage threshold for functions (65%) not met: 0%\nTest Suites: 6 failed, 8 passed, 14 total\nTests:       20 failed, 217 passed, 237 total\nSnapshots:   0 total\nTime:        98.21 s\nForce exiting Jest: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?\n"
+    },
+    "complexity": {
+      "files": [
+        {
+          "filePath": "src/backlog/discovery.js",
+          "complexity": 81,
+          "linesOfCode": 329,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/backlog/executor.js",
+          "complexity": 46,
+          "linesOfCode": 445,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/backlog/index.js",
+          "complexity": 7,
+          "linesOfCode": 74,
+          "maintainabilityIndex": 65.15535020965483
+        },
+        {
+          "filePath": "src/backlog/metrics.js",
+          "complexity": 28,
+          "linesOfCode": 437,
+          "maintainabilityIndex": 14.218182994773764
+        },
+        {
+          "filePath": "src/backlog/security.js",
+          "complexity": 77,
+          "linesOfCode": 777,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/backlog/wsjf.js",
+          "complexity": 20,
+          "linesOfCode": 193,
+          "maintainabilityIndex": 34.1010568274963
+        },
+        {
+          "filePath": "src/compliance/ComplianceEngine.js",
+          "complexity": 67,
+          "linesOfCode": 659,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/database/connection.js",
+          "complexity": 29,
+          "linesOfCode": 420,
+          "maintainabilityIndex": 13.9653931102796
+        },
+        {
+          "filePath": "src/deployment/ProductionDeployer.js",
+          "complexity": 48,
+          "linesOfCode": 647,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/distributed/DistributedProcessingEngine.js",
+          "complexity": 45,
+          "linesOfCode": 602,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/i18n/index.js",
+          "complexity": 28,
+          "linesOfCode": 377,
+          "maintainabilityIndex": 15.8241852033435
+        },
+        {
+          "filePath": "src/index.js",
+          "complexity": 32,
+          "linesOfCode": 388,
+          "maintainabilityIndex": 7.406313508069199
+        },
+        {
+          "filePath": "src/lambda/prowler-ingest.js",
+          "complexity": 31,
+          "linesOfCode": 346,
+          "maintainabilityIndex": 9.952777222977277
+        },
+        {
+          "filePath": "src/lambda/remediation-generator.js",
+          "complexity": 100,
+          "linesOfCode": 784,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/lambda/risk-scoring.js",
+          "complexity": 45,
+          "linesOfCode": 396,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/models/Asset.js",
+          "complexity": 49,
+          "linesOfCode": 251,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/models/Finding.js",
+          "complexity": 37,
+          "linesOfCode": 185,
+          "maintainabilityIndex": 0.1684911448786438
+        },
+        {
+          "filePath": "src/models/Remediation.js",
+          "complexity": 55,
+          "linesOfCode": 336,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/models/index.js",
+          "complexity": 1,
+          "linesOfCode": 15,
+          "maintainabilityIndex": 87.12641566115562
+        },
+        {
+          "filePath": "src/monitoring/ObservabilityManager.js",
+          "complexity": 33,
+          "linesOfCode": 466,
+          "maintainabilityIndex": 4.931432344393232
+        },
+        {
+          "filePath": "src/monitoring/alertManager.js",
+          "complexity": 58,
+          "linesOfCode": 566,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/monitoring/health.js",
+          "complexity": 18,
+          "linesOfCode": 253,
+          "maintainabilityIndex": 36.68878378165884
+        },
+        {
+          "filePath": "src/monitoring/logger.js",
+          "complexity": 19,
+          "linesOfCode": 294,
+          "maintainabilityIndex": 35.52087667351067
+        },
+        {
+          "filePath": "src/monitoring/metrics.js",
+          "complexity": 41,
+          "linesOfCode": 334,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/observability/ObservabilityManager.js",
+          "complexity": 100,
+          "linesOfCode": 915,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/performance/CacheManager.js",
+          "complexity": 125,
+          "linesOfCode": 1115,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/performance/LoadBalancer.js",
+          "complexity": 96,
+          "linesOfCode": 963,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/performance/PerformanceManager.js",
+          "complexity": 35,
+          "linesOfCode": 576,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/performance/PerformanceOptimizer.js",
+          "complexity": 74,
+          "linesOfCode": 767,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/performance/QuantumOptimizer.js",
+          "complexity": 63,
+          "linesOfCode": 634,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/quantum/AIExecutionOptimizer.js",
+          "complexity": 30,
+          "linesOfCode": 597,
+          "maintainabilityIndex": 9.88296049668858
+        },
+        {
+          "filePath": "src/quantum/AutoExecutor.js",
+          "complexity": 93,
+          "linesOfCode": 813,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/quantum/QuantumExecutionEngine.js",
+          "complexity": 44,
+          "linesOfCode": 681,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/quantum/QuantumSelfHealer.js",
+          "complexity": 47,
+          "linesOfCode": 640,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/quantum/TaskPlanner.js",
+          "complexity": 152,
+          "linesOfCode": 948,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/reliability/AdvancedErrorHandler.js",
+          "complexity": 52,
+          "linesOfCode": 698,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/reliability/HealthMonitor.js",
+          "complexity": 36,
+          "linesOfCode": 391,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/reliability/ResilienceManager.js",
+          "complexity": 53,
+          "linesOfCode": 657,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/repositories/BaseRepository.js",
+          "complexity": 42,
+          "linesOfCode": 399,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/repositories/FindingRepository.js",
+          "complexity": 26,
+          "linesOfCode": 367,
+          "maintainabilityIndex": 21.27973026926393
+        },
+        {
+          "filePath": "src/resilience/CircuitBreaker.js",
+          "complexity": 65,
+          "linesOfCode": 785,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/resilience/RetryHandler.js",
+          "complexity": 94,
+          "linesOfCode": 795,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/scaling/AutoScalingManager.js",
+          "complexity": 85,
+          "linesOfCode": 720,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/scaling/QuantumAutoScaler.js",
+          "complexity": 46,
+          "linesOfCode": 648,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/security/AdvancedSecurityManager.js",
+          "complexity": 57,
+          "linesOfCode": 753,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/security/AdvancedThreatDetector.js",
+          "complexity": 34,
+          "linesOfCode": 584,
+          "maintainabilityIndex": 1.7087142639410562
+        },
+        {
+          "filePath": "src/security/QuantumSecurityManager.js",
+          "complexity": 88,
+          "linesOfCode": 946,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/services/NeptuneService.js",
+          "complexity": 65,
+          "linesOfCode": 639,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/services/SecurityAnalysisService.js",
+          "complexity": 34,
+          "linesOfCode": 370,
+          "maintainabilityIndex": 4.8919444312681115
+        },
+        {
+          "filePath": "src/utils/errorHandler.js",
+          "complexity": 47,
+          "linesOfCode": 412,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/utils/helpers.js",
+          "complexity": 35,
+          "linesOfCode": 336,
+          "maintainabilityIndex": 4.426348962088741
+        },
+        {
+          "filePath": "src/utils/validators.js",
+          "complexity": 39,
+          "linesOfCode": 292,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "src/validation/SecurityValidator.js",
+          "complexity": 231,
+          "linesOfCode": 1096,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "tests/backlog.test.js",
+          "complexity": 1,
+          "linesOfCode": 406,
+          "maintainabilityIndex": 68.06675636947902
+        },
+        {
+          "filePath": "tests/basic.test.js",
+          "complexity": 1,
+          "linesOfCode": 7,
+          "maintainabilityIndex": 88.27044925472343
+        },
+        {
+          "filePath": "tests/compliance/ComplianceEngine.test.js",
+          "complexity": 1,
+          "linesOfCode": 347,
+          "maintainabilityIndex": 68.92628676308992
+        },
+        {
+          "filePath": "tests/contract/api-contracts.test.js",
+          "complexity": 1,
+          "linesOfCode": 484,
+          "maintainabilityIndex": 67.44081513583833
+        },
+        {
+          "filePath": "tests/contract/pact.config.js",
+          "complexity": 9,
+          "linesOfCode": 265,
+          "maintainabilityIndex": 55.87493577572927
+        },
+        {
+          "filePath": "tests/csrm-003.test.js",
+          "complexity": 1,
+          "linesOfCode": 9,
+          "maintainabilityIndex": 88.12498822443001
+        },
+        {
+          "filePath": "tests/csrm-005.test.js",
+          "complexity": 1,
+          "linesOfCode": 9,
+          "maintainabilityIndex": 88.12498822443001
+        },
+        {
+          "filePath": "tests/fixtures/test-data.js",
+          "complexity": 29,
+          "linesOfCode": 329,
+          "maintainabilityIndex": 13.202082066841834
+        },
+        {
+          "filePath": "tests/i18n/I18nManager.test.js",
+          "complexity": 1,
+          "linesOfCode": 213,
+          "maintainabilityIndex": 71.85081616675804
+        },
+        {
+          "filePath": "tests/integration/backlog-integration.test.js",
+          "complexity": 14,
+          "linesOfCode": 259,
+          "maintainabilityIndex": 45.41277088841351
+        },
+        {
+          "filePath": "tests/integration/lambda-integration.test.js",
+          "complexity": 1,
+          "linesOfCode": 354,
+          "maintainabilityIndex": 69.19023859817294
+        },
+        {
+          "filePath": "tests/mocks/aws-sdk.js",
+          "complexity": 40,
+          "linesOfCode": 492,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "tests/performance/k6-config.js",
+          "complexity": 14,
+          "linesOfCode": 228,
+          "maintainabilityIndex": 45.68660518856113
+        },
+        {
+          "filePath": "tests/performance/load-test.js",
+          "complexity": 36,
+          "linesOfCode": 325,
+          "maintainabilityIndex": 0
+        },
+        {
+          "filePath": "tests/quantum/AutoExecutor.test.js",
+          "complexity": 1,
+          "linesOfCode": 607,
+          "maintainabilityIndex": 66.18799854882113
+        },
+        {
+          "filePath": "tests/quantum/QuantumExecutionEngine.test.js",
+          "complexity": 3,
+          "linesOfCode": 656,
+          "maintainabilityIndex": 61.82834239674297
+        },
+        {
+          "filePath": "tests/quantum/TaskPlanner.test.js",
+          "complexity": 6,
+          "linesOfCode": 574,
+          "maintainabilityIndex": 56.480755457426554
+        },
+        {
+          "filePath": "tests/quantum-enhancements.test.js",
+          "complexity": 3,
+          "linesOfCode": 267,
+          "maintainabilityIndex": 66.36338217616354
+        },
+        {
+          "filePath": "tests/security-test-processor.js",
+          "complexity": 17,
+          "linesOfCode": 114,
+          "maintainabilityIndex": 43.28392003872928
+        },
+        {
+          "filePath": "tests/setup.js",
+          "complexity": 1,
+          "linesOfCode": 35,
+          "maintainabilityIndex": 80.7946882639815
+        },
+        {
+          "filePath": "tests/validation/SecurityValidator.test.js",
+          "complexity": 1,
+          "linesOfCode": 611,
+          "maintainabilityIndex": 66.12091454947755
+        }
+      ],
+      "averageComplexity": 42.770270270270274,
+      "maxComplexity": 231,
+      "filesOverThreshold": 57
+    },
+    "duplicates": {
+      "duplicateBlocks": 56,
+      "duplicatePercentage": 2.5208671783093384,
+      "duplicates": [
+        {
+          "original": {
+            "file": "src/backlog/discovery.js",
+            "function": "testOutput",
+            "code": "const testOutput = execSync('npm test 2>&1 || true', { encoding: 'utf8' }"
+          },
+          "duplicate": {
+            "file": "src/backlog/metrics.js",
+            "function": "testOutput",
+            "code": "const testOutput = execSync('npm test 2>&1 || true', { encoding: 'utf8' }"
+          }
+        },
+        {
+          "original": {
+            "file": "src/backlog/executor.js",
+            "function": "status",
+            "code": "const status = execSync('git status --porcelain', { encoding: 'utf8' }"
+          },
+          "duplicate": {
+            "file": "src/backlog/metrics.js",
+            "function": "status",
+            "code": "const status = execSync('git log --oneline -10', { encoding: 'utf8' }"
+          }
+        },
+        {
+          "original": {
+            "file": "src/backlog/metrics.js",
+            "function": "prs",
+            "code": "const prs = execSync('gh pr list --json number', { encoding: 'utf8' }"
+          },
+          "duplicate": {
+            "file": "src/backlog/metrics.js",
+            "function": "prs",
+            "code": "const prs = execSync('gh pr list --state merged --limit 10 --json createdAt,mergedAt', { encoding: 'utf8' }"
+          }
+        },
+        {
+          "original": {
+            "file": "src/backlog/metrics.js",
+            "function": "incidents",
+            "code": "const incidents = execSync('gh issue list --label \"type:incident\" --state closed --limit 50 --json number', { encoding: 'utf8' }"
+          },
+          "duplicate": {
+            "file": "src/backlog/metrics.js",
+            "function": "incidents",
+            "code": "const incidents = execSync('gh issue list --label \"type:incident\" --state closed --limit 10 --json createdAt,closedAt', { encoding: 'utf8' }"
+          }
+        },
+        {
+          "original": {
+            "file": "src/backlog/security.js",
+            "function": "files",
+            "code": "const files = this.findJavaScriptFiles();\n    \n    for (const file of files) {\n      try {\n        const content = fs.readFileSync(file, 'utf8');\n        \n        // Look for SQL query patterns without parameterization\n        const sqlPatterns = [\n          /\\.query\\s*\\(\\s*['\"`][^'\"`]*\\$\\{[^}]*\\}[^'\"`]*['\"`]/g,\n          /\\.query\\s*\\(\\s*['\"`][^'\"`]*\\+[^'\"`]*['\"`]/g,\n          /SELECT.*FROM.*WHERE.*\\$\\{/gi,\n          /INSERT.*INTO.*VALUES.*\\$\\{/gi\n        ];\n        \n        sqlPatterns.forEach(pattern => {\n          const matches = content.match(pattern);\n          if (matches) {\n            vulnerabilities.push({\n              type: 'sql_injection',\n              file,\n              description: 'Potential SQL injection vulnerability detected',\n              severity: 'high',\n              pattern: pattern.toString()\n            });\n          }\n        });\n      } catch (error) {\n        // Skip files that can't be read\n      }\n    }\n    \n    return vulnerabilities;\n  }"
+          },
+          "duplicate": {
+            "file": "src/backlog/security.js",
+            "function": "files",
+            "code": "const files = this.findJavaScriptFiles();\n    \n    for (const file of files) {\n      try {\n        const content = fs.readFileSync(file, 'utf8');\n        \n        // Look for request handlers without validation\n        if (content.includes('req.body') || content.includes('req.params') || content.includes('req.query')) {\n          if (!content.includes('validate') && !content.includes('Joi') && !content.includes('ajv')) {\n            vulnerabilities.push({\n              type: 'missing_validation',\n              file,\n              description: 'Request handler missing input validation',\n              severity: 'medium'\n            });\n          }\n        }\n      } catch (error) {\n        // Skip files that can't be read\n      }\n    }"
+          }
+        },
+        {
+          "original": {
+            "file": "src/backlog/security.js",
+            "function": "content",
+            "code": "const content = fs.readFileSync(file, 'utf8');\n        \n        // Look for SQL query patterns without parameterization\n        const sqlPatterns = [\n          /\\.query\\s*\\(\\s*['\"`][^'\"`]*\\$\\{[^}"
+          },
+          "duplicate": {
+            "file": "src/backlog/security.js",
+            "function": "content",
+            "code": "const content = fs.readFileSync(file, 'utf8');\n        \n        // Look for request handlers without validation\n        if (content.includes('req.body') || content.includes('req.params') || content.includes('req.query')) {\n          if (!content.includes('validate') && !content.includes('Joi') && !content.includes('ajv')) {\n            vulnerabilities.push({\n              type: 'missing_validation',\n              file,\n              description: 'Request handler missing input validation',\n              severity: 'medium'\n            });\n          }\n        }"
+          }
+        },
+        {
+          "original": {
+            "file": "src/backlog/security.js",
+            "function": "matches",
+            "code": "const matches = content.match(pattern);\n          if (matches) {\n            vulnerabilities.push({\n              type: 'sql_injection',\n              file,\n              description: 'Potential SQL injection vulnerability detected',\n              severity: 'high',\n              pattern: pattern.toString()\n            });\n          }"
+          },
+          "duplicate": {
+            "file": "src/backlog/security.js",
+            "function": "matches",
+            "code": "const matches = content.match(pattern);\n          if (matches) {\n            vulnerabilities.push({\n              type: 'hardcoded_secret',\n              file,\n              description: 'Potential hardcoded secret detected',\n              severity: 'high',\n              pattern: pattern.toString()\n            });\n          }"
+          }
+        },
+        {
+          "original": {
+            "file": "src/backlog/metrics.js",
+            "function": "auditOutput",
+            "code": "const auditOutput = execSync('npm audit --json 2>/dev/null || echo \"{}"
+          },
+          "duplicate": {
+            "file": "src/backlog/security.js",
+            "function": "auditOutput",
+            "code": "const auditOutput = execSync('npm audit --json 2>/dev/null || echo \"{}"
+          }
+        },
+        {
+          "original": {
+            "file": "src/backlog/security.js",
+            "function": "criticalCount",
+            "code": "const criticalCount = audit.metadata?.vulnerabilities?.critical || 0;\n      const highCount = audit.metadata?.vulnerabilities?.high || 0;\n      \n      if (criticalCount > 0 || highCount > 0) {\n        console.warn(`⚠️  Found ${criticalCount} critical and ${highCount} high severity vulnerabilities`);\n        return false;\n      }"
+          },
+          "duplicate": {
+            "file": "src/backlog/security.js",
+            "function": "criticalCount",
+            "code": "const criticalCount = audit.metadata?.vulnerabilities?.critical || 0;\n        const highCount = audit.metadata?.vulnerabilities?.high || 0;\n        \n        if (criticalCount > 0 || highCount > 0) {\n          console.warn(`⚠️  Found ${criticalCount} critical and ${highCount} high severity vulnerabilities`);\n          return false;\n        }"
+          }
+        },
+        {
+          "original": {
+            "file": "src/backlog/security.js",
+            "function": "highCount",
+            "code": "const highCount = audit.metadata?.vulnerabilities?.high || 0;\n      \n      if (criticalCount > 0 || highCount > 0) {\n        console.warn(`⚠️  Found ${criticalCount} critical and ${highCount} high severity vulnerabilities`);\n        return false;\n      }"
+          },
+          "duplicate": {
+            "file": "src/backlog/security.js",
+            "function": "highCount",
+            "code": "const highCount = audit.metadata?.vulnerabilities?.high || 0;\n        \n        if (criticalCount > 0 || highCount > 0) {\n          console.warn(`⚠️  Found ${criticalCount} critical and ${highCount} high severity vulnerabilities`);\n          return false;\n        }"
+          }
+        }
+      ],
+      "threshold": 5,
+      "passing": true
+    },
+    "linting": {
+      "error": "Failed to parse ESLint output"
+    },
+    "codeSize": {
+      "totalFiles": 74,
+      "totalLines": 35702,
+      "totalCodeLines": 25526,
+      "totalCommentLines": 4623,
+      "totalBlankLines": 5553,
+      "averageFileSize": 482.4594594594595,
+      "largestFiles": [
+        {
+          "filePath": "src/performance/CacheManager.js",
+          "totalLines": 1115,
+          "codeLines": 740,
+          "commentLines": 192,
+          "blankLines": 183
+        },
+        {
+          "filePath": "src/validation/SecurityValidator.js",
+          "totalLines": 1096,
+          "codeLines": 736,
+          "commentLines": 183,
+          "blankLines": 177
+        },
+        {
+          "filePath": "src/performance/LoadBalancer.js",
+          "totalLines": 963,
+          "codeLines": 640,
+          "commentLines": 158,
+          "blankLines": 165
+        },
+        {
+          "filePath": "src/quantum/TaskPlanner.js",
+          "totalLines": 948,
+          "codeLines": 682,
+          "commentLines": 110,
+          "blankLines": 156
+        },
+        {
+          "filePath": "src/security/QuantumSecurityManager.js",
+          "totalLines": 946,
+          "codeLines": 676,
+          "commentLines": 114,
+          "blankLines": 156
+        },
+        {
+          "filePath": "src/observability/ObservabilityManager.js",
+          "totalLines": 915,
+          "codeLines": 672,
+          "commentLines": 103,
+          "blankLines": 140
+        },
+        {
+          "filePath": "src/quantum/AutoExecutor.js",
+          "totalLines": 813,
+          "codeLines": 584,
+          "commentLines": 104,
+          "blankLines": 125
+        },
+        {
+          "filePath": "src/resilience/RetryHandler.js",
+          "totalLines": 795,
+          "codeLines": 521,
+          "commentLines": 146,
+          "blankLines": 128
+        },
+        {
+          "filePath": "src/resilience/CircuitBreaker.js",
+          "totalLines": 785,
+          "codeLines": 512,
+          "commentLines": 136,
+          "blankLines": 137
+        },
+        {
+          "filePath": "src/lambda/remediation-generator.js",
+          "totalLines": 784,
+          "codeLines": 573,
+          "commentLines": 106,
+          "blankLines": 105
+        }
+      ],
+      "fileDistribution": {
+        "small": 6,
+        "medium": 12,
+        "large": 24,
+        "xlarge": 32
+      }
+    },
+    "documentation": {
+      "totalFunctions": 1881,
+      "documentedFunctions": 405,
+      "documentationCoverage": 21.5311004784689,
+      "readmeExists": true,
+      "docsDirectory": true,
+      "apiDocumentation": true
+    },
+    "dependencies": {
+      "productionDependencies": 4,
+      "developmentDependencies": 15,
+      "totalDependencies": 19,
+      "dependencyRatio": 0.26666666666666666
+    },
+    "technical_debt": {
+      "totalDebt": 299.23444976076553,
+      "debtLevel": "critical",
+      "factors": [
+        {
+          "factor": "complexity",
+          "debt": 285,
+          "description": "57 files exceed complexity threshold"
+        },
+        {
+          "factor": "documentation",
+          "debt": 14.23444976076555,
+          "description": "Documentation coverage is 28.5% below target"
+        }
+      ]
+    }
+  },
+  "overallScore": null
+}
