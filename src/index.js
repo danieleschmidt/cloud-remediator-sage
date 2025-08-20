@@ -12,6 +12,8 @@ const QuantumSelfHealer = require('./quantum/QuantumSelfHealer');
 const AIExecutionOptimizer = require('./quantum/AIExecutionOptimizer');
 const AdvancedThreatDetector = require('./security/AdvancedThreatDetector');
 const AdvancedErrorHandler = require('./reliability/AdvancedErrorHandler');
+const SecurityHardening = require('./security/SecurityHardening');
+const AdvancedHealthMonitor = require('./monitoring/AdvancedHealthMonitor');
 const QuantumAutoScaler = require('./scaling/QuantumAutoScaler');
 const DistributedProcessingEngine = require('./distributed/DistributedProcessingEngine');
 const ResilienceManager = require('./reliability/ResilienceManager');
@@ -46,6 +48,8 @@ class CloudRemediatorSage {
     this.errorHandler = new AdvancedErrorHandler();
     this.autoScaler = new QuantumAutoScaler();
     this.distributedEngine = new DistributedProcessingEngine();
+    this.securityHardening = new SecurityHardening();
+    this.advancedHealthMonitor = new AdvancedHealthMonitor();
     this.i18n = i18nManager;
     
     this.initialized = false;
@@ -129,6 +133,14 @@ class CloudRemediatorSage {
       // Initialize distributed processing engine
       await this.distributedEngine.initialize();
       this.logger.info('Distributed processing engine initialized');
+
+      // Initialize security hardening
+      await this.securityHardening.initialize();
+      this.logger.info('Security hardening initialized');
+
+      // Initialize advanced health monitoring
+      await this.advancedHealthMonitor.initialize();
+      this.logger.info('Advanced health monitoring initialized');
 
       this.initialized = true;
       this.logger.info('Cloud Remediator Sage platform initialized successfully');
@@ -312,6 +324,8 @@ class CloudRemediatorSage {
           errorHandler: await this.checkServiceHealth(() => this.errorHandler.getErrorHandlingStatus()),
           autoScaler: await this.checkServiceHealth(() => this.autoScaler.getScalingStatus()),
           distributedEngine: await this.checkServiceHealth(() => this.distributedEngine.getDistributedSystemStatus()),
+          securityHardening: await this.checkServiceHealth(() => this.securityHardening.getSecurityStatus()),
+          advancedHealthMonitor: await this.checkServiceHealth(() => this.advancedHealthMonitor.getHealthStatus()),
           i18n: { status: 'healthy' }
         }
       };
@@ -361,6 +375,10 @@ class CloudRemediatorSage {
       
       if (this.resilienceManager) {
         await this.resilienceManager.shutdown();
+      }
+      
+      if (this.advancedHealthMonitor) {
+        await this.advancedHealthMonitor.stopMonitoring();
       }
       
       this.initialized = false;

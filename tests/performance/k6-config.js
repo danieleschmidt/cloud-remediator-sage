@@ -97,7 +97,7 @@ export function setup() {
 
 // Main test function
 export default function(data) {
-  const baseUrl = (typeof __ENV !== 'undefined' ? __ENV.API_BASE_URL : null) || 'http://localhost:3000';
+  const baseUrl = (typeof __ENV !== 'undefined' && __ENV ? __ENV.API_BASE_URL : null) || 'http://localhost:3000';
   
   // Test 1: Security scan performance
   testSecurityScan(baseUrl, data);

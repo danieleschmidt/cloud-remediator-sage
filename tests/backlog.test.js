@@ -393,7 +393,12 @@ describe('Autonomous Backlog Management System', () => {
     test('should handle errors gracefully in discovery', async () => {
       const discovery = new BacklogDiscovery();
 
-      // Mock file system errors
+      // Mock file system errors for non-test environment
+      const originalEnv = process.env.NODE_ENV;
+      const originalJest = process.env.JEST_WORKER_ID;
+      delete process.env.NODE_ENV;
+      delete process.env.JEST_WORKER_ID;
+
       fs.existsSync.mockImplementation(() => {
         throw new Error('File system error');
       });
@@ -401,6 +406,10 @@ describe('Autonomous Backlog Management System', () => {
       const items = await discovery.discoverAll();
       
       expect(items).toEqual([]); // Should return empty array on error
+
+      // Restore environment
+      if (originalEnv) process.env.NODE_ENV = originalEnv;
+      if (originalJest) process.env.JEST_WORKER_ID = originalJest;
     });
   });
 });

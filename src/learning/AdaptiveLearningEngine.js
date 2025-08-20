@@ -863,9 +863,10 @@ class AdaptiveLearningEngine extends EventEmitter {
 
   extractFeatureValue(data, feature) {
     switch (feature) {
-      case 'severity':
+      case 'severity': {
         const severityMap = { low: 1, medium: 2, high: 3, critical: 4 };
         return severityMap[data.severity] || 0;
+      }
       case 'responseTime':
         return data.responseTime || 0;
       default:

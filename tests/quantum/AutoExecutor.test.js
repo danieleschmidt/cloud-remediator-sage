@@ -310,15 +310,17 @@ describe('QuantumAutoExecutor', () => {
       riskReduction: 5.5
     };
 
-    const mockResults = {
-      tasksExecuted: 0,
-      tasksSucceeded: 0,
-      tasksFailed: 0,
-      totalRiskReduction: 0,
-      executionDetails: []
-    };
+    let mockResults;
 
     beforeEach(() => {
+      mockResults = {
+        tasksExecuted: 0,
+        tasksSucceeded: 0,
+        tasksFailed: 0,
+        totalRiskReduction: 0,
+        executionDetails: []
+      };
+      
       mockNeptuneService.queryFindings.mockResolvedValue([{
         id: 'finding-1',
         resource: { arn: 'arn:aws:s3:::test-bucket' }

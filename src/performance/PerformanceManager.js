@@ -124,9 +124,13 @@ class PerformanceManager extends EventEmitter {
       await this.cacheManager.initialize();
       this.logger.info('Cache manager initialized');
 
-      // Initialize load balancer
-      await this.loadBalancer.initialize();
-      this.logger.info('Load balancer initialized');
+      // Initialize load balancer if it has initialize method
+      if (this.loadBalancer && typeof this.loadBalancer.initialize === 'function') {
+        await this.loadBalancer.initialize();
+        this.logger.info('Load balancer initialized');
+      } else {
+        this.logger.info('Load balancer initialization skipped (no initialize method)');
+      }
 
       // Initialize performance optimizer
       await this.optimizer.initialize();
@@ -559,9 +563,15 @@ class PerformanceManager extends EventEmitter {
       this.stopPerformanceMonitoring();
 
       // Shutdown components
-      await this.cacheManager.shutdown();
-      await this.loadBalancer.shutdown();
-      await this.optimizer.shutdown();
+      if (this.cacheManager && typeof this.cacheManager.shutdown === 'function') {
+        await this.cacheManager.shutdown();
+      }
+      if (this.loadBalancer && typeof this.loadBalancer.shutdown === 'function') {
+        await this.loadBalancer.shutdown();
+      }
+      if (this.optimizer && typeof this.optimizer.shutdown === 'function') {
+        await this.optimizer.shutdown();
+      }
 
       this.logger.info('Performance Manager shutdown complete');
 
