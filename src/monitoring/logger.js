@@ -3,7 +3,7 @@
  * Provides correlation IDs, structured output, and security-focused logging
  */
 
-const { v4: uuidv4 } = require('crypto');
+const crypto = require('crypto');
 
 class StructuredLogger {
     constructor(options = {}) {
@@ -17,7 +17,7 @@ class StructuredLogger {
      * Create a correlation ID for request tracking
      */
     createCorrelationId() {
-        return uuidv4();
+        return crypto.randomUUID();
     }
 
     /**
