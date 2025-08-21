@@ -1,10 +1,10 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.4",
-  "serialNumber": "urn:uuid:0befce48-1ce9-4351-af88-cbd7d8d97ba4",
+  "serialNumber": "urn:uuid:a27620fe-fdb9-4401-a905-f0e0b9ea3942",
   "version": 1,
   "metadata": {
-    "timestamp": "2025-08-20T13:24:31.882Z",
+    "timestamp": "2025-08-21T05:21:51.721Z",
     "tools": [
       {
         "vendor": "Terragon Labs",
@@ -43,7 +43,7 @@
       },
       {
         "name": "cdx:build:timestamp",
-        "value": "2025-08-20T13:24:32.012Z"
+        "value": "2025-08-21T05:21:51.848Z"
       },
       {
         "name": "cdx:build:version",
@@ -726,7 +726,7 @@
   ],
   "signature": {
     "algorithm": "SHA-256",
-    "value": "5d612a34a2baf4352110604fcc39e45357529e147ba68cf37ec31b75a354afdb",
-    "timestamp": "2025-08-20T13:24:32.012Z"
+    "value": "17a258018e27c567a44f9875ad5c79cfeb51d1467a2e62d16b5124021910d7d2",
+    "timestamp": "2025-08-21T05:21:51.848Z"
   }
 }

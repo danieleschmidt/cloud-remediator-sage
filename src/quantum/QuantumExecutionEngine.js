@@ -475,7 +475,7 @@ class QuantumExecutionEngine extends EventEmitter {
    */
   measureQuantumExecution(result, startTime) {
     const executionTime = Date.now() - startTime;
-    const quantumEfficiency = this.calculateQuantumEfficiency(result);
+    const quantumEfficiency = this.calculateQuantumEfficiency(result, executionTime);
     
     return {
       ...result,
@@ -494,11 +494,11 @@ class QuantumExecutionEngine extends EventEmitter {
   /**
    * Calculate quantum efficiency metrics
    */
-  calculateQuantumEfficiency(result) {
+  calculateQuantumEfficiency(result, executionTime = 0) {
     const successRate = result.success ? 1 : 0;
-    const resourceEfficiency = 1 - (result.resourceUsage || 0.5);
+    const resourceEfficiency = 1 - (result.resourceUsage || 0.3);
     const timeEfficiency = result.expectedTime ? 
-      Math.max(0, 1 - (result.executionTime / result.expectedTime)) : 0.5;
+      Math.max(0, 1 - (executionTime / result.expectedTime)) : 0.7;
     
     return (successRate * 0.4) + (resourceEfficiency * 0.3) + (timeEfficiency * 0.3);
   }

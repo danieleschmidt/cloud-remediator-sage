@@ -12,6 +12,8 @@ const QuantumSelfHealer = require('./quantum/QuantumSelfHealer');
 const AIExecutionOptimizer = require('./quantum/AIExecutionOptimizer');
 const AdvancedThreatDetector = require('./security/AdvancedThreatDetector');
 const AdvancedErrorHandler = require('./reliability/AdvancedErrorHandler');
+const AdvancedErrorRecovery = require('./reliability/AdvancedErrorRecovery');
+const AdvancedInputValidator = require('./security/AdvancedInputValidator');
 const SecurityHardening = require('./security/SecurityHardening');
 const AdvancedHealthMonitor = require('./monitoring/AdvancedHealthMonitor');
 const QuantumAutoScaler = require('./scaling/QuantumAutoScaler');
@@ -19,6 +21,8 @@ const DistributedProcessingEngine = require('./distributed/DistributedProcessing
 const ResilienceManager = require('./reliability/ResilienceManager');
 const PerformanceManager = require('./performance/PerformanceManager');
 const QuantumOptimizer = require('./performance/QuantumOptimizer');
+const QuantumConcurrencyManager = require('./performance/QuantumConcurrencyManager');
+const QuantumCacheManager = require('./performance/QuantumCacheManager');
 const i18nManager = require('./i18n');
 
 // Initialize global logger
@@ -37,6 +41,8 @@ class CloudRemediatorSage {
     this.logger = logger;
     this.performanceManager = new PerformanceManager();
     this.quantumOptimizer = new QuantumOptimizer();
+    this.concurrencyManager = new QuantumConcurrencyManager();
+    this.cacheManager = new QuantumCacheManager();
     this.resilienceManager = new ResilienceManager();
     this.neptuneService = new NeptuneService();
     this.securityService = new SecurityAnalysisService();
@@ -46,6 +52,8 @@ class CloudRemediatorSage {
     this.aiOptimizer = new AIExecutionOptimizer();
     this.threatDetector = new AdvancedThreatDetector();
     this.errorHandler = new AdvancedErrorHandler();
+    this.errorRecovery = new AdvancedErrorRecovery();
+    this.inputValidator = new AdvancedInputValidator();
     this.autoScaler = new QuantumAutoScaler();
     this.distributedEngine = new DistributedProcessingEngine();
     this.securityHardening = new SecurityHardening();
@@ -161,13 +169,46 @@ class CloudRemediatorSage {
       await this.initialize();
     }
 
+    // Advanced input validation and sanitization
+    const findingValidation = await this.inputValidator.validateInput(rawFinding, {
+      type: 'object',
+      required: true,
+      properties: {
+        id: { type: 'string', maxLength: 100 },
+        severity: { type: 'string', pattern: /^(CRITICAL|HIGH|MEDIUM|LOW)$/i },
+        resource: { type: 'string', maxLength: 500 },
+        category: { type: 'string', maxLength: 100 },
+        title: { type: 'string', maxLength: 200 },
+        description: { type: 'string', maxLength: 1000 }
+      }
+    });
+
+    if (!findingValidation.isValid) {
+      throw new Error(`Invalid finding input: ${findingValidation.violations.join(', ')}`);
+    }
+
+    const sourceValidation = await this.inputValidator.validateInput(source, {
+      type: 'string',
+      maxLength: 50,
+      allowedChars: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.'
+    });
+
+    const sanitizedSource = sourceValidation.sanitizedInput || 'unknown';
+    const validatedFinding = findingValidation.sanitizedInput;
+    
     try {
       // Advanced threat detection on incoming findings
-      const threatAnalysis = await this.threatDetector.analyzeThreat({
-        type: 'finding-ingestion',
-        source: source,
-        data: rawFinding
-      }, { component: 'finding-processor' });
+      const threatAnalysis = await this.performanceManager.executeWithPerformance(
+        () => this.resilienceManager.executeWithResilience(
+          () => this.threatDetector.analyzeThreat({
+            type: 'finding-ingestion',
+            source: sanitizedSource,
+            data: validatedFinding
+          }, { component: 'finding-processor' }),
+          { serviceName: 'threat-detector', useRetry: true, maxRetries: 2 }
+        ),
+        { operationName: 'threat-analysis', useOptimizer: true }
+      );
 
       // If high threat detected, handle with enhanced security
       if (threatAnalysis.riskScore >= 0.7) {
@@ -178,7 +219,13 @@ class CloudRemediatorSage {
         });
       }
 
-      const finding = await this.securityService.processFinding(rawFinding, source);
+      const finding = await this.performanceManager.executeWithPerformance(
+        () => this.resilienceManager.executeWithResilience(
+          () => this.securityService.processFinding(validatedFinding, sanitizedSource),
+          { serviceName: 'security-service', useRetry: true, maxRetries: 3, useCircuitBreaker: true }
+        ),
+        { operationName: 'security-processing', useOptimizer: true, cacheKey: `finding-${validatedFinding.id}` }
+      );
       
       this.logger.info('Finding processed successfully', {
         findingId: finding.id,
@@ -190,7 +237,7 @@ class CloudRemediatorSage {
 
       return finding;
     } catch (error) {
-      // Enhanced error handling
+      // Enhanced error handling with intelligent recovery
       const errorRecord = await this.errorHandler.handleError(error, {
         operation: 'processFinding',
         component: 'finding-processor',
@@ -198,9 +245,21 @@ class CloudRemediatorSage {
         rawFinding: JSON.stringify(rawFinding).substring(0, 200)
       });
 
+      // Attempt intelligent error recovery
+      const recoveryResult = await this.errorRecovery.attemptRecovery(error, {
+        operation: 'processFinding',
+        source: sanitizedSource,
+        attempt: (errorRecord.attempt || 0) + 1,
+        service: this.securityService
+      });
+
       // If error was recovered, try again
-      if (errorRecord.recovered) {
-        this.logger.info('Retrying after error recovery', { errorId: errorRecord.id });
+      if (recoveryResult.recovered) {
+        this.logger.info('Retrying after intelligent error recovery', { 
+          errorId: errorRecord.id,
+          strategy: recoveryResult.strategy,
+          attempt: recoveryResult.attempt 
+        });
         return await this.processFinding(rawFinding, source);
       }
 
@@ -276,6 +335,108 @@ class CloudRemediatorSage {
   }
 
   /**
+   * Process multiple findings concurrently with quantum optimization
+   */
+  async processFindingsConcurrent(rawFindings, options = {}) {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+
+    this.logger.info('Starting concurrent findings processing', {
+      findingCount: rawFindings.length,
+      options
+    });
+
+    // Create tasks for concurrent execution
+    const tasks = rawFindings.map((finding, index) => ({
+      id: `finding-processing-${index}`,
+      execute: () => this.processFinding(finding, options.source || 'batch'),
+      priority: this.determineFindingPriority(finding),
+      estimatedTime: this.estimateProcessingTime(finding),
+      resourceRequirements: { cpu: 0.2, memory: 0.1 },
+      retryable: true,
+      timeout: options.taskTimeout || 30000,
+      metadata: { findingIndex: index, findingId: finding.id }
+    }));
+
+    try {
+      // Execute with quantum concurrency optimization
+      const concurrencyResult = await this.concurrencyManager.executeQuantumConcurrent(tasks, {
+        maxConcurrentTasks: options.maxConcurrentTasks || 5,
+        quantumOptimization: options.quantumOptimization !== false,
+        adaptiveThrottling: options.adaptiveThrottling !== false
+      });
+
+      const processedFindings = concurrencyResult.results
+        .filter(result => result.success)
+        .map(result => result.result);
+
+      const failedFindings = concurrencyResult.failures
+        .map(failure => ({
+          finding: rawFindings[failure.task.metadata.findingIndex],
+          error: failure.error
+        }));
+
+      this.logger.info('Concurrent findings processing completed', {
+        totalFindings: rawFindings.length,
+        processedSuccessfully: processedFindings.length,
+        failed: failedFindings.length,
+        executionTime: concurrencyResult.executionTime,
+        coherence: concurrencyResult.metrics.coherence,
+        efficiency: concurrencyResult.metrics.efficiency
+      });
+
+      return {
+        processedFindings,
+        failedFindings,
+        metrics: concurrencyResult.metrics,
+        executionTime: concurrencyResult.executionTime,
+        concurrencyStats: this.concurrencyManager.getStatus()
+      };
+
+    } catch (error) {
+      this.logger.error('Concurrent findings processing failed', { error: error.message });
+      throw error;
+    }
+  }
+
+  /**
+   * Determine finding processing priority based on severity and risk
+   */
+  determineFindingPriority(finding) {
+    if (!finding || !finding.severity) return 'normal-priority';
+    
+    const severity = finding.severity.toUpperCase();
+    switch (severity) {
+      case 'CRITICAL': return 'high-priority';
+      case 'HIGH': return 'high-priority';
+      case 'MEDIUM': return 'normal-priority';
+      case 'LOW': return 'low-priority';
+      default: return 'normal-priority';
+    }
+  }
+
+  /**
+   * Estimate processing time for a finding
+   */
+  estimateProcessingTime(finding) {
+    const baseTimes = {
+      CRITICAL: 5000,
+      HIGH: 3000,
+      MEDIUM: 2000,
+      LOW: 1000
+    };
+    
+    const severity = finding?.severity?.toUpperCase() || 'MEDIUM';
+    const baseTime = baseTimes[severity] || 2000;
+    
+    // Add complexity factors
+    const complexityFactor = finding?.description?.length > 500 ? 1.5 : 1.0;
+    
+    return Math.floor(baseTime * complexityFactor);
+  }
+
+  /**
    * Get comprehensive system health status
    */
   async getHealthStatus() {
@@ -312,8 +473,18 @@ class CloudRemediatorSage {
             cacheStats: performanceReport.cacheStats
           }
         },
+        security: {
+          threatDetectorStatus: await this.checkServiceHealth(() => this.threatDetector.getDetectionStatus()),
+          securityHardeningStatus: await this.checkServiceHealth(() => this.securityHardening.getSecurityStatus()),
+          inputValidationMetrics: this.inputValidator.getValidationMetrics(),
+          errorRecoveryStatus: this.errorRecovery.getRecoveryStatus(),
+          lastThreatScan: new Date().toISOString(),
+          securityLevel: 'high',
+          activeThreats: 0
+        },
         services: {
           performanceManager: { status: 'healthy', metrics: performanceMetrics },
+          concurrencyManager: { status: 'healthy', ...this.concurrencyManager.getStatus() },
           resilienceManager: { status: 'healthy' },
           neptuneService: await this.checkServiceHealth(() => this.neptuneService.healthCheck()),
           taskPlanner: await this.checkServiceHealth(() => this.taskPlanner.healthCheck?.() || { status: 'healthy' }),
@@ -368,6 +539,10 @@ class CloudRemediatorSage {
     try {
       // Shutdown services in reverse order of initialization
       await this.neptuneService.disconnect();
+      
+      if (this.concurrencyManager) {
+        await this.concurrencyManager.shutdown();
+      }
       
       if (this.performanceManager) {
         await this.performanceManager.shutdown();

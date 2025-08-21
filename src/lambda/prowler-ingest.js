@@ -9,7 +9,20 @@ const AWS = process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID
       S3: class MockS3 {
         getObject(params) {
           return {
-            promise: () => Promise.resolve({ Body: JSON.stringify({ findings: [] }) })
+            promise: () => Promise.resolve({ 
+              Body: JSON.stringify({ 
+                findings: [
+                  {
+                    id: 'test-finding-1',
+                    severity: 'HIGH',
+                    resource: 'arn:aws:s3:::test-bucket',
+                    category: 'data_protection',
+                    title: 'Test security finding',
+                    description: 'Mock finding for testing'
+                  }
+                ]
+              }) 
+            })
           };
         }
       },
@@ -27,7 +40,7 @@ const SecurityAnalysisService = require('../services/SecurityAnalysisService');
 const NeptuneService = require('../services/NeptuneService');
 const { StructuredLogger } = require('../monitoring/logger');
 const { ErrorHandler } = require('../utils/errorHandler');
-const { CircuitBreaker } = require('../resilience/CircuitBreaker');
+const CircuitBreaker = require('../resilience/CircuitBreaker');
 
 const s3 = new AWS.S3();
 const sqs = new AWS.SQS();
@@ -100,6 +113,10 @@ exports.handler = errorHandler.createLambdaMiddleware()(async (event, context, c
     body: JSON.stringify({
       message: 'Prowler findings processed successfully',
       correlationId,
+      processedFindings: results.processed,
+      errors: results.errors,
+      findings: results.findings,
+      skipped: results.skipped,
       results,
       timestamp: new Date().toISOString()
     })

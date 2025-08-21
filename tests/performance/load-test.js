@@ -105,7 +105,7 @@ export const options = {
 };
 
 export default function () {
-  const baseUrl = (typeof __ENV !== 'undefined' && __ENV ? __ENV.API_BASE_URL : null) || 'http://localhost:3000';
+  const baseUrl = (typeof __ENV !== 'undefined' && __ENV ? __ENV.API_BASE_URL : null) || 'http://localhost:3000'; // eslint-disable-line no-undef
   
   // Select random test data
   const randomItem = testData[Math.floor(Math.random() * testData.length)];
@@ -113,7 +113,7 @@ export default function () {
   const batch = testData.slice(0, batchSize);
   
   // Test different load scenarios
-  const iterValue = (typeof __ITER !== 'undefined' && __ITER !== null ? __ITER : Math.floor(Math.random() * 100));
+  const iterValue = (typeof __ITER !== 'undefined' && __ITER !== null ? __ITER : Math.floor(Math.random() * 100)); // eslint-disable-line no-undef
   if (iterValue % 4 === 0) {
     testSingleItemProcessing(baseUrl, randomItem);
   } else if (iterValue % 4 === 1) {
@@ -242,7 +242,7 @@ function simulateBacklogProcessing(item) {
   return true;
 }
 
-function simulateSecurityAnalysis(item) {
+function simulateSecurityAnalysis() { // eslint-disable-line no-unused-vars
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({
