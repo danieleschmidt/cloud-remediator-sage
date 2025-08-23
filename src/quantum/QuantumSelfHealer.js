@@ -126,7 +126,12 @@ class QuantumSelfHealer extends EventEmitter {
       // Self-heal the healer if possible
       await this.emergencyAdaptation(error);
       
-      throw error;
+      return {
+        success: false,
+        duration: 0,
+        error: error.message,
+        healingId
+      };
     } finally {
       this.healingInProgress = false;
     }
@@ -175,6 +180,11 @@ class QuantumSelfHealer extends EventEmitter {
     const optimalStrategy = strategyEvaluations.reduce((best, current) => 
       current.expectedSuccess > best.expectedSuccess ? current : best
     );
+    
+    // Ensure we have a valid strategy
+    if (!optimalStrategy) {
+      return this.getFallbackStrategy();
+    }
     
     this.logger.info('Optimal healing strategy selected', {
       strategy: optimalStrategy.name,
@@ -232,6 +242,21 @@ class QuantumSelfHealer extends EventEmitter {
     strategies.push(...learnedStrategies);
     
     return strategies;
+  }
+
+  /**
+   * Get fallback strategy when no optimal strategy is found
+   */
+  getFallbackStrategy() {
+    return {
+      name: 'basic-restart',
+      type: 'fallback',
+      actions: ['reset-quantum-state'],
+      quantumProperties: { coherence: 0.5, entanglement: 0.1 },
+      confidence: 0.5,
+      allowPartialFailure: true,
+      expectedSuccess: 0.5
+    };
   }
 
   /**
