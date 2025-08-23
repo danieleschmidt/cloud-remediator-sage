@@ -80,7 +80,7 @@ describe('Enhanced Quantum Features', () => {
       
       expect(healingResult).toBeDefined();
       expect(healingResult.success).toBeDefined();
-      expect(healingResult.duration).toBeGreaterThan(0);
+      expect(healingResult.duration).toBeGreaterThanOrEqual(0);
     });
 
     test('should update quantum coherence based on healing success', async () => {

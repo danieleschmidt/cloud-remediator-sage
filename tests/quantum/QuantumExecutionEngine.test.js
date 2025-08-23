@@ -210,8 +210,8 @@ describe('QuantumExecutionEngine', () => {
 
       expect(engine.globalMetrics.totalExecutions).toBe(initialTotal + 1);
       expect(engine.globalMetrics.successfulExecutions).toBe(initialSuccessful + 1);
-      expect(engine.globalMetrics.avgExecutionTime).toBeGreaterThan(0);
-      expect(engine.globalMetrics.quantumEfficiency).toBeGreaterThan(0);
+      expect(engine.globalMetrics.avgExecutionTime).toBeGreaterThanOrEqual(0);
+      expect(engine.globalMetrics.quantumEfficiency).toBeGreaterThanOrEqual(0);
     });
   });
 

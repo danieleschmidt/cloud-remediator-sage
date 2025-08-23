@@ -52,7 +52,7 @@ class AdvancedInputValidator {
       /(cat|ls|ps|netstat|whoami|id|pwd)\s/gi,
       
       // Path traversal
-      /\.\.\/|\.\.\\|\.\.\%252f|\.\.\%255c/gi,
+      /\.\.\/|\.\.\\|\.\.%252f|\.\.%255c/gi,
       
       // LDAP injection
       /(\)|\(|&|\||!)/g,
