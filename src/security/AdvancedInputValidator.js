@@ -40,31 +40,65 @@ class AdvancedInputValidator {
       /javascript:/gi,
       /vbscript:/gi,
       /on\w+\s*=/gi,
+      /<iframe[^>]*>/gi,
+      /<object[^>]*>/gi,
+      /<embed[^>]*>/gi,
       
       // SQL injection patterns
-      /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|UNION|DECLARE)\b)/gi,
+      /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|UNION|DECLARE|TRUNCATE|GRANT|REVOKE)\b)/gi,
       /'(\s)*(OR|AND)\s*'.*?'/gi,
       /--(\s|$)/g,
       /\/\*.*?\*\//g,
+      /(\bOR\b|\bAND\b)\s*\d+\s*=\s*\d+/gi,
+      /\b(WAITFOR|DELAY)\b/gi,
       
       // Command injection patterns
-      /(\||&|;|`|\$\(|\${)/g,
-      /(cat|ls|ps|netstat|whoami|id|pwd)\s/gi,
+      /(\||&|;|`|\$\(|\${|%%)/g,
+      /(cat|ls|ps|netstat|whoami|id|pwd|curl|wget|nc|nslookup|dig)\s/gi,
+      /(rm|mv|cp|chmod|chown|kill|killall)\s/gi,
+      /(sudo|su|passwd|crontab)\s/gi,
       
-      // Path traversal
-      /\.\.\/|\.\.\\|\.\.%252f|\.\.%255c/gi,
+      // Path traversal and directory traversal
+      /\.\.\/|\.\.\\|\.\.%252f|\.\.%255c|%2e%2e%2f|%2e%2e%5c/gi,
+      /(\/etc\/passwd|\/etc\/shadow|\/proc\/|\/sys\/|\/dev\/)/gi,
+      /(\\windows\\|\\system32\\|\\boot\\.ini)/gi,
       
       // LDAP injection
-      /(\)|\(|&|\||!)/g,
+      /(\)|\(|&|\||!|\*|\+|=|<|>|~|%|\^)/g,
       
       // XPath injection
-      /\/\/|\[|\]|@/g,
+      /\/\/|\[|\]|@|\bor\b|\band\b/gi,
       
-      // Template injection
-      /\{\{.*?\}\}|\$\{.*?\}/g,
+      // Template injection (Server-Side Template Injection)
+      /\{\{.*?\}\}|\$\{.*?\}|<%.*?%>|\{%.*?%\}/g,
+      /\{\{.*?(config|self|request|session|g|url_for|get_flashed_messages).*?\}\}/gi,
       
-      // Protocol smuggling
-      /(ftp|file|gopher|dict|ldap|sftp):/gi
+      // NoSQL injection patterns
+      /\$where|\$ne|\$gt|\$lt|\$regex|\$or|\$and|\$not/gi,
+      
+      // XML injection and XXE patterns
+      /<!DOCTYPE[^>]*>/gi,
+      /<!ENTITY[^>]*>/gi,
+      /<!ELEMENT[^>]*>/gi,
+      /<!\[CDATA\[/gi,
+      
+      // Protocol smuggling and SSRF
+      /(ftp|file|gopher|dict|ldap|sftp|smb|telnet|tftp):/gi,
+      /(http|https):\/\/localhost|127\.0\.0\.1|0\.0\.0\.0|10\.|172\.|192\.168\./gi,
+      
+      // Log injection patterns
+      /\r|\n|%0d|%0a/gi,
+      
+      // Code execution patterns
+      /eval\s*\(|Function\s*\(|setTimeout\s*\(|setInterval\s*\(/gi,
+      /require\s*\(|import\s*\(|exec\s*\(/gi,
+      
+      // AWS/Cloud metadata patterns
+      /(169\.254\.169\.254|metadata\.google\.internal|100\.100\.100\.200)/gi,
+      
+      // Deserialization patterns
+      /rO0AB|aced00|java\.lang\.Runtime|ProcessBuilder/gi,
+      /__reduce__|pickle\.loads|yaml\.load|marshal\.loads/gi
     ];
   }
 
