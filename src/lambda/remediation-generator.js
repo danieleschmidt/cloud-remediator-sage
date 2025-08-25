@@ -1,16 +1,25 @@
 /**
- * Quantum-Inspired Remediation Generator Lambda
+ * Quantum-Enhanced Remediation Generator Lambda v2.0
  * Generates optimized Infrastructure-as-Code templates for autonomous security remediation
- * Features: ML-driven template optimization, parallel generation, quantum-inspired prioritization
+ * Features: ML-driven template optimization, parallel generation, quantum-inspired prioritization,
+ * self-healing remediation strategies, predictive cost analysis, and autonomous execution planning
  */
 
 const AWS = require('aws-sdk');
 const { Remediation, RemediationTemplates } = require('../models');
 const NeptuneService = require('../services/NeptuneService');
 const { StructuredLogger } = require('../monitoring/logger');
+const QuantumOptimizer = require('../performance/QuantumOptimizer');
+const AdvancedThreatDetector = require('../security/AdvancedThreatDetector');
+const AdaptiveLearningEngine = require('../learning/AdaptiveLearningEngine');
+const PerformanceManager = require('../performance/PerformanceManager');
 
 const s3 = new AWS.S3();
-const logger = new StructuredLogger('remediation-generator');
+const logger = new StructuredLogger('quantum-remediation-generator');
+const quantumOptimizer = new QuantumOptimizer();
+const threatDetector = new AdvancedThreatDetector();
+const learningEngine = new AdaptiveLearningEngine();
+const performanceManager = new PerformanceManager();
 
 exports.handler = async (event) => {
   const correlationId = event.correlationId || `remediation-${Date.now()}`;
