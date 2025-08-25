@@ -171,6 +171,11 @@ class QuantumSelfHealer extends EventEmitter {
   async selectOptimalStrategy(failurePattern) {
     const strategies = await this.generateHealingStrategies(failurePattern);
     
+    // Ensure we have at least one strategy
+    if (!strategies || strategies.length === 0) {
+      return this.getFallbackStrategy();
+    }
+    
     // Quantum superposition of strategies - evaluate multiple strategies simultaneously
     const strategyEvaluations = await Promise.all(
       strategies.map(strategy => this.evaluateStrategy(strategy, failurePattern))
@@ -182,7 +187,7 @@ class QuantumSelfHealer extends EventEmitter {
     );
     
     // Ensure we have a valid strategy
-    if (!optimalStrategy) {
+    if (!optimalStrategy || !optimalStrategy.actions) {
       return this.getFallbackStrategy();
     }
     
@@ -653,7 +658,18 @@ class QuantumSelfHealer extends EventEmitter {
     return commonChars / Math.max(sig1.length, sig2.length, 1);
   }
   
-  evaluateStrategy(strategy, pattern) { return { ...strategy, expectedSuccess: 0.7 + Math.random() * 0.2 }; }
+  evaluateStrategy(strategy, pattern) { 
+    // Ensure strategy has required properties and calculate success probability
+    const baseSuccess = strategy.confidence || 0.5;
+    const randomVariation = Math.random() * 0.3; // Add some randomness for testing
+    const expectedSuccess = Math.min(0.95, baseSuccess + randomVariation);
+    
+    return { 
+      ...strategy, 
+      expectedSuccess,
+      evaluatedAt: Date.now()
+    }; 
+  }
   getLearnedStrategies(pattern) { return []; }
   updateNeuralPatterns(data) {}
   updateStrategyEffectiveness(strategy, result) {}
