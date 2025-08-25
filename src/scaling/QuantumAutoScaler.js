@@ -48,10 +48,49 @@ class QuantumAutoScaler extends EventEmitter {
       ['compute', { current: 0, target: 0, max: 0 }],
       ['memory', { current: 0, target: 0, max: 0 }],
       ['storage', { current: 0, target: 0, max: 0 }],
-      ['network', { current: 0, target: 0, max: 0 }]
+      ['network', { current: 0, target: 0, max: 0 }],
+      ['database', { current: 0, target: 0, max: 0 }]
     ]);
     
-    this.geographicRegions = new Map();
+    // Advanced ML prediction models
+    this.mlModels = {
+      demandPredictor: {
+        weights: new Map(),
+        bias: 0,
+        learningRate: 0.01,
+        accuracy: 0.0,
+        trainingData: []
+      },
+      seasonalityDetector: {
+        patterns: new Map(),
+        cycles: ['hourly', 'daily', 'weekly', 'monthly'],
+        confidenceScores: new Map()
+      },
+      anomalyPredictor: {
+        baselines: new Map(),
+        deviationThresholds: new Map(),
+        alertHistory: []
+      },
+      costOptimizer: {
+        costModels: new Map(),
+        savingsHistory: [],
+        recommendations: new Map()
+      }
+    };
+    
+    // Geographic and multi-region scaling
+    this.geographicState = {
+      regions: new Map([
+        ['us-east-1', { weight: 0.4, latency: 20, cost: 1.0 }],
+        ['us-west-2', { weight: 0.3, latency: 25, cost: 1.1 }],
+        ['eu-west-1', { weight: 0.2, latency: 80, cost: 1.2 }],
+        ['ap-southeast-1', { weight: 0.1, latency: 150, cost: 0.9 }]
+      ]),
+      trafficDistribution: new Map(),
+      latencyRequirements: new Map(),
+      complianceZones: new Set(['eu-west-1']) // GDPR compliance
+    };
+    
     this.availabilityZones = new Map();
     
     // AI/ML components for predictive scaling
