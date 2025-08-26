@@ -10,18 +10,18 @@ const AWS = process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID
         getObject(params) {
           return {
             promise: () => Promise.resolve({ 
-              Body: JSON.stringify({ 
-                findings: [
-                  {
-                    id: 'test-finding-1',
-                    severity: 'HIGH',
-                    resource: 'arn:aws:s3:::test-bucket',
-                    category: 'data_protection',
-                    title: 'Test security finding',
-                    description: 'Mock finding for testing'
-                  }
-                ]
-              }) 
+              Body: JSON.stringify([
+                {
+                  CheckID: 's3_bucket_public_access_block',
+                  CheckTitle: 'S3 bucket public access block',
+                  Status: 'FAIL',
+                  Severity: 'HIGH',
+                  ResourceId: 'test-bucket',
+                  ResourceArn: 'arn:aws:s3:::test-bucket',
+                  Description: 'Test security finding for mock',
+                  Remediation: 'Configure bucket policy to restrict public access'
+                }
+              ]) 
             })
           };
         }
@@ -114,6 +114,7 @@ exports.handler = errorHandler.createLambdaMiddleware()(async (event, context, c
       message: 'Prowler findings processed successfully',
       correlationId,
       processedFindings: results.processed,
+      processed: results.processed,
       errors: results.errors,
       findings: results.findings,
       skipped: results.skipped,

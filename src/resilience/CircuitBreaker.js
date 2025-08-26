@@ -572,6 +572,27 @@ class QuantumCircuitBreaker extends EventEmitter {
     });
   }
 
+  /**
+   * Update predictive model for future failures
+   */
+  updatePredictiveModel() {
+    // Simple predictive model based on recent trends
+    if (this.metrics.totalRequests < 5) return;
+    
+    const recentFailureRate = this.calculateRecentFailureRate();
+    const historicalRate = this.metrics.currentFailureRate;
+    
+    // Update prediction with weighted average
+    this.metrics.predictedFailureRate = (recentFailureRate * 0.7) + (historicalRate * 0.3);
+    
+    // Update healing factor based on success patterns
+    if (recentFailureRate < historicalRate) {
+      this.quantumState.healingFactor = Math.min(2.0, this.quantumState.healingFactor + 0.1);
+    } else {
+      this.quantumState.healingFactor = Math.max(0.5, this.quantumState.healingFactor - 0.05);
+    }
+  }
+
   // Recovery strategy implementations
   async healingRecovery() {
     // Simulate healing-based recovery
