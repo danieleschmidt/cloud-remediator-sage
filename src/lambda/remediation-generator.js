@@ -47,7 +47,11 @@ exports.handler = async (event) => {
     // Determine which findings to process
     let findingsToProcess = [];
 
-    if (event.findingId) {
+    if (event.finding) {
+      // Process single finding from event
+      const { Finding } = require('../models');
+      findingsToProcess = [new Finding(event.finding)];
+    } else if (event.findingId) {
       // Process specific finding
       const findings = await neptuneService.queryFindings({ 
         id: event.findingId 
