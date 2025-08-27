@@ -5,6 +5,7 @@
  */
 
 const { EventEmitter } = require('events');
+const crypto = require('crypto');
 const { StructuredLogger } = require('../monitoring/logger');
 
 class QuantumOptimizer extends EventEmitter {

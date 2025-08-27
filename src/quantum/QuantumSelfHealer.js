@@ -292,7 +292,7 @@ class QuantumSelfHealer extends EventEmitter {
       }
       
       const overallSuccess = results.every(r => r.success) || 
-                            (strategy.allowPartialFailure && results.some(r => r.success));
+                            (strategy.allowPartialFailure === true && results.some(r => r.success));
       
       const duration = Math.max(1, Date.now() - startTime);
       

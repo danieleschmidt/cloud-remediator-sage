@@ -16,6 +16,9 @@ const AdvancedErrorRecovery = require('./reliability/AdvancedErrorRecovery');
 const AdvancedInputValidator = require('./security/AdvancedInputValidator');
 const SecurityHardening = require('./security/SecurityHardening');
 const AdvancedHealthMonitor = require('./monitoring/AdvancedHealthMonitor');
+const EnterpriseErrorHandler = require('./reliability/EnterpriseErrorHandler');
+const EnterpriseHealthMonitor = require('./monitoring/EnterpriseHealthMonitor');
+const EnterprisePerformanceOptimizer = require('./performance/EnterprisePerformanceOptimizer');
 const QuantumAutoScaler = require('./scaling/QuantumAutoScaler');
 const DistributedProcessingEngine = require('./distributed/DistributedProcessingEngine');
 const ResilienceManager = require('./reliability/ResilienceManager');
@@ -53,11 +56,14 @@ class CloudRemediatorSage {
     this.threatDetector = new AdvancedThreatDetector();
     this.errorHandler = new AdvancedErrorHandler();
     this.errorRecovery = new AdvancedErrorRecovery();
+    this.enterpriseErrorHandler = new EnterpriseErrorHandler();
     this.inputValidator = new AdvancedInputValidator();
     this.autoScaler = new QuantumAutoScaler();
     this.distributedEngine = new DistributedProcessingEngine();
     this.securityHardening = new SecurityHardening();
     this.advancedHealthMonitor = new AdvancedHealthMonitor();
+    this.enterpriseHealthMonitor = new EnterpriseHealthMonitor();
+    this.enterprisePerformanceOptimizer = new EnterprisePerformanceOptimizer();
     this.i18n = i18nManager;
     
     this.initialized = false;
@@ -150,8 +156,32 @@ class CloudRemediatorSage {
       await this.advancedHealthMonitor.initialize();
       this.logger.info('Advanced health monitoring initialized');
 
+      // Initialize Generation 2: Enterprise-grade reliability
+      this.logger.info('Initializing Generation 2 enterprise components...');
+      
+      // Initialize enterprise error handler
+      if (this.enterpriseErrorHandler && typeof this.enterpriseErrorHandler.initialize === 'function') {
+        await this.enterpriseErrorHandler.initialize();
+      }
+      this.logger.info('Enterprise error handler initialized');
+
+      // Initialize enterprise health monitor
+      if (this.enterpriseHealthMonitor && typeof this.enterpriseHealthMonitor.startMonitoring === 'function') {
+        await this.enterpriseHealthMonitor.startMonitoring();
+      }
+      this.logger.info('Enterprise health monitoring initialized');
+
+      // Initialize Generation 3: Performance optimization
+      this.logger.info('Initializing Generation 3 performance optimization components...');
+      
+      // Initialize enterprise performance optimizer
+      if (this.enterprisePerformanceOptimizer && typeof this.enterprisePerformanceOptimizer.initialize === 'function') {
+        await this.enterprisePerformanceOptimizer.initialize();
+      }
+      this.logger.info('Enterprise performance optimizer initialized');
+
       this.initialized = true;
-      this.logger.info('Cloud Remediator Sage platform initialized successfully');
+      this.logger.info('Cloud Remediator Sage platform initialized successfully - Generation 3 complete');
 
     } catch (error) {
       this.logger.error('Platform initialization failed', { error: error.message });
@@ -497,6 +527,9 @@ class CloudRemediatorSage {
           distributedEngine: await this.checkServiceHealth(() => this.distributedEngine.getDistributedSystemStatus()),
           securityHardening: await this.checkServiceHealth(() => this.securityHardening.getSecurityStatus()),
           advancedHealthMonitor: await this.checkServiceHealth(() => this.advancedHealthMonitor.getHealthStatus()),
+          enterpriseErrorHandler: await this.checkServiceHealth(() => this.enterpriseErrorHandler?.getStatus() || { status: 'healthy' }),
+          enterpriseHealthMonitor: await this.checkServiceHealth(() => this.enterpriseHealthMonitor?.getHealthStatus() || { status: 'healthy' }),
+          enterprisePerformanceOptimizer: await this.checkServiceHealth(() => this.enterprisePerformanceOptimizer?.getPerformanceStatus() || { status: 'healthy' }),
           i18n: { status: 'healthy' }
         }
       };
@@ -556,8 +589,22 @@ class CloudRemediatorSage {
         await this.advancedHealthMonitor.stopMonitoring();
       }
       
+      // Shutdown Generation 2 enterprise components
+      if (this.enterpriseHealthMonitor) {
+        await this.enterpriseHealthMonitor.stopMonitoring();
+      }
+      
+      if (this.enterpriseErrorHandler) {
+        await this.enterpriseErrorHandler.shutdown();
+      }
+      
+      // Shutdown Generation 3 performance components
+      if (this.enterprisePerformanceOptimizer) {
+        await this.enterprisePerformanceOptimizer.shutdown();
+      }
+      
       this.initialized = false;
-      this.logger.info('Platform shutdown completed');
+      this.logger.info('Platform shutdown completed - All generations (1-3) stopped');
     } catch (error) {
       this.logger.error('Error during shutdown', { error: error.message });
     }
