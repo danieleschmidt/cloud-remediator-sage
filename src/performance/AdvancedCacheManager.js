@@ -253,8 +253,12 @@ class AdvancedCacheManager extends CacheManager {
         systemLoad: this.getSystemLoadMetrics()
       };
 
+      // Use https module instead of fetch for Node.js compatibility
+      const https = require('https');
+      const { URL } = require('url');
+      
       // Call ML prediction endpoint
-      const response = await fetch(this.advancedOptions.mlModelEndpoint, {
+      const response = await this.makeHttpRequest(this.advancedOptions.mlModelEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ features })
@@ -721,6 +725,46 @@ class AdvancedCacheManager extends CacheManager {
     }
 
     return recommendations;
+  }
+
+  /**
+   * Make HTTP request using Node.js built-in modules (Node.js compatibility)
+   */
+  makeHttpRequest(url, options) {
+    const https = require('https');
+    const { URL } = require('url');
+    
+    return new Promise((resolve, reject) => {
+      const parsedUrl = new URL(url);
+      const requestOptions = {
+        hostname: parsedUrl.hostname,
+        port: parsedUrl.port || 443,
+        path: parsedUrl.pathname,
+        method: options.method || 'GET',
+        headers: options.headers || {}
+      };
+
+      const req = https.request(requestOptions, (res) => {
+        let data = '';
+        res.on('data', chunk => data += chunk);
+        res.on('end', () => {
+          resolve({
+            ok: res.statusCode >= 200 && res.statusCode < 300,
+            status: res.statusCode,
+            json: () => Promise.resolve(JSON.parse(data)),
+            text: () => Promise.resolve(data)
+          });
+        });
+      });
+
+      req.on('error', reject);
+      
+      if (options.body) {
+        req.write(options.body);
+      }
+      
+      req.end();
+    });
   }
 }
 
